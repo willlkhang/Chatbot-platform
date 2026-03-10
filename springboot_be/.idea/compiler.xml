@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-service" />
+        <module name="user-service" />
         <module name="discovery-service" />
         <module name="gateway-service" />
-        <module name="config-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,6 +19,7 @@
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="third-party-platform" options="-parameters" />
+      <module name="user-service" options="-parameters" />
     </option>
   </component>
 </project>
