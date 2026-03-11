@@ -17,4 +17,15 @@ public class PersonalizationServiceImpl implements PersonalizationService {
     public Personalization getPersonalizationById(Long personalizationId) {
         return  personalizationRepository.getPersonalizationById(personalizationId);
     }
+
+    @Override
+    public void addPersonalization(Personalization personalization) {
+        personalizationRepository.save(personalization);
+    }
+
+    @Override
+    public void clearPersonalization(Long userId, Long perId) {
+        Personalization entity = personalizationRepository.getPersonalizationByUserAndId(userId, perId);
+        personalizationRepository.delete(entity);
+    }
 }
