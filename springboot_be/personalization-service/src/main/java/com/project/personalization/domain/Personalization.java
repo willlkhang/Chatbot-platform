@@ -8,25 +8,25 @@ public class Personalization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long personalizationId;
     private Long userId;
     private String references;
 
     public Personalization(){
     }
 
-    public Personalization(String references, Long userId, Long id) {
+    public Personalization(Long personalizationId, String references, Long userId) {
+        this.personalizationId = personalizationId;
         this.references = references;
         this.userId = userId;
-        Id = id;
     }
 
-    public Long getId() {
-        return Id;
+    public Long getPersonalizationId() {
+        return personalizationId;
     }
 
-    public void setId(Long id) {
-        Id = id;
+    public void setPersonalizationId(Long personalizationId) {
+        this.personalizationId = personalizationId;
     }
 
     public String getReferences() {

@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface PersonalizationRepository extends JpaRepository<Personalization, Long> {
 
-    @Query("SELECT p FROM Personalization p WHERE p.id =:id")
+    @Query("SELECT p FROM Personalization p WHERE p.personalizationId =:id")
     Personalization getPersonalizationById(@Param("id") Long id);
 }
