@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PersonalizationRepository extends JpaRepository<Personalization, Long> {
 
     @Query("SELECT p FROM Personalization p WHERE p.personalizationId =:id")
@@ -15,4 +17,7 @@ public interface PersonalizationRepository extends JpaRepository<Personalization
 
     @Query("SELECT p FROM Personalization p WHERE p.personalizationId =:perId AND p.userId =:userId")
     Personalization getPersonalizationByUserAndId(@Param("userId") Long userId, @Param("perId") Long perId);
+
+    @Query("SELECT p FROM Personalization p")
+    List<Personalization> getAllPer();
 }

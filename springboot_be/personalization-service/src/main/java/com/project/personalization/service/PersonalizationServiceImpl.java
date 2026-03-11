@@ -6,6 +6,10 @@ import com.project.personalization.repository.PersonalizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PersonalizationServiceImpl implements PersonalizationService {
@@ -27,5 +31,12 @@ public class PersonalizationServiceImpl implements PersonalizationService {
     public void clearPersonalization(Long userId, Long perId) {
         Personalization entity = personalizationRepository.getPersonalizationByUserAndId(userId, perId);
         personalizationRepository.delete(entity);
+    }
+
+    @Override
+    public List<Personalization> getAllPer() {
+
+        List<Personalization> pers = personalizationRepository.findAll();
+        return new ArrayList<>(pers);
     }
 }

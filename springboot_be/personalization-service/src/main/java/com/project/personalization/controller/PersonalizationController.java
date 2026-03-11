@@ -4,13 +4,16 @@ import com.project.personalization.domain.Personalization;
 import com.project.personalization.service.PersonalizationService;
 
 //rest api spring boot group
+import feign.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/api/personalization")
 public class PersonalizationController {
 
     @Autowired
@@ -40,6 +43,18 @@ public class PersonalizationController {
         }
         else{
             return ResponseEntity.ok().body(per);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPers(){
+        List<Personalization> list = personalizationService.getAllPer();
+
+        if (list.isEmpty()){
+            return ResponseEntity.ok().body("There is on personalization yet");
+        }
+        else {
+            return ResponseEntity.ok().body(list);
         }
     }
 }
