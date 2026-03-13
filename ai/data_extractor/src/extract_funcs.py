@@ -50,7 +50,7 @@ def extract_qna_pairs(txt_file_paths : list[Path]):
             split_text = re.split(r'(\n[AaQq].?\n)', raw_text)
             
             while split_text and re.search(r'^([AaQq].?)$', split_text[0].strip()) is None:
-                split_text.pop(0)
+                split_text.pop(0) 
             
             qna_pairs = qna_pairs + create_qna_pairs(split_text)
     
@@ -61,32 +61,43 @@ def extract_qna_pairs(txt_file_paths : list[Path]):
 def create_qna_pairs(split_txt_list : list):
     
     """
-    Creates QnA pairs from raw txt files which have been split and appends them to a pair storage list.
+    Creates QnA pairs from list of text in pattern (Q, question, A, answer).
     
-    Data is returneda as {Q: (Question), A: (Answer)} pairs.
+    Data is returned as {Q: (Question), A: (Answer)} pairs.
     
-    Expects split_txt_list to be a list of strings returned from using re.split(r'(AaQq).?') on raw text.
+    NOTE: gemini created this logic, I just wrote it to be cleaner.
     
-    I am assuming that that QnA are in sequence always.
+    How it works:
+    
+    1. Checks list via index in blocks of 4.
+    2. For each block, checks if position 1 is 'Q' and position 2 is 'A'
+    3. If both are true, this is a valid block, it gets collected as a QnA pair.
+    4. If not, we assume there's an issue with the list and move two steps forward
+       to try realign again.
+    
     """
     
     pair_storage = []
     
-    # slice 4 since we're expecting split_txt_files to have a pattern of [Q, (question_str), A, (answer_str)]
-    while len(split_txt_list) >= 4:
+    i = 0
+    while i < len(split_txt_list) - 3:
         
-        # getting [Q, (question_str), A, (answer_str)]
-        pair = split_txt_list[:4:]
+        Q = split_txt_list[i].strip()
+        A = split_txt_list[i + 2].strip()
+            
+        is_Q = re.search(r"^([Qq].?)$", Q) is not None
+        is_A = re.search(r"^([Aa].?)$", A) is not None
         
-        Q = pair[1].strip()
-        A = pair[3].strip()
-
-        # getting rid of really tiny QnA (and corrupted text)
-        if len(A) > 5 and len(Q) > 5:
-            pair_storage.append({'Question' : Q, 'Answer' : A})
-
-        # shortening the list to get the next pair
-        split_txt_list = split_txt_list[4::]
+        if is_Q and is_A:
+            
+            question = split_txt_list[i + 1].strip()
+            answer = split_txt_list[i + 3].strip()
+            
+            pair_storage.append({'Question': question, 'Answer': answer})
+            
+            i += 4
+        else:
+            i += 2
         
     return pair_storage
         
