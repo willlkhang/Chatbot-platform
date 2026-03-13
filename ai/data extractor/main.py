@@ -6,7 +6,7 @@ Output: Data.json
 """
 
 import sys
-import txt_extract_tools as txtools
+from src import extract_funcs as ef
 
 def main():
     
@@ -16,15 +16,15 @@ def main():
     
     directory_path = sys.argv[1]
     
-    txt_files = txtools.search_txt_files(directory_path)
+    txt_files = ef.search_txt_files(directory_path)
     
     print('Found the following text files:')
     for file in txt_files:
         print(file.name)
     
-    pair_list = txtools.extract_qna_pairs(txt_files)
+    pair_list = ef.extract_qna_pairs(txt_files)
     
-    txtools.create_json(pair_list)
+    ef.create_json(pair_list)
     
     print('Created data.json')
     
