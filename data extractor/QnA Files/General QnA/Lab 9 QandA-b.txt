@@ -1,0 +1,90 @@
+For part a, use the material from the lecture notes. Don't just jump to code in the textbook (earlier editions) because the textbook also provides non-recursive implementations. We are not using these as recursive versions are needed for the lab. 
+
+For trees, recursive implementations have less code as the tree structure is recursive, and therefore a recursive algorithm matches this structure.
+
+For insert, do not have two public insert methods. Don't forget issues related to duplication in public methods - methods should not duplicate functionality. By now you would have come across the DRY principle. https://www.geeksforgeeks.org/dont-repeat-yourselfdry-in-software-development/. You need to know it. See Exam pack. To actually know these principles, you need to use them and be able to tell when the principles are being violated.
+
+Usage is: (for the simple tree you have been asked to create)
+
+//somewhere in the main program:
+
+Bst intTree;
+
+intTree.insert(20);
+intTree.insert(30);
+
+The above are hardcoded values to be inserted. You actually need to read the values from a file - so a loop is needed and the values get inserted into the tree using this loop.
+
+Just because the tree is meant to be simple, it doesn't mean that you can forget good OO design rules. You must still follow good design.
+
+Part a does not need template. Part b is for a template BST. So to have an integer tree in part b, you will have
+
+Bst<int> intTree;
+
+The rest of the test program doesn't change.
+
+make sure you test your BST with a date too.
+Bst<Date> dateTree;
+
+Test all operations.
+
+
+Unit check your template BST before using in the assignment.
+-----------------------------------------------------------------------
+Q and A:
+
+Q:
+ I'm having a bit of trouble trying to work out how to input and perform operations on the unit and date objects in a binary search tree. I have created my template BST class and tested it by using the test data from part a and it is working well. I'm just unsure how to have the unit ID from the unit class as the search key. Do i need one variable in the BST node to store the key, and the other to store the entire data? I was also considering determining the unitID by creating a substring in main and then sending in that unitID only into the BST. However, when performing the traversals, the output would then only be the unitIDs and not the entire unit information (if that makes sense). I guess I'm just not sure how we can perform traversals on objects when the unitID only is the search key. I have attached my template BST class.
+
+A:
+Comparison of integers works when the tree is created with
+Bst<int> intTree;
+
+This is because in the insert routine
+
+template<class T>
+void Bst<T>::insert(bstNode *newNode, bstNode *parent)
+
+the comparison can be made because the operator < is already available for integers.
+
+if (newNode->data < parent->data)
+
+i.e data is int, so comparison is working. But the problem arises when you have
+Bst<Unit> unitTree
+
+or 
+
+Bst<Date> dateTree; 
+
+This is because the tree insert method is trying to compare two Unit (or Date) objects that do not have a way to do comparisons when the code
+
+ if (newNode->data < parent->data) is executed.
+
+So you need to provide an overloaded comparison operator < that can compare two Unit (or Date) objects.
+
+What the operator < compares is entirely up to you. 
+
+
+So the following routine is needed:
+
+bool operator<(  const Unit & L,   const Unit & R){
+      
+    //.......... fill these in, you decide which parts of L and R are compared and how
+}
+
+It shouldn't be part of the tree as you can see the parameters are Unit objects so placing code in the tree that is relevant only to Unit objects makes the tree not very useful for other data, like storing Date in the Bst. Don't forget lessons from Lab 4.
+
+For the lab exc, comparison operators for Date must be checked very carefully. What does it mean to say one date is less than another date? What are the different checks that you have got to make on day, month, year. Work out the logic on paper before you implement in code.
+
+Similar considerations as above apply when you try to do this:
+
+Bst<Date> dateTree; // the Bst would need to know how to compare two dates
+					// so Date comparison operators would need to be written.
+ 
+
+   
+Q: 
+Do I create a tree that stores any kind of data
+
+A: 
+not needed for part a - storing an integer is good enough but for part b, you should template it. You will need the template version for assignment 2.

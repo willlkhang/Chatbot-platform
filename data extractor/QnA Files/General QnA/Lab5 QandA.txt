@@ -1,0 +1,714 @@
+The answers in the QandA files (including this one) apply to this lab, all future labs, assignments and exam.
+
+The most recent QandA is on the top (reverse chronological order).
+---------------------------------------------------------------
+
+Q:
+I wanted to ask you if you have any extra content related to the design code.
+
+The reason I wanted to ask is because when it comes to designing our own codebase, I feel a bit lost. I understand that some of it is required from the client, but I wanted to ask if there are any other example(s) for me to make UMLs to test if I'm on the right track with the thought process of making classes.
+
+A:
+There are from topics 1 and 2. See the required readings "Design patterns explained: a new perspective on object-oriented design" and "Head first design patterns".
+
+The rules are broken down in the coding standards. "C++ coding standards: 101 rules, guidelines, and best practices" (red book).
+
+The power points and the QandA files (including this one) cover the mandatory requirements. You will see that the QandA files are highlighted on the first page (the cover) of the unit guide.
+
+The workshops delve into aspects that students have always struggled with.
+
+We are just following through on these. These are not ict283 level of importance, but career level importance.
+ 
+So the substance of topics 1 and 2 (see readings) set the scene for everything we do. We keep building on that.
+
+That is why you will see that is not enough to have code that produces an output that is expected. Without the correct design code gets no marks. The design needs to be defended in-person and the application of the design in code is also defended in-person.
+
+
+
+Q:
+I have a question about the struct WindRecType. Indeed, i manage to make the reading of the columns dynamic but i wanted to get all the values also dynamically. Can i change the structure to help me to help me to make it work ?
+
+A:
+Yes, you can change to suit. 
+
+Think carefully before you make the change. 
+
+This means think carefully from the design side and *not* for programmer convenience.  
+
+
+Q:
+Can I use realloc to resize my Vector?
+
+A:
+No you can't. The Vector will not be assessed if you do.
+
+Check that you are not using any STL library or algorithm in your template Vector. All algorithms have to be written by you. So, there should not be #include <algorithm>. The C library routine realloc (or any other similar library routine) should not be used. You need to write your own version. If in doubt ask early or just assume that you can’t use it. 
+
+STL Library contain various data structures like vector, map, stack... etc. Some examples are here https://en.cppreference.com/w/cpp/container. Except for std::string, none of the others can be used in the assignment. If used, no marks will be given. You will need to design and write code for whatever you use. Allways follow the specification of the assignment as given.
+
+There are a number of algorithms as well. Some examples of these are here https://en.cppreference.com/w/cpp/algorithm. None of these can be used in the assignment. If used, no marks will be given.
+
+You may use exception handling or assert.
+
+There is more detailed advice in the Topic 6 lab.
+
+This question has been asked before. See below.
+
+
+Q:
+
+Regarding Lab 5, my reading of the instructions is that, from Qn 2 onward, we're re-designing the whole 'registration' program from the ground up to include all of the changes requested in the Lab 5 instructions while applying the OO coding principles from the lectures and textbook. So I'd restructure the Class Diagram to be as sensible as possible,  given the new classes I'm adding, while maximizing code-reuse and cohesion, while minimizing coupling etc. (That is, we're not just tacking bits onto Lab 4.) Is this correct?
+
+A:
+Yes, that is the case.  In Q1, create Vector and test it by replacing the array in Registration with your Vector. 
+
+Up till this question, you would have experienced first hand what it is like to make changes (maintenance) to existing code to cater for changing requirements. For Q2, you come up with a low maintenance design using the theoretical concepts learnt. This is an acquired skill that comes with practice. Just knowing the theory does not mean that the theory can be applied perfectly the first time.
+
+Total redesign but provide the functionality asked for. Maximise cohesion, minimise coupling. Any future user requirement should have little to no change to the data classes. Aim to follow the SOLID principles.
+
+When arguing your case, don't just say design meets SOLID principles. You need to indicate which principle specifically and show **how** that principle is adhered to. Relate the principle to the actual design/code you have.
+
+Also review some advice provided in PowerPoint notes Lec-15 in topic 5.
+
+
+Q:
+Is it ok to compare float with integers?
+
+
+A:
+Types are different, so it becomes and apples vs cabbages comparison.
+
+One type would need to be converted into the other. So if integer is converted to float, then it becomes comparison of two floats. You can see that this comparison would have errors. The programmer needs to decide the tolerance level for errors, so the comparison is within some allowable tolerance. You would have come across these issues in earlier units.
+
+See here https://floating-point-gui.de/errors/comparison/ for some discussion.
+
+If the range of values being considered are similar, then absolute error margins can work out, but be mindful of the limitations.
+
+A more detailed discussion is found in "What Every Computer Scientist Should Know About Floating-Point Arithmetic" See Appendix D. https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html. 
+
+To ensure that no one thinks that this issue only applies to this 
+unit, I want to point out that this is a common problem any 
+time you work with floating point numbers. Computer floating point 
+representation is unable to represent most Real numbers accurately. 
+You don't always see the issue cropping up if you work with "toy" 
+data sets. We are not working with "toy" data in this unit.
+
+Consider if an average value would exist in your data. If you convert an float into an int and then do a comparison, how useful is your answer to the end user when you say that there is a match? It is deliberately giving an incorrect answer. So how would you use the advice above and still provide an answer?
+
+Also see examples with code here https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+
+The above are not the only issues when considering numeric types. Unsigned is a numeric type and it has its own issue:
+
+You may also have come across something similar to the following in your first year.
+
+Build and run it to see.
+
+#include <stdio.h>
+
+int main()
+{
+    unsigned amount_in_bank = 100;
+    unsigned amount_to_pay = 150;
+    unsigned amount_left;
+
+    amount_left = amount_in_bank - amount_to_pay;  // makes sense
+
+    if (amount_left >= 0)
+    {
+
+        printf("After payment, you will have $%u left in bank\n", amount_left);
+    }
+    else
+    {
+        printf("You do not have enough to pay\n");
+
+    }
+    return 0;
+}
+
+Who wouldn't like to save money in a bank like that? Better than any get rich quick scheme.
+
+Q:
+Following on from the lab, I have the Registration program working as asked in Lab 5.
+
+I use a method called setsize(int sz). I want to check with you if my approahc is correct.
+
+The vector is created as asked Vector<Result> results; 
+Then I read the count in and call results.setsize(count).
+
+Then makes my vector the correct size to read in the data.
+
+Is this the right approach or should I use the pushback or insert?
+
+A:
+By creating the Vector of the right size needed for the application would make the work "as-is". For the lab exercise this is acceptable.
+
+Another way is using a non-default constructor with size as a parameter as shown in the lab specs. This is the expected approach given the changes listed in the Registration exercise.
+
+But, consider what would happen if the size is not known at the outset? One fix is to read the data file and count, close the data file and then call setsize. But this method doesn't scale if the data file is massive and you don't know at the start how many items there are. It may take minutes to count the number of items.
+
+So a more flexible approach is to also have insert as was discussed.
+
+For your setsize method, defend it. Consider what happens if the Vector is loaded with a lot of data items, and the client program called setsize with a count less than the number of items that are there. Depending on how you address this issue, would it be justifiable to have both setsize and pushback/insert?
+
+Your setsize has an advantage over the insert. It is a rather neat advantage in particular situations. You can use this point too for the justification.
+
+This is more discussion of the insert in the earlier stages of this file below.
+
+Remember that your Vector is not the STL vector. The more methods you put in, the more liable it becomes to various bugs and misuse that you did not foresee. So you want to keep the number of methods as small as possible. The algorithm in each of the methods should also be small and simple. A data structure is a "tool" used by other programmers. That tool should be reliable.
+
+Q:
+I have re-read the chapter and I think I have found the example that you are referring too.
+By chance could you check out this Draft vector template and let me know if I am on the right track?
+
+A:
+Check what the [] operators return. Consider normal usage of []. For example, if you have the usual array:
+
+int A[10]; // the usual raw array data structure
+
+when you access the array data structure as shown below, does it return the whole array data structure or just an element of the array?
+
+cout << A[2] ;
+
+The operator returns the whole data structure when you have:
+Vector& operator [] (int maxSize);
+
+This has changed the meaning of the operator [] rather drastically. The meaning must not change when you overload. The programming language would let you do it, but you need to use the features of the language carefully. Do not use an approach because it is there. Always consider design implications. If you feel that the design is correct then use the language feature that assists with the design.
+
+Also not sure why name the parameter maxsize. It is meant to be index. 
+
+Having the following breaks encapsulation and is redundant when you have operator[]
+    //Retrieve
+    T* Get();
+
+Breaks encapsulation at it appears that the user is going to get private raw array. The client can then make a mess of the private data structure of Vector including calling delete on it. Vector will be really stuffed then.
+
+The Get method must also be declared const. If you don't you can get no marks for the Vector as you just ruined the Vector encapsulation. Do break design rules.
+
+Implementation of GetLength below assumes that the raw array stored pointers to something all the time. It is not possible if the private declaration is showing T* mArray; If I want to store integers, it will store integers when I use it like this Vector<int> intVec given this private declaration.
+
+template <class T>
+int Vector<T>::GetLength(){
+    int s=0;
+    for(int i= 0; i < maxSize; i++){
+        if(!(mArray[i] == nullptr)){
+            s++;
+        }
+    }
+    return s;
+}
+
+There is nothing to stop you from using pointers to data. This is extra implementation complication but it may do the GetLength that you are after. But the extra complication provides other advantages like having some parts of the array with no data instead of just the end parts. But you will need to consider what operator[] will return when there is no data if this behaviour is expected for operator[] in its normal usage.
+
+Easier way is to keep track whenever a new value is added. Think of how this is to be tracked, what is the initial size in the constructor and how new elements are added. 
+
+In the resize method, there is a local temp array, copy from private mArray into temp (loop) and then there are these lines of code.
+    delete [] mArray;
+    mArray = temp;
+    delete [] temp;
+
+Use diagrams to see what is going on. Desk check each line of code in resize using diagrams. The resize method is destroying Vector's private data array. Desk check to see where.
+
+Is the following doing a deep copy? Please desk check. It is not a single value. An array needs to be copied. Review the lecture notes example where you are consider what to do if array data is used.
+template <class T>
+bool Vector<T>::Copy( const Vector<T> &rhs){
+    if (rhs.mArray != NULL){
+        return Set (*(rhs.mArray)); // with rhs int data value
+    }else{
+        return false;
+    }
+}
+
+The textbook example shows you how.
+
+The textbook example goes over the top, so strip it down to basics. Less code, less bugs. The complete Vector we need is about an A4 page of code when laid out neatly not including doxygen comments.
+
+Q:
+There is a disagreement whether the [] should allow access outside of array bounds by increasing memory size. I am not allowing it with assert to keep within array bounds as I want [] to work as the normal arrays.  But other classmates are telling me that I should allow by expanding the array. I have a separate method for inserting at end according to your question-answer file.  Can I double check with you which is the right way?
+
+A:
+Some students have asked me the same question in the clinic and lab and we had a good discussion.  Programmers who are careful make sure that [] doesn't get an index outside of raw array bounds. When any operator is overloaded, the meaning (semantics) of the operator must not be different to the normal meaning. See rule 26 in C++ Coding Standards: 101 Rules, Guidelines, and Best Practices. This is an important reference for this unit and later.
+ 
+There is very strong advice that the operator semantics shouldn't change when overloaded for use with user defined classes. This means that you are doing the right thing.
+
+The [] operator allows set/get on existing array data. What that means, the operator lets you access array memory that already exists, or update data at an **existing** memory location. It should not allow access to memory outside itself. An example that I used with the students who asked me about this:
+
+Consider an array that has 5 elements that are now in the Vector (index:0..4), with count==5, and the [] operator is permitted access to any index. This is not normal behaviour even for raw arrays. A client asks to insert at index 25. Consider the problem when the operator [] permits it by resizing the underlying raw array. Later on, the clients needs to sum all the elements, how would your Vector prevent access to elements 6 to 24 as access is being provided by the overloaded operator? The count would have gone up by 1, so would the index range from 0..5 for the 6 elements. More about this at an earlier related question in this file.
+
+One very important concern overrides all other concerns; nothing can be more important: **The client must not ever, ever, be given erroneous data or information.** You routine must choose to terminate if the wrong data access cannot be handled gracefully. Important business decisions may rely on the data or information you provide. It this era of increasing automation, people's lives can be put at risk because of wrong data. So never design/implement data structures or other programs that give wrong data or output. In assignments or labs, it is just not getting the marks, but in the real world, you can have a really awful situation. 
+
+As a topical example, the MACS software - that is being suspected for the 2018, 2019 Boeing 737 max 8 fatalities - appears to have given incorrect output
+ https://www.businessinsider.com.au/boeing-faa-told-of-possible-mcas-software-issues-in-737-max-plane-before-crash-report-2019-3?r=US&IR=T. 
+
+Also
+https://www.theatlantic.com/notes/2019/03/heres-what-was-on-the-record-about-problems-with-the-737-max/584791/ 
+
+where the automation got switched off to get control back to human. 
+
+Had the MACS software aborted and the pilots took over manual control, it may have been possible to avoid the tragedies that occurred.
+
+Also see some background:
+https://www.theverge.com/2020/4/9/21197162/boeing-737-max-software-hardware-computer-fcc-crash
+
+There is another example that appears to be a common problem. I have seen this problem repeatedly in both Assignment 1 and Assignment 2. The Date class is restricted to only have years that are in the data file. So in 2023, the upper range of year for the Date class was set to 2023. What that meant was the application could not be used for data after 2023. I don't think this was part of some cunning plan to prevent clients using the application after 2023, and perhaps charge them more to handle data after 2023. It appears to be a result of faulty design thinking.  
+
+It is not just students who make mistakes like this. In this example reported in 2024, airline booking system can't handle people over 100 years old. It is hilarious (not for the people affected) and serious at the same time, luckily no one was injured and no fatalities. https://www.theguardian.com/technology/2024/apr/28/us-american-airlines-booking-system-woman-age-error
+
+I am not expecting that the code for handling Date in the airline system was written by a student or intern.
+
+So **never** set anything to what you consider default values when the client sends data that you consider erroneous.
+ 
+
+Q
+One final question; when we Upload our Lab5 solution; will it receive any feedback? Or is it simply a mechanism to ensure people have finished L5 before attempting the assignment? 
+
+A:
+It is a mechanism that the uni learning designers advised me about how to make sure that students don't jump into the deep end of the pool when they are not ready for it and start floundering.
+
+The assessment is in the assignment itself as q5 code will be part of the assignment. 
+
+You will need to demonstrate the Vector solution in person to your tutor if want to be allocated marks for the Vector in the assignment. Please see the lab 5 specs.
+
+Q:
+Are you able to recommend a approximate figure for how long we should 
+be aiming for reading from the input file will take? 
+
+A:
+The ideal situation would be that there are read instantly. This is 
+not going to happen as so much depends on the algorithm, code 
+implementation, type of hard disk, caching, processor, what else is running,.. etc.
+
+As a rule of thumb, the time to aim for is the time to copy the file 
+from one place to another on your hard disk.
+
+I have seen load times exceeding 5 minutes for the assignment. That is too much. See the Light code construction counting example and the PowerPoint Lec-14 in Topic05/Content to see the particular issue that was causing it.
+
+
+Q:
+I have a general question. In what circumstances would it be appropriate to include the implementation in the header, for a class? Such as Vector.h, that we have designed, what are the hallmarks which indicate that design approach should be taken?
+
+A:
+The purpose of separating the specification (aka headers, interface to the class in your question) from the implementation is so that users of the specs (the what) don't create dependencies (in their application) on the way the implementation (the how) is carried out. Clients just want to use the interface to the class to get their job done. If the implementation is changed without changing the interface, perhaps to increase efficiencies, the applications don't break as the application only depends on the public specs. This means that the client only depends on the specifications (the what) and not the implementation (the how). The implementation needs to be tucked out of sight.
+
+In the Registration exercise of Lab 3 and 4, you were changing the implementation, but the client code in main() wasn't changed.
+
+This separation in design must always be followed unless there are very good reasons for not following. See more in Topic 1 and later readings. Summary of readings is in the file "Essential Reading List by Topics File" in LMS.
+
+There are situations where non separation can be defensible.
+
+1. profiling data shows execution speed boost is needed - some code is inlined. There needs to be actual profiling evidence before this option is taken. Usual cases would be pass through setters and getters. You know about inline code as you have seen it in Registration exercises. For the Registration exercises there was no good reason to inline so you had to move the implementation to the .cpp files.
+
+What does the coding standards book that we use as reference have to say about premature optimisation?
+
+If you want to find out more about inline functions (not just inline methods), including pros/cons with examples, see 
+https://www.geeksforgeeks.org/inline-functions-cpp/
+
+The link above also gives advice about pitfalls of using macros, and if you are planning to use a macro, use an inline function instead as the compiler can do the necessary checks.
+
+2. It is not possible to do separate compilation as the type is not known - template classes. In your example of Vector, Vector.cpp can't be compiled to Vector.o (or Vector.obj) as the type information is not available in the Vector class on account of it being a parametrised type.
+
+In both the above cases, you still tuck the implementation (the how) out of sight below the the specification. There is the additional advantage that it makes the specs less cluttered and easier to read by the user.
+
+To use an everyday example, to drive a car, you get in the car and use the interface provided by the car (steering wheel, accelerator, brakes, etc). The interfaces just convey what can be done with the car. You don't want to have to deal with how each of these things work - actually see them working while driving. If an engine is changed to a more efficient engine, the interface doesn't change so you still drive the car as before. Or, if you get into a different car (make/model), the steering wheel function has to remain the same.
+
+
+Q:
+I do have an important question to ask this time, and I hope to seek your guidance about it.
+ 
+It's about accessors getters/ setters, and whether they break the rule of encapsulation resulting in poor OO design.
+
+I have tried to read and search multiple resources about this, but I have yet to come with a clear answer, with different resources and articles giving different opinions on Accessors.
+
+From my understanding, encapsulation hides the internal representation, state of the object from the outside. So the users of the class should not even know about things that are private. However, don't setters and getters contradict encapsulation and even ruin it, because it exposes the private variable by letting the user know about the private variable existing. Whether you use get/set to control what the user read and write does not matter here, because the user should not even know the private variables exist in the first place. 
+
+It also contradicts how an object should actually behave. From my understanding, an object is supposed to represent things as a whole. Like a Dog object you have used as example. It has some intelligence as if its a real thing. with methods like bark etc to represent a behaviour. Whereas as compared to the time and date class used in lab 4/5. It uses classes like a bag to hold things and used to only retrieve part of the data such as an hour, min and seconds. With this case, you might as well use a struct to hold data. Because you only are retrieving part of the data and not as a whole, unless you are using the time class to return hour min and seconds as a whole. 
+
+However, even so,  with the only set and get for everything in a class seems like a bad design to me and does not encapsulate the variables since everything is exposed to the user in my view. 
+
+A:
+The encapsulation controls access to the internals, and the only thing that a user needs to know is "what" the class does, not "how".
+
+By declaring anything as private, direct access to that data/method is prevented. Access to the private data is now only possible via a public method. The public method can impose restrictions on what are valid values. If you use a struct to encapsulate (a struct is also an encapsulation), you as a designer are indicating to the user that there is no access control to what is valid or not valid.  A struct is like the bag you are referring to. So if you have time as a struct, the user can set seconds to be >=60 directly and it will remain that way. If you control the range of values by the class mechanism, then you can restrict how seconds can be set. For example, the user can, through a set method, set seconds to be 120 and the setter can allow this, but the setter would also convert that to 2 min and 0 sec internally.  That is internal behaviour that keeps the time object normalised. The user doesn't have to worry about the details, the object takes care of all that.
+
+So with the class mechanism, it doesn't mean that you are trying to hide that a Time object has hours, minutes and seconds. The user needs to know about hours, minutes, and seconds, but doesn't have to worry about the details of how hours, minutes and seconds are handled. How these values are stored is also not relevant to the user. All the user is interested in is that the Time object is efficient and does what is expected of Time objects and has access to the components (hour, minutes, seconds) of Time.
+
+Using a different example, lets say a car. The driver of the car knows that there is an engine. The driver doesn't keep opening the bonnet to see how the engine is working but views engine parameters (getters) and controls (setters) the engine via the interface available from the driver's seat. 
+
+If the designer is really paranoid about information hiding, the designer can use the PIMPL idiom to totally hide the internal data structure but this approach can be extreme. There is advice about this in this unit. See the 101 Coding Standards reference book we use, Rule 43.
+
+Encapsulation also includes separation of the class interface/declaration/specification (what) from its implementation (how) - file level encapsulation. Non-template classes have the implementation (how) in implementation files (.cpp for C++, .c for C). Class interface/declaration/specification (what) is found in specification files (.h for C++ and C).  This separation leads to abstraction - know what the class does, but not how (details).
+
+So if you used Date and Time classes as a "bag", you know that your OO design needs to be improved. You are not hiding the fact that Date has day, month, year as the user of the class needs to know about day, month, year. Certain day, month and year combinations are not valid, and a bag like structure would allow invalid dates. 
+
+See See the 101 Coding Standards reference book rules 11, 41.
+
+Rule 41 has further advice on setters and getters.
+
+
+Q:
+Based on what we've learned I'd argue that putting file and standard I/O together in a single "General I/O" class would contradict the S from SOLID, and that separate classes is preferable for different types of I/O. But I just want check with you on this: Are there any reasons to have standard I/O and File I/O in a single class?
+
+A:
+I am assuming you mean keyboard/screen by the word "standard".
+
+The answer to this was decided many decades ago, before there was a language called 
+C++, or Java, or C#...
+
+At a high level (abstract level), I/O is flow of data to/from the processing area (your program) and outside. "Outside" means from external environment, keyboard, files, screen console., etc. The specifics vary, in that the source (input) could be a keyboard or it could be a file and the destination (output) can be screen or file.
+
+So the modelling of I/O is done using streams. As far as the processing is concerned, it is looking at input streams or output streams. What the stream is connected to in the outside environment is not really relevant as the algorithm implementations only process the data.  Using this approach, the processing environment is not made dependent on the actual source/destination. So the processing environment doesn't have to change when new forms of source or destinations are being used as it only sees streams. All that is needed is for the programmer to connect the streams to the physical source/destination. 
+
+The idea is that the processing environment (algorithm implementations) sees only the abstraction and this prevents the coupling to specific external hardware. This is an important idea. Java really pushes this, as Java code runs on a virtual machine and so Java programmers are insulated from the hardware. Java programs are written to abstractions of the various hardware, keyboards, screens, graphics, networking,, .etc. The hardware specifics may change but that is meant only to be seen by the virtual machine that runs the Java programmers code.
+
+Classes model behaviour and transferring data is a behaviour. The model used has to be at the highest level of abstraction, so that user programs written to the highest level of abstraction don't have to be modified when lower level implementation changes. So you will see that the I/O stream library is built using an inheritance hierarchy that models data streams. http://www.cplusplus.com/reference/iolibrary/
+
+So if you move away from this abstraction, you are not having more cohesion, you are just proliferating your code with special cases and creating couplings where these couplings are not needed. You are also reducing cohesion as the Input or Output behaviour is now fragmented in multiple classes that each deal only with specific external environments. **The cohesion applies to the behaviour and classes are known by their public behaviour.**
+
+The may be good reasons to model a keyboard, (or some other device) if the application is to build a simulation of a keyboard. You can have a keyboard class then. In most cases, the processing environment (algorithm implementations) is dealing with data.
+
+
+Q:
+I want to change the struct from topic 5 lab to a class in the assignment. Is that allowed?
+
+A:
+You have free choice but you must provide reasons for making that choice. As pointed out below, the quality of your decision is assessed.
+
+To help you decide, consider the following questions:
+1. Does the encapsulation (packaging/grouping) have special behaviour(s) particular to it?
+
+If it does, then use a class. For example, a Dog class would have
+the bark behaviour.
+
+2. If all you are doing is packaging/grouping some data and the
+packaging has no special behaviour as a package, then it is struct.
+
+3. If some data needs to have controlled access, then you may use a 
+class. 
+
+There is more advice in Rules 11 and 41 in the 101 Coding Standards reference book.
+
+In your OO design, understand the concepts provided by "SOLID" principles. 
+For the description of the concepts, see
+https://en.wikipedia.org/wiki/SOLID_(object-oriented_design).
+
+These principles are independent of C++. 
+So these design principles would also apply if you are programming in
+Java, C#, JavaScript, ..etc.
+
+
+Q:
+I have my overloaded extraction and insertion operators for each of the class in main.cpp. Do I need to doxygen comment them?
+
+A:
+Everything inside the class declaration has doxygen comments. Typically in .h files. See example below.
+
+Everything outside, normal comments.
+
+So main is outside a class declaration, use normal comments.
+
+**  File A.h  **
+// relevant #include only
+
+/// START OF DOXYGEN COMMENTS, even for template classes
+class A   /// start of class A declaration 
+{
+	// Class methods are found here.
+	// Only the first line (prototypes of the methods are here)
+	// Method bodies (implementation) are not found here
+	
+	// Unlike Java, C++ classes will not have method bodies here
+	// unless you have very strong justification for having it here.
+	// There can be heavy penalties for doing it the "Java way".
+	// Java has only one view of the world - all objects
+	// C++ allows choice and therefore choice needs to exercised carefully and deliberately
+
+	/// Inside the class declaration - doxygen comments
+	/// doxygen comments indicate what the method does, **NOT how**.
+	/// It is a description of the behaviour, *not how* this behaviour is achieved.
+	/// Parameter descriptions and return data description just says what the
+	/// data is for, or what the data represents.
+	/// You should use the file modelfile.h in Practice/Doxyexample to guide
+	/// you with doxygen comments.
+
+	
+}; /// end of class A declaration. END OF DOXYGEN COMMENTS, even for template classes
+
+// outside the class, but still in A.h - normal comments. NO doxygen comments here
+// the situation with template class files where you will have implementation in the .h file
+
+**  File A.cpp  **
+	// Implementation - (body of the methods)
+	// this is outside of class declaration - NO doxygen comments,
+	// just normal comments
+	
+	// Template classes would not have a .cpp file.
+	// The method bodies (implementation) would be in the .h file after "end of class 
+	// declaration". Normal comments used in the implementation.
+
+** File main.cpp  **
+// No doxygen comments here
+// This is not a class - it is where the main() routine lives
+// This is the application program that makes use of the classes.
+// So normal comments
+
+The doxgen comments are used to produce external documentation.
+The doxygen program uses the comments to produce external documentation.
+For our case, this documentation is in html.
+
+If you have used Java, which all of you would have from prior studies, javadocs is used to produce external documentation from javadoc comments inside your .java files. Doxygen does the same thing (as javadocs) for C++ files.
+
+I also use Doxygen to analyse structure of large codebases.
+
+BTW, main does not appear in UML class design. See question below.
+
+
+Q:
+2.  Do we represent the main program in a UML diagram?  If so, is 
+there any special notation for doing so.  
+
+A:
+No you don't represent it in a UML class diagram as main() is not a class but a subroutine (function, in this case).
+
+In Java, main is a class. Not so in C++. In C++, main is a global 
+subroutine (function), and so very different from what a class is.
+
+
+Q:
+I've been talking to some of the people in my class and when they run 
+out of space in their Vector they have it double it's size, I asked 
+them why and they just said they were told to. I don't understand why 
+I would have my vector double it's size without knowing that it's 
+necessary. That seems like it would use up a lot of memory. am I 
+missing something?
+
+A:
+It doesn't have to be double. Other strategies can be used. The main thing is to strike a balance between allocating memory when needed (processing needed) and the amount of memory used (and left empty, thus wasted). One approach is in the lecture notes. There are others. The idea is that over the lifetime of the Vector, the average  (a more accurate term is "amortised") time for inserting at the end of the Vector is a constant value. The actual multiplier by which to increase is implementation dependant. See complexity of push_back http://www.cplusplus.com/reference/vector/vector/push_back/. The discussion at this link is for the STL vector. You can't use the STL vector in your assignment as you need to write your own from scratch. The discussion at the link is still relevant.
+
+For the STL vector, I have come across multipliers of 1.5 and 2. VS2010 uses 1.5. The STL vector can start with no memory. Do not use multiplies larger than 2 as it will over the lifetime of the vector usage waste memory. There is a need to balance memory space and time to allocate and then copy elements. Some discussion about this was made some time ago by Andrew Koenig and Barbara Moo at http://www.drdobbs.com/c-made-easier-how-vectors-grow/184401375. Koenig was at the same lab as Stroustrup, the creator of C++. Both Koenig and Barbara are acknowledged experts in the field. In a discussion forum some years ago, Koenig worked out the value of 1.5.
+
+
+Q:
+My scenario 1: Object A has Object B inside of its class declaration as a member variable. If I have an array of Object As and wish to access to the B members inside of those As: Is it better to have the B member of A declared as public, so its member functions can be accessed through A?
+ i.e. aArray[0].B.SetValue(10);
+
+A:
+No, defeats encapsulation.
+
+Also take a look at the Law of Demeter. 
+https://en.wikipedia.org/wiki/Law_of_Demeter
+
+Also make sure that you do not invoke a setter on an object obtained by reference via a getter.
+So make sure sure that getters are declared "double" const so that the compiler enforces the design decision.
+
+const T& getter() const;
+
+q:
+or scenario 2:
+Is it better for B to be declared private and a set of helper methods created inside of A specifically for accessing B? 
+i.e. aArray[0].SetBValue(10);
+
+I used the second approach in Lab 04 however upon reflection it would appear that the first approach is the more sensible one to use and is the one I'm currently using in my assignment.
+
+A:
+The approach that makes the internal member private is the better approach. There is no need to be explicit in the method name to indicate that the setting is for B. B makes sense to A itself but B does not have to make sense for users of A. B is encapsulated, so sometime down the track, A can swap B out for something else without causing a problem for users of A. You don't want users of A to create dependencies with B, the private data of A.
+
+Your Lab 4's approach is the better approach. You will get penalised for the first approach if A is a class. A class is used if you want to have controlled access.
+
+Also consider a more modular approach. Users of A may need to know about B as users of A may have the data that is stored in B. Consider the following:
+
+class Person{
+
+	public:
+		setAge(...)
+			// what would you pass in as the parameter?
+			// is it an integer parameter representing age
+			// or a single bit for each call to setAge, so call setAge multiple times, and, 
+			// each time only 1 bit is set?
+			// The question is do you set the age using each low level part of age (1 bit at 
+			// at a time, or just one quantity that represents age.
+			
+			// Can you apply the same reasoning in the situation where A contains B?
+			// A contains a setter of each constituent of B or A has one setter 
+			//   setB(const B& b)
+	
+
+	private:
+		int age;
+		// there can be other attributes here, but not relevant to this discussion
+
+};
+
+
+If you would like to explore further, please see Chapter 1 "The 
+Object Oriented Paradigm" of the ebook "Design Patterns Explained" 
+(in our library). Link is: http://tinyurl.com/y3fg3r7a. It was part of topic 1 readings. You can access via LMS or My unit readings from the library.
+
+It will also give you an idea of the approach we are taking.
+
+Q:
+Will marks be subtracted based on which method we use for error 
+handling?
+
+A:
+No, not for trying. May not be allocated for not trying. The easiest way when normal error messages are not sufficient is to use assert. A subroutine must have its precondition valid. If the subroutine can't guarantee its own precondition, it wouldn't be able to do its job.
+
+Assert is also covered in the textbook readings from early in the semester. A short explanation is here http://www.cplusplus.com/reference/cassert/assert/. It has an example on how to use assert, but the error could be handled with a simple error message instead of assert which kills the program. In any case, assert is a good debugging tool too. Use liberally when developing.
+
+You may have come across try/catch in earlier units. The textbook has a whole chapter on it.
+
+Q:
+Instead of using assert to check array bounds, can I throw an exception if index is out of bounds?
+
+A:
+Yes if you want to. Textbook has a chapter on it. List of std::exception is
+here https://en.cppreference.com/w/cpp/error/exception
+
+
+
+Q:
+I have got a lot of assignments due and also have to work. If it is not too much to ask, which chapter in the text do I need to read to do the Vector class?
+
+A:
+The chapter on "Overloading and Templates" listed at the top (highlighted) in the lab 5 sheet. A bloated version of what we need is already there. It is called something else, and so all you have to do is recognise it, rename it and remove the bloat and you have got your solution. Removing the bloat makes it smaller and less to type up too.
+
+
+Q:
+How do i overload the square bracket operator for const and not const. 
+
+A:
+The two versions: Test in isolation first to see which is used when. Remove the cout line once you have understood when each is called. Bounds checking is not shown. The textbook answers your question as well.
+
+    T& operator[] (int i)
+    {
+        cout<<"notconst: "; // just to show the difference in the calls.
+        return a[i]; 		// just basic return without any checking to 
+							//demonstrate the essence of the difference
+    }
+
+    const T& operator[] (int i)  const
+    {
+        cout<<"const: ";   // I have added this so that you can see which one is
+							// called to work out how each version runs when
+        return a[i];
+
+private:
+    T a[10]; // basic array, but the operators would be the same if dynamic
+			 // array allocation is used.
+	
+Think of why the operators return a reference T& and not just T.
+Once you have understood the use, remove the & and see the result.
+Note: An lvalue is what can be modified or assigned to.
+
+The operators are overloaded because the first one is not const and the second is const (declared const on the right side)
+
+A const method or const parameter would need to use the const version of []
+
+As indicted earlier, the textbook chapter on overloading and templates has more details.
+
+Q:
+I'm thinking that I'll modify my Vector template class to have an 
+insertion and deletion method instead of pushBack() and popBack().
+Is this the way to go?
+
+A:
+The Vector is just an encapsulated dynamic array providing controlled
+access. It should behave like an array. 
+
+As long as you can make a good case for your approach. The methods that you provide shouldn't have duplicated functionality and the functionality is best provided as methods. External helper routines  add "good to have" functionality, but methods provide absolutely essential functionality. "Absolutely essential" means that without these methods, the object can't do its job. Think carefully about what is the difference between "Absolutely essential" and "really nice to have". Designers have to think about this problem a lot.
+
+There is also a principle called DRY, that you must become intimately familiar with:
+ https://www.geeksforgeeks.org/dont-repeat-yourselfdry-in-software-development/
+
+The I/O operators from lab 4 were made as external helpers to 
+decouple format issues from classes. These operators were
+moved to main. The data classes are like the "Model" in MVC pattern. Display and formats are the "View". Do not make Model have a dependency on View.
+
+More related QandA on this topic below.
+
+
+Q:
+(related questions in lower case q, a)
+Regarding ICT283 Lab 5, when I designed my Vector template class I 
+included a pushBack() and popBack() function.
+
+However this required that I resize the array in which my T-types are being stored.
+
+To achieve this I've declared and initialized the array...
+
+     a)  T * array = (T *) realloc(array, arraySize)
+
+
+(I've got additional realloc() calls in both the pushBack() and popBack() functions to adjust the amount for memory the array is using based on the number of elements in the array.)
+
+
+The following seems to behave the same as the code in a):
+
+
+    b) T * array = new T[arraySize]; 
+
+A:
+Use this high level version in b). 
+a) is the lower level version, used in C programming.
+
+realloc also hides other operations that you need to be familiar with and be able to do yourself to really understand the processing requirements and tasks that needs to be carried out. So do not use realloc(). It is not permitted in the assignment.
+
+q:
+This has made me wonder:
+
+Is there anything special about an array, or is it just a 
+contiguous series of data of the same type stored in memory? 
+
+a:
+Nothing special, just contiguous memory. At the level of contiguous 
+bytes, the type isn't even relevant.
+
+In the example code (b) that you have for creating array:
+
+Once you have created the array, of let say, T binds to integer (i.e. int), making array an integer array of arraysize,  and assuming 32 bit ints, I can do this,
+
+char *dodgyC = (char *) array;
+
+dodgyC[0] is the first byte of the first 4 byte int value of the array you created.
+
+The pointer type is the "lens" or "window" through which the contiguous series of bytes are viewed when the pointer is dereferenced. [] does pointer arithmetic and then a deference. So array[2] is actually *(array+2). array+2 is the pointer arithmetic (addition) and it is adds 2*sizeof(pointer type) to array.
+
+Assuming a double is 8 bytes (64 bits) on your particular implementation,
+
+double *dodgyD = (double *) array;
+
+dodgyD[0] consists of 2 int values (2 x 32 bit ints) from the array but accessed as one element via dodgyD and represented as a 64 bit float - yes dodgy indeed. The two int values are accessed as one element via dodgyD[0] because dodgyD is a double pointer.
+
+When accessing memory via a pointer, there is no way to see memory as anything else than the type of the pointer. If you are using an int pointer, you can only see int. If you use a char pointer, you will see char, ... and so on.
+
+See description of the various builtin types in the textbook or 
+https://en.cppreference.com/w/cpp/language/types
+
+Pointers are powerful, useful but *very dangerous* mechanism. Memory access can happen in unintended ways. You will be experiencing it first-hand, instead of just reading about it, as we are using a powerful programming language. 
+
+You may have heard of what happened in what is called the "largest IT outage in history" when a security company called CrowStrike pushed an improperly checked update.
+
+A memory access violation at the privileged level can have very bad consequences.
+ 
+CrowdStrike own analysis indicates that the Sensor is written in C++. There was a pointer to an array of 20 elements. It was such a basic error that people learning to program make, trying to access the 21st element - an out of bounds access.  https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf 
+
+You will be making similar errors in this and later labs and learning from them. For you it is just loss of marks as your code would not be running at a privileged level and the OS will just kill your program. But the consequences when this error happens in production code is staggering. The amount of money that will be finally be involved would be eye-watering.
+
+https://ia.acs.org.au/article/2024/crowdstrike-sued-by-shareholders-over-mass-outage.html
+
+The OS allowed the memory access in privileged mode and damaged itself. There is another lesson to be learnt. Zero trust principle is used in security, but it should also be used in software architecture. 
+
+The other concern that there is with pointers is that when a data structure like the Vector you are building contains pointer to data. Then the rule of 3 applies. See Topic 5, Lec-13.ppt. The required methods must be tested to make sure that the data structure is useable. 
+
+q:
+Is it ok, that I've got pushBack() and popBack() methods in my Vector template?
+
+a:
+What would happen if you needed to put a value in a specified location - like the way an array is supposed to behave? i.e random access as opposed to sequential access.
+
+You would need to provide a method or operator for this access. You would already have a method to return size. Once you provide this random access method, you have duplication of functionality and this is not good from a design point of view. It is not minimal any more. 
+
+There is a (very good) case for pushback as access using operator[] doesn't increase size and the [] access enforces bounds strictly. Pushback is needed to keep putting new data into your Vector. In this situation operator [] is used to set/get existing array elements and so there is no duplication by pushback. See Rule 80 in coding standards.
+
+{There was a some debate in class about naming. The term "Push" is used for a very different data structure called Stack. A Vector is not a Stack, so pushback could be avoided. Preferred term is insert or maybe insert-end. I am indicating "maybe" as the term "end" is dictating implementation approach in the specs. The specs should avoid implementation concerns as the specs should aim for abstraction where possible. For data structures that can grow, and the Vector that you are building is such a data structure, the Coding Standards advice using pushback. See discussion for rule 80 in the coding standards.
+
+Should also consider if increasing size in [] is expected behaviour. Semantics of overloaded operators should not change. This rule applies to all overloaded operators. The usual [] operator doesn't increase size and by increasing size, in [] the semantics of [] is changed. Can you think of the pros/cons of allowing size change in []? Think of consequences good/bad of allowing size change in [].}
