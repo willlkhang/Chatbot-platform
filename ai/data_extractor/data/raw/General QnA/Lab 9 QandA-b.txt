@@ -86,5 +86,6 @@ Bst<Date> dateTree; // the Bst would need to know how to compare two dates
 Q: 
 Do I create a tree that stores any kind of data
 
-A: 
+A:
+
 not needed for part a - storing an integer is good enough but for part b, you should template it. You will need the template version for assignment 2.

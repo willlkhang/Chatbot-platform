@@ -22,15 +22,12 @@ def search_txt_files(dir_path : str, files=None):
     # recursively searches for text files from starting directory
     for item in current_dir.iterdir():
         
-        if item.is_file and re.search(r'\.txt', item.name):
+        if item.is_file() and re.search(r'\.txt', item.name):
             files.append(item)
         elif item.is_dir():
             search_txt_files(str(item), files)
             
     return files
-
-
-
 
 def extract_qna_pairs(txt_file_paths : list[Path]):
     
@@ -40,7 +37,7 @@ def extract_qna_pairs(txt_file_paths : list[Path]):
     The pairs are returned as a list of {Q: (Question), A: (Answer)}.
     """
     
-    text = []
+    qna_pairs = []
     
     for txt_file in txt_file_paths:
         
@@ -51,14 +48,17 @@ def extract_qna_pairs(txt_file_paths : list[Path]):
 
             # split by the Q and A tag
             split_text = re.split(r'(\n[AaQq].?\n)', raw_text)
-           
-            create_qna_pairs(split_text, text)
+            
+            while split_text and re.search(r'^([AaQq].?)$', split_text[0].strip()) is None:
+                split_text.pop(0)
+            
+            qna_pairs = qna_pairs + create_qna_pairs(split_text)
     
-    return text
+    return qna_pairs
 
 
 
-def create_qna_pairs(split_txt_list : list, pair_storage : list):
+def create_qna_pairs(split_txt_list : list):
     
     """
     Creates QnA pairs from raw txt files which have been split and appends them to a pair storage list.
@@ -70,9 +70,7 @@ def create_qna_pairs(split_txt_list : list, pair_storage : list):
     I am assuming that that QnA are in sequence always.
     """
     
-    # removes beginning text which has no QnA pairing
-    while split_txt_list and re.search(r'([AaQq].?)', split_txt_list[0].strip()) is None:
-        split_txt_list = split_txt_list[1::]
+    pair_storage = []
     
     # slice 4 since we're expecting split_txt_files to have a pattern of [Q, (question_str), A, (answer_str)]
     while len(split_txt_list) >= 4:
@@ -80,24 +78,27 @@ def create_qna_pairs(split_txt_list : list, pair_storage : list):
         # getting [Q, (question_str), A, (answer_str)]
         pair = split_txt_list[:4:]
         
-        A = pair[1].strip()
-        Q = pair[3].strip()
-        
+        Q = pair[1].strip()
+        A = pair[3].strip()
+
         # getting rid of really tiny QnA (and corrupted text)
         if len(A) > 5 and len(Q) > 5:
-            pair_storage.append({'Question' : A, 'Answer' : Q})
+            pair_storage.append({'Question' : Q, 'Answer' : A})
 
         # shortening the list to get the next pair
         split_txt_list = split_txt_list[4::]
         
+    return pair_storage
+        
 
 
-def create_json(pair_list, mode='w'):
+def create_json(pair_list, save_loc= Path.cwd() / 'data.json', mode='w'):
     
     """
     Creates a json file from a list
     """
-    with open('data.json', mode) as file:
+    
+    with open(save_loc, mode) as file:
         json.dump(pair_list, file, indent=4)
         
         
