@@ -1,0 +1,51 @@
+Q:
+I have a question for LabExTopic3, do we have to use UNIT class or not after creating the Result class.
+
+A:
+You must use both Result and Unit classes and the others that are asked for in the exercise.
+
+Q2 is very specific in that result contains unit + mark. In UML, would a filled diamond or unfilled diamond be used to represent the relationship? Think about this way: If there was no result, would a unit exist anyway? See PowerPoints notes again.
+
+Q:
+I just wanted to clarify the ppt slides. In Lecture 07 Arrays and Records, why would we declare a multi-dimensional array dynamically as in the example you have given working with two-dimensional arrays? I understand how the program example works, just why? Where this occurs in the code is in the prototype declaration, within the main body and CreateArray definition.
+
+A:
+
+1. If you need a large 2d array, there would not be sufficient space on the run time stack. The heap memory is available for programmers to use. Memory on heap is created using new.
+
+2. If you have no idea of how big the array size is going to be when you are writing the program. Data can come from a file and files can contain different amounts of data. If you create the largest possible array, you are wasting memory. If you create an array that is too small, all data can't be loaded.
+
+So the array is created dynamically, meaning the array is created when the subroutine runs and the particular line containing "new" is executed. The non-dynamic array version (e.g. float array[5];) is created *before* the subroutine containing this declaration of array runs. This non-dynamic creation happens when the memory required for the subroutine is being setup on the runtime stack. The programmer needs to specify the size at the time of writing the program.
+
+In C++, heap memory is requested with "new". You would have encountered "new" in Java. For comparison with C, various version of malloc, calloc is used to get heap memory, but the concept is the same.
+
+Prototype declaration is just declaration. main() has declarations.
+
+float **array = NULL;   // does not create an array. Creates a pointer variable. The type of this variable is pointer to a pointer to a location in memory to store a float. 
+
+So what the above means is that array is pointer variable. It stores an address. But the address values it stores is also an address. See notes and workshop discussions. 
+
+Where is this pointer variable stored? On the run-time stack or heap?
+
+How big (in byte/bits) is this array variable? 
+ Try this:  cout << sizeof(array) << endl; in main for different array sizes. 
+Check the two outputs to see that it is the size of a pointer variable:
+
+//-----------------------------------------
+    // Declare a pointer to an array of pointers
+    float **array = NULL;
+    int rows, cols;
+
+    cout << sizeof(array) << endl; // <------------------
+
+    GetSizes (rows, cols);
+
+    // Get memory for the 2 dim array
+    array = CreateArray (rows, cols);
+
+    cout << sizeof(array) << endl;  // <------------------
+
+... the rest of the existing code.
+//-----------------------------
+
+So memory for the array is created when the statements containing "new" is executed in CreateArray

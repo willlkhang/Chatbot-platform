@@ -1,0 +1,51 @@
+The most recent QandA is on the top. Reverse chronological order.
+---------------------------------------------------------------
+
+Q:
+Can I use our Vector later or remove it completely and use the map and other data structures needed for assignment 2.
+
+A:
+The choice is entirely up to you. You decide on how you would use the various data structures, what combinations to use as long as the map and the required tree data structure (covered later) is used. 
+
+**We are rapidly moving to situations where you make the decisions and you must defend your design decisions.** Industry expects our grads to be able to do this.
+
+All choices needs to be defended (rationale provided with discussion of pros/cons).
+
+For the lab 8 exercises, follow the instructions in Lab 8.
+
+
+Q:
+Do I need to write test plans as in the 3rd year units samples.
+
+A:
+No, keep it simple. See the PowerPoint notes example for Calculator. Our assignments are smaller than 3rd year projects. What you need to take into third year is that there are different types of testing beyond unit and application tests done in ict283.
+
+
+Q:
+In some of the datafiles, some fields are recorded as 'N/A'. Is in an error in the datafile or we should write a code to handle these situations?
+
+A:
+Yes, your code filters out (ignores the NA). It normally means that sensors were offline and so the data logger software recorded that.
+
+It depends a lot on who wrote the data logger software. So it is not an error. A different programmer would take a different approach in writing the data logger using empty field. An empty field is denoted by two commas in sequence:
+
+data,some data,,data,data
+
+The two commas in sequence ,, means that there was no value in between them. It is like the NA.
+
+Your can decide to ignore the whole line if
+1. there is an NA (or empty) in any field, or
+2. there is an NA (or empty) in any of the required fields that was being used for assignment 1 (and later in Assignment 2)
+
+You choose either 1 or 2 from above but you must explain your reasoning.
+
+
+Q:
+Can I test with all the files provided? Can I use more?
+
+A:
+Yes and you can use more. If you download your own files.
+
+To test your data structure and your program, you could just duplicate the same file listings repeatedly in the data/data_source.txt file. For example to test how fast your program can read the data files, list 20 or more files in the data_source.txt file. It doesn't matter if the files are repeated in the index file as you are just checking if you can read and load so much data stress testing your data structure and checking for inefficiencies in your code. Remember the light construction code from the earlier topic
+
+But, for real testing to the test plan, create smaller specially designed test files that test specific conditions specified in your test plan. What is in a properly designed test plan is the real test that we are after. See lecture notes for this topic 8. Look at the test files provided for the third year units to get an even better understanding of where we are going.
