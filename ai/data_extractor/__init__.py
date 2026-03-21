@@ -1,0 +1,1 @@
+from ai.data_extractor.run_extractor import run_extraction
