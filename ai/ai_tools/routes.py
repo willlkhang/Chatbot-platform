@@ -1,18 +1,24 @@
 from flask import request, jsonify
-from ai_tools import core
-from ai_tools.forms import MaterialForm
+from ai_tools import core, db
+from ai_tools.schema import MaterialSchema
+from ai_tools.models import Material
+from pydantic import ValidationError
 
 
 # allows people to create data on the database
 @core.route("/create", methods=['POST'])
 def create():
     raw_data = request.get_json(silent=True)
-    
-    print(raw_data)
-    form = MaterialForm(**raw_data)
-    
-    if form.validate():
-        return jsonify({'condition': [form.topic.data, form.content.data]})
-    else:
-        return jsonify({'condition': 'failed'})
+    try:
+        data = MaterialSchema(**raw_data)
+        
+        materials = Material(topic=data.topic, content=data.content)
+
+        db.session.add(materials)
+        db.session.commit()
+        
+        return jsonify({'status': 'success'})
+    except ValidationError as e:
+        return jsonify({'status': 'failed',
+                        'details': e.errors()}), 400
     
