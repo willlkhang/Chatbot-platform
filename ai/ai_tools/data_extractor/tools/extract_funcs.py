@@ -103,11 +103,12 @@ def create_qna_pairs(split_txt_list : list):
         
 
 
-def create_json(pair_list, save_loc= Path.cwd() / 'data.json', mode='w'):
+def create_json(pair_list, save_loc= Path.cwd() , mode='w'):
     
     """
     Creates a json file from a list
     """
+    save_loc = str(save_loc) +  '/data.json'
     
     with open(save_loc, mode) as file:
         json.dump(pair_list, file, indent=4)
