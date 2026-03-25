@@ -7,18 +7,19 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-service" />
+        <module name="base-service" />
+        <module name="gateway-service" />
+        <module name="chat-service" />
         <module name="personalization-service" />
         <module name="user-service" />
-        <module name="base-service" />
         <module name="discovery-service" />
-        <module name="gateway-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ai-chat" options="-parameters" />
-      <module name="base-service" options="" />
+      <module name="chat-service" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />

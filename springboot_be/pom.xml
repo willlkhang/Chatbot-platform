@@ -13,6 +13,7 @@
         <module>user-service</module>
         <module>base-service</module>
         <module>personalization-service</module>
+        <module>chat-service</module>
 
     </modules>
 
