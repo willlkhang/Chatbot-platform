@@ -1,0 +1,60 @@
+WITH TaggedQuestions AS (
+    SELECT 
+        q.title AS question_title,
+        q.body AS question_body_raw,
+        a.body AS answer_body_raw,
+        q.score,
+        CASE 
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|oop|%' OR CONCAT('|', q.tags, '|') LIKE '%|object-oriented|%' THEN 'OOP'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|pointers|%' OR CONCAT('|', q.tags, '|') LIKE '%|pointer|%' THEN 'POINTERS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|parameters|%' OR CONCAT('|', q.tags, '|') LIKE '%|arguments|%' THEN 'PARAMETERS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|arrays|%' OR CONCAT('|', q.tags, '|') LIKE '%|array|%' THEN 'ARRAYS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|struct|%' OR CONCAT('|', q.tags, '|') LIKE '%|record|%' THEN 'RECORDS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|c|%' AND (CONCAT('|', q.tags, '|') LIKE '%|char|%' OR CONCAT('|', q.tags, '|') LIKE '%|string|%') THEN 'C CHARACTER FUNCTIONS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|string|%' OR CONCAT('|', q.tags, '|') LIKE '%|strings|%' THEN 'STRINGS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|vector|%' OR CONCAT('|', q.tags, '|') LIKE '%|std-vector|%' THEN 'VECTORS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|software-design|%' OR CONCAT('|', q.tags, '|') LIKE '%|testing|%' THEN 'DESIGN AND TESTING'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|class-design|%' THEN 'MINIMAL AND COMPLETE CLASSES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|inheritance|%' THEN 'INHERITANCE'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|composition|%' OR CONCAT('|', q.tags, '|') LIKE '%|object-composition|%' THEN 'COMPOSITION'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|aggregation|%' THEN 'AGGREGATION'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|abstract-class|%' OR CONCAT('|', q.tags, '|') LIKE '%|interface|%' THEN 'ABSTRACT CLASSES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|encapsulation|%' THEN 'ENCAPSULATION'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|linked-list|%' THEN 'LINKED LIST'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|multidimensional-array|%' OR CONCAT('|', q.tags, '|') LIKE '%|2d-array|%' THEN 'TWO DIMENSIONAL STRUCTURES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|set|%' OR CONCAT('|', q.tags, '|') LIKE '%|hashset|%' THEN 'SETS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|dictionary|%' OR CONCAT('|', q.tags, '|') LIKE '%|map|%' THEN 'MAPS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|stack|%' THEN 'STACKS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|queue|%' THEN 'QUEUES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|tree|%' OR CONCAT('|', q.tags, '|') LIKE '%|trees|%' THEN 'TREES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|binary-tree|%' OR CONCAT('|', q.tags, '|') LIKE '%|binary-search-tree|%' THEN 'BINARY TREES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|b-tree|%' OR CONCAT('|', q.tags, '|') LIKE '%|trie|%' THEN 'MULTIWAY TREES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|search|%' OR CONCAT('|', q.tags, '|') LIKE '%|searching|%' THEN 'SEARCHING'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|merge|%' THEN 'MERGING'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|sorting|%' OR CONCAT('|', q.tags, '|') LIKE '%|sort|%' THEN 'SORTING'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|algorithm|%' OR CONCAT('|', q.tags, '|') LIKE '%|algorithms|%' THEN 'ALGORITHMS'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|hash-table|%' OR CONCAT('|', q.tags, '|') LIKE '%|hashtable|%' THEN 'HASH TABLES'
+            WHEN CONCAT('|', q.tags, '|') LIKE '%|graph-theory|%' OR CONCAT('|', q.tags, '|') LIKE '%|graph-algorithm|%' THEN 'GRAPH THEORY'
+        END AS topic
+    FROM `bigquery-public-data.stackoverflow.posts_questions` AS q
+    JOIN `bigquery-public-data.stackoverflow.posts_answers` AS a
+        ON q.accepted_answer_id = a.id
+),
+RankedQuestions AS (
+    SELECT 
+        topic,
+        question_title,
+        question_body_raw,
+        answer_body_raw,
+        ROW_NUMBER() OVER (PARTITION BY topic ORDER BY score DESC) as rank
+    FROM TaggedQuestions
+    WHERE topic IS NOT NULL
+)
+SELECT 
+    topic,
+    question_title,
+    REGEXP_REPLACE(question_body_raw, r'<[^>]+>', '') AS question_body,
+    REGEXP_REPLACE(answer_body_raw, r'<[^>]+>', '') AS answer_body
+FROM RankedQuestions
+WHERE rank <= 3000
+ORDER BY topic, rank
