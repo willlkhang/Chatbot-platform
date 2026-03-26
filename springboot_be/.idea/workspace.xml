@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/mapper/UserMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/service/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -360,7 +357,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1774441532208</updated>
-      <workItem from="1774441533287" duration="8771000" />
+      <workItem from="1774441533287" duration="9128000" />
     </task>
     <servers />
   </component>
