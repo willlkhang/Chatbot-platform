@@ -2,8 +2,8 @@ package com.project.user.service;
 
 import com.project.base.domain.User;
 import com.project.base.outputDto.UserResponse;
-import com.project.user.mapper.UserMapper;
 import com.project.user.repository.UserRepository;
+import com.project.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Override
     public List<UserResponse> getAllUsers() {

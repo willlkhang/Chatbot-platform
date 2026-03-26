@@ -11,8 +11,16 @@
         <module name="gateway-service" />
         <module name="chat-service" />
         <module name="personalization-service" />
-        <module name="user-service" />
         <module name="discovery-service" />
+      </profile>
+      <profile name="Annotation profile for ai-chat" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
+        </processorPath>
+        <module name="user-service" />
       </profile>
     </annotationProcessing>
   </component>
