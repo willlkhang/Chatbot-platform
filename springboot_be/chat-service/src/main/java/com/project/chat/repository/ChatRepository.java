@@ -20,7 +20,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Chat c SET c.messages=:messages WHERE c.chatId =:chatId")
+    @Query(value = "UPDATE Chat c SET c.messages=:messages WHERE c.userId=:userId AND c.chatId =:chatId")
     void updateConversation(@Param("chatId") Long chatId,
+                            @Param("userId") Long userId,
                             @Param("messages") List<String> messages);
 }

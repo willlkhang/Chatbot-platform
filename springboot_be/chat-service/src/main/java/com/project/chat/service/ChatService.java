@@ -8,5 +8,5 @@ public interface ChatService {
 
     Chat getChatById(Long chatId);
     Chat getChatByUserId(Long userId);
-    void updateConversation(List<String> messages);
+    void updateConversation(Long userId, Long chatId, List<String> messages);
 }
