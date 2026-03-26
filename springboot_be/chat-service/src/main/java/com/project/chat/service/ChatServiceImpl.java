@@ -27,4 +27,9 @@ public class ChatServiceImpl implements ChatService{
     public void updateConversation(Long userId, Long chatId, List<String> messages) {
         chatRepository.updateConversation(chatId, userId, messages);
     }
+
+    @Override
+    public void createChat(Chat chat) {
+        chatRepository.save(chat);
+    }
 }

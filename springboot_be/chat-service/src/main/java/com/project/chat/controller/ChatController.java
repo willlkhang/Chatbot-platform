@@ -9,12 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/chat")
 public class ChatController {
 
     @Autowired
     ChatService chatService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/create")
+    public ResponseEntity<?> createChat(@RequestBody Chat chat){
+        chatService.createChat(chat);
+        return ResponseEntity.ok().body(chat);
+    }
+
+    @GetMapping("/{id}")
     public ResponseEntity<?> getChatByUserId(@PathVariable Long userId){
         Chat chat = chatService.getChatByUserId(userId);
         if(chat == null){
@@ -23,7 +30,7 @@ public class ChatController {
         return ResponseEntity.ok().body(chat);
     }
 
-    @PostMapping("/user/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getChatById(@PathVariable Long id){
         Chat chat = chatService.getChatById(id);
         if(chat == null){
