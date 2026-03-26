@@ -10,5 +10,5 @@ public interface UserService {
     User getUserByUsername(String name);
     User getUserById(Long id);
     List<UserResponse> getAllUsers();
-
+    void createUser(User user);
 }
