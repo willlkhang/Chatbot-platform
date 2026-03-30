@@ -1,0 +1,14 @@
+.env
+
+unsloth_compiled_cache/
+
+unsloth_training_checkpoints/
+
+outputs/
+
+__pycache__/
+
+#databasegroup
+checkpoints.sqlite-shm
+checkpoints.sqlite-wal
+checkpoints.sqlite
