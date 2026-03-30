@@ -61,13 +61,15 @@ workflow.add_edge("tools", "agent") # Back to agent after using tool
 
 app = workflow.compile(checkpointer=memory)
 
-async def run_request():
+async def run_request(query):
     config = {"configurable": {"thread_id": "convo_1"}}
     
     # Try asking a question that requires memory
-    query = "What happen if I don't use SOLID?"
     res = app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
     print(f"\nAgent: {res['messages'][-1].content}")
 
+    return (f"\n{res['messages'][-1].content}")
+
 if __name__ == "__main__":
-    asyncio.run(run_request())
+    query = "What is my name?"
+    asyncio.run(run_request(query))
