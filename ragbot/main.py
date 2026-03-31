@@ -37,7 +37,7 @@ tool_node = ToolNode(tools)
 
 def run_agent_reasoning(state: MessagesState):
     SYSTEM_MSG = SystemMessage(content="You are a helpful assistant. Use search_assignment_docs for homework and Tavily for general web info.")
-    # Gemini sees the whole history + the system message
+
     response = llm_with_tools.invoke([SYSTEM_MSG] + state["messages"])
     return {"messages": [response]}
 
@@ -47,7 +47,7 @@ def should_continue(state: MessagesState):
         return END
     return "tools"
 
-# --- 4. BUILD THE GRAPH ---
+
 conn = sqlite3.connect("checkpoints.sqlite", check_same_thread=False)
 memory = SqliteSaver(conn)
 
@@ -63,12 +63,20 @@ app = workflow.compile(checkpointer=memory)
 
 async def run_request(query):
     config = {"configurable": {"thread_id": "convo_1"}}
-    
-    # Try asking a question that requires memory
-    res = app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
-    print(f"\nAgent: {res['messages'][-1].content}")
 
-    return (f"\n{res['messages'][-1].content}")
+    res = app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
+    raw = res['messages'][-1].content
+    print(f"\nAgent: {raw}")
+
+    if isinstance(raw, list):
+        text = ""
+        for block in raw:
+            if isinstance(block, dict) and block.get('type') == 'text':
+                text += block.get('text', '')
+    else:
+        text = raw
+
+    return text
 
 if __name__ == "__main__":
     query = "What is my name?"
