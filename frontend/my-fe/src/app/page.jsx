@@ -5,33 +5,68 @@ import { useEffect, useState } from "react";
 export default function Home(){
 
     const [messages, setMessages] = useState([]);
-    const [inputValue, setInputValue] = useState("");
+    const [query, setQuery] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const isChatting = messages.length > 0;
 
     const handleSendMessage = (e) => {
         e.preventDefault();
-        if (inputValue.trim() === "") return;
+        if (query.trim() === "") return;
+
+        const textToSend = query;
 
         const newMessages = [
             ...messages,
-            { role: "user", content: inputValue }
+            { role: "user", content: textToSend }
         ];
 
         setMessages(newMessages);
-        console.log("What's your problem from ICT283?:", inputValue);
-        setInputValue("");
+        console.log("What's your problem from ICT283?:", query);
+        setQuery("");
 
-        setTimeout(() => {
-            setMessages((prev) => [
-                ...prev,
-                { role: "ai", content: "I am ready to help you with your DSA problem. What are you stuck on?" }
-            ]);
-        }, 600);
+        chatWithRag(textToSend);
+
+        // setTimeout(() => {
+        //     setMessages((prev) => [
+        //         ...prev,
+        //         { role: "ai", content: "I am ready to help you with your DSA problem. What are you stuck on?" }
+        //     ]);
+        // }, 600);
     };
 
     const handleNewChat = () => {
         setMessages([]);
+    };
+
+    const chatWithRag = async (messageText) => {
+        if (!messageText) return;
+
+        try {
+            setLoading(true)
+            const respond = await fetch(
+                "http://localhost:5000/api/response",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: messageText })
+            });
+
+            if (!respond.ok) {
+                throw new Error(`API Error: ${respond.status}`);
+            }
+            const res = await respond.json();
+            setMessages((prev) => [
+                ...prev,
+                { role: "ai", content: res.ai }
+            ]);
+        } catch (error) {
+            console.log("Fetch Failed ", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -75,45 +110,15 @@ export default function Home(){
                     <form className="form" onSubmit={handleSendMessage}>
                         <input type="text"
                                 placeholder="Enter your questions here"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)} 
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)} 
                         />
-                        <button type="submit" disabled={!inputValue.trim()}>
+                        <button type="submit" disabled={!query.trim()}>
                             Send
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-
-
-        // <div className="main-container">
-        //     {!isChatting && (
-        //         <div className="welcome-screen">
-        //             <h1>Hi! I am a DSA bot</h1>
-
-        //         </div>
-        //     )}
-
-        //     {isChatting && (
-        //         <div className="chat-history">
-        //             {/* render chat here */}
-        //             <div className="message ai">
-        //                 Willing to help you
-        //             </div>
-        //         </div>
-        //     )}
-        //     <div className={`input-area ${isChatting ? "at-bottom" : "at-center"}`}>
-        //         <form onSubmit={handleSendMessage}>
-        //             <input 
-        //                 type="text" 
-        //                 placeholder="Enter your problem here..." 
-        //                 value={inputValue}
-        //                 onChange={(e) => setInputValue(e.target.value)}
-        //             />
-        //             <button type="submit">Send</button>
-        //         </form>
-        //     </div>
-        // </div>
     )
 }
