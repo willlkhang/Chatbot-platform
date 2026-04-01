@@ -1,0 +1,53 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #f9f9f9;
+    transition: all 0.3s;
+    padding: 0 24px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    &-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f9fbfc;
+        height: 50px;
+        overflow: hidden; //this means when the children is larger than parent, the overflow parts are hidden
+        transition: all 0.3s;
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+
+            .block-center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+
+                .logo {
+                    padding: 5px;
+
+                    img {
+                        width: auto; 
+                        height: 40px;
+                        object-fit: contain;
+                    }
+                }
+
+                .slogan {
+                    font-size: 20px;
+                    font-weight: 600;
+                    font-style: italic;
+                    color: black;
+                    margin-left: 10px;
+                }
+            }
+        }
+
+    }
+}
