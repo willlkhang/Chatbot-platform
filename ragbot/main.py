@@ -4,30 +4,34 @@ from dotenv import load_dotenv
 
 import asyncio
 
-# LangChain / LangGraph imports
+#LangChain / LangGraph imports
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_pinecone import PineconeVectorStore
 from langchain_tavily import TavilySearch
 from langchain_core.tools import tool
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import START, MessagesState, StateGraph, END
 from langgraph.prebuilt import ToolNode
 
-load_dotenv()
+from repository import retriever
 
-embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001",
-                                          google_api_key=os.environ.get("GOOGLE_API_KEY"),
-                                          output_dimensionality=1536)
+load_dotenv()
 
 llm = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview")
 
-vectorstore = PineconeVectorStore(index_name=os.environ['INDEX_NAME'], embedding=embeddings)
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
 @tool
 def search_assignment_docs(query: str) -> str:
-    """Search assignment docs and SOLID principles. Use for assignment questions."""
+    """Search assignments questions.
+        Look for keywords:
+        - Assignment 1
+        - Assignment 2
+        - Lab, tutorials
+        - SOLID
+        - ICT283
+        - No marks, zero marks
+        - Demostrate, demo, demostration
+    """
     docs = retriever.invoke(query)
     return "\n\n".join(doc.page_content for doc in docs)
 
