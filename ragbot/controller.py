@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 import asyncio
 
-from main import run_request
+from handler import run_request
 
 app = Flask(__name__)
 api = Api(app)
