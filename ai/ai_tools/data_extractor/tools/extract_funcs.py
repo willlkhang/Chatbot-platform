@@ -93,7 +93,7 @@ def create_qna_pairs(split_txt_list : list):
             question = split_txt_list[i + 1].strip()
             answer = split_txt_list[i + 3].strip()
             
-            pair_storage.append({'Question': question, 'Answer': answer})
+            pair_storage.append({'Q': question, 'A': answer})
             
             i += 4
         else:

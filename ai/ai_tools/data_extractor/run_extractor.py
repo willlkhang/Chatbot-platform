@@ -1,4 +1,4 @@
-from ai.ai_tools.data_extractor.tools import extract_funcs as ef
+from ai_tools.data_extractor.tools import extract_funcs as ef
 
 """
 for internal development use
