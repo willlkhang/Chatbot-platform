@@ -1,0 +1,948 @@
+Assignment Moderation (Assignments 1 and 2)
+	Be aware that your assignment 1 and 2 marks are not final until your exam performance validates your ability. We reserve the right to revoke your assignment marks (0 marks) if your exam answers indicate that your ability is lower than what is indicated by your performance in the assignments. When this happens, you may be required to sit an invigilated assignment that is handwritten on paper. You will need to pass this invigilated hand-written assignment for your original assignment marks to be re-instated. 
+
+
+Reverse chronological order - most recent at the top of this file.
+
+Above all, heed rule 6 "Correctness, simplicity, and clarity come first" in the Coding standards book https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988#
+
+Rules in the Coding standards book can be used to justify your own approach. Quote the rule number and title with an explanation of how the rule is applied to your approach. The Coding standards book is part of the mandatory readings for the assignment. These rules will apply to any design/code written in labs/assignments/Exam. Also see the Exam QandA. They will also continue to apply after you have graduated.
+
+Except for std::map and map variants, all other STL data structures being used must be encapsulated in your own data structure for marks to be allocated. The typical example would be that you want to use std::vector. This is fine, but it must be wrapped in your Vector that came from the labs and Assignment 1. 
+
+**If your application uses std::vector directly, NO marks are given. Don't forget you also need to justify usage. 
+
+**The polymorphic function wrapper std::function cannot be used in the assignment. If it is seen in any part of your code, NO marks will be given for the assignment.
+
+**Do not use auto compiler based type deduction or range for loops.
+
+**Be aware that when some requirement is specified and that requirement is ignored, NO marks are allocated. Some students have already discovered this in assignment 1. Ignoring advice in this QandA file can have the same outcome.
+
+**Make sure main() shows where input/output and high level algorithm of the approach as shown in the workshops. The marker does not have time to go searching.
+
+**Note that you will be asked to explain your tree in-person. If you are unable to explain, NO marks can be allocated as your tutor/lecturer would not be able to verify that you did built that tree yourself.***
+
+***If you are developing your own Map data structure, or balanced BST you will need to demonstrate these data structures to your tutor prior to submission.
+
+
+----------------------------------------
+Q:
+In the testTree.cpp there are static global variables. Can I use global variables like that in the assignment?
+
+A:
+If you are referring to variables like unit::c and CollectU::i being global variables, try the following to see if they are actually global variables in the way you think global variables are accessible to any subroutine.  Can you change the values from anywhere? Or print out the values from anywhere?
+
+int main(){
+    unit::c = 20; // can you change these values here?
+    CollectU::i = 200;
+	
+	std::cout << unit::c; // is this access possible?
+
+// ... other code from the main()
+
+}
+
+
+
+
+Q:
+Can I use std::hash to hash my data key to get the hash value.
+
+A:
+Yes, you can use std::hash, or use your own hash function if you did the ict159 assignment that involved hashing.
+You will need to demonstrate in-person the approach you are taking and why you are taking that approach.
+
+Related QandA below.
+
+
+Q:
+I have a question regarding the minimum requirement in the assignment 2 document. I have copied and pasted the ones found in the bin/debug folder where it has the executable then included the appropriate data folder containing all the files to be read. It works on my machine but it tells me that it can't find libgcc_s_dw2-1.dll and the executable does not work on a machine I tested that does not have any compilers. Am I missing something that should have been in that folder that should go along the executable or is this a possible issue with the project build settings? I do not recall any of the provided documents on how to resolve this issue or where to even start resolving this issue thus I am asking for advice on how to proceed. 
+
+A:
+In the compiler settings, select the static link options, then build in release mode.
+
+When something is still missing, locate the .dll and place in the same folder. 
+
+Q
+I am getting bad problems when the tree is unbalanced. I think I have a solution where I encapsulate my bst in another class and that class is responsible for inserting by hashing first. The wrapper class manages everything that has to do with Bst. 
+
+Would this meet the assignment Bst requrements of using the Bst as the assignment code doesn't see the bst at all?
+
+A
+Assignment 2 specifications require usage of the BST. The specs doesn't say how. 
+
+If you encapsulate your BST in a BST manager class which manages the BST, and the assignment makes use of this BST manager class, the requirements for BST is met.
+
+From your question, I am assuming that you are thinking of a manger class for your BST.
+
+q
+Follow up to my previous question is that I have written my own hash function. Can I use my own hash function?
+
+a.
+Yes. 
+Review the requirements of good hash functions in Topic 11. 
+
+
+Q:
+I have been thinking about what you had mentioned in the tut. I like the idea where all the data from all the data files stored in the assignment 1 Vector. The map and bst just index the Vector with no weaterher data in the bst or map.
+
+My program is mostly working now, but I was thinking of changing to the idea because I think there are many advantages as no data actually moves around or is duplicated. Would you advice changing.
+
+A:
+NO. Do not change now. It is the last week of semester. Change means substantial testing again.
+
+Complete the assignment using the approach you have been following. Test rigorously to a careful test plan. Once the assignment is ready for submission, and if you still have time, create a branch of the version from Lab 8. Improve the design of assignment 1 to make it more modular and then work out how to use the alternative approach we discussed in class where the map and BST are used to index the Vector by Date and time. 
+
+To get some inspiration, look at Topic 9/Lec-30.ppt. These are multiway trees, however see how the B+ Tree is different to a B Tree. The list referred in the slide is the Vector we discussed. Also pros/cons of the approach. But don't go building a B+ tree now. 
+
+Best not to jump into what we discussed without doing a bit more homework first.
+
+Q:
+This week is the last week. What if we fail to show the demonstration for the assignment 2, as we fail to catch up with evrything, due to unfortunate circumstances. 
+We will be getting straight zero for assignment 2 then ?
+If that is the case, then it would be so much difficult to pass the unit.
+Looking for your kind consideration.
+
+A:
+The demonstration in the last week is not of a fully working assignment, so no expectation that you have caught up with everything. 
+
+The parts that are not working are stubbed as indicated in the lab sheet and explained in the workshop. So in the last week you show progress on the assignment and answer your tutor's questions.
+
+The assignment requires the use of the BST with function pointers from lab 10. Lets say, you have not been able to incorporate Lab 10's BST into the assignment. Let your tutor know. You tutor will ask you to explain how the BST with function pointers work and how you are planning to use it in the assignment. You will need some idea of how it could be used and how the function pointers are used as call backs.
+
+Show your test plan to your tutor and compare the output of the parts that are working with what is in the test plan. Lets say the answers being output are actually *wrong*. That is ok too as long as you can show that the test is failing. It shows the tutor that you are aware that the output is wrong because you have a test plan to check the output and that you are following a development process. These are good practices.
+
+Lets assume that you did try the demonstration and still got a zero. Then, because you tried, we can also try to help you. What that means is that if you pass the exam, and particularly if you do well in the exam, your assignment submission can be looked at again. You may have to come in to explain your assignment after the exam.
+
+It is only when you don't bother or give up, then nothing can be done to help you.
+
+
+Q:
+I have had my BST assessed by my tutor and it meets the requirement of the traversal methods using function pointers. My main concern is I will be using the maps mainly to store the data but use the BST primarily to search and verify that such entries are made in the maps before doing the calculations and I will not be utilising the traversal functions. Will I get zero marks on technicalities if I have relegated my tree to use primarily to search?
+ 
+A:
+No it can't be zero as you are using both map and BST for processing.
+
+Search is the primary function of the search tree. As you would be using the BST in your processing, you are meeting the assignment's data structure requirements for BST usage. 
+
+What you get would depend on how well you make your case, and develop (design and implement) your solution.
+
+Q:
+My next question is with regards to the use of the keyword auto. As far as I am aware it is of C++11. If I am using it with iterators such as auto itr = map.begin() or auto = myMap.CreateIterator(), Is that approach forbidden?
+
+A:
+I had indicated not using auto during class in response to a similar questions some time ago. Thanks for asking to confirm.
+
+In this unit, everyone has to learn carefully about managing and using type information. The approach you are showing is a nice one, but it doesn't lend itself to learning about types and careful usage of types. The use of auto offloads the type deduction to the compiler. While learning, this task is not to be offloaded.
+
+So do not use auto in assignment 2. You will be using auto after this unit as you would have learnt careful management and usage of types.
+
+Also a reminder not to use range for loops.
+
+The marker can give a mark of 0 if you violate.
+
+The use of auto and range-for loops are encouraged *after* this unit. But be aware their usage has their own rules that you have to learn.
+
+
+Q:
+My last question is related to wrapping the map in a wrapper class, does operator overloads for operator [], operator = , the copy constructor, and regular constructor count towards the 4-5 public functions allowed for the map to be considered for the bonus?
+
+A:
+It depends on how the private data member of type std::map is declared. Your list may not be minimal. Review how the Stack and Queue classes that were provided in the earlier topics wrapped their corresponding STL versions.
+
+
+Q:
+My plan of attack is to use the BST and create a key of YYYYmmdd for the nodes in my BST, and then use a map from each of those nodes to contain the daily values, since I will be collecting them into a single result, my map may require a way for me to insert many values at the same time. I have included a merge function into my map container, while this is not minimal but complete at the strictest definition it is required for my intended method of collection without making the overall codebase messier. When the phrase of minimal but complete is used, it is related to the overall intent behind the code correct? I just want to clear things on my end before I get too deep into the structure that as long as I can justify why a routine is present it can exist within my codebase.
+
+A:
+What you are proposing would meet the requirements of the assignment where map and bst has to be used.
+
+How well it meets the requirements depends on how well you make your case in defending your approach. Something to consider is the key you are using to insert into the bst. Would search give you O(lg n)?  Can an idea from a few weeks back and covered formally in topic 11 be used to help?
+
+Minimal but complete means the public interface. Multiple discussions about this occurred during the workshops during the semester. Some advice is also provided in one of the early PowerPoint slides. If you provide a public merge into the map, the question would arise if merge is a proper behaviour for a map. An object is known only by its public behaviour(s).
+
+Would the argument for providing a public merge in map be a violation of the rules for class design?
+
+Also see rules 32, 33 and 36 and what the "Law of Second Chances" mean in the 101 Coding standards book. 
+
+Although rule 35 is about inheritance, it also has specific advice related to your question. 
+
+Consider if your argument for merge is violating the "prime-directive" in the Coding standards book: Rule 0.
+
+Assignment markers expect that you are following these rules, and a number of others that have been referenced throughout the semester. Not following these rules are serious errors as the outcome is badly designed software. In many cases a mark of 0 can be given even when the code gives the correct answer. 
+
+Badly designed software is unstable and harder to maintain. Just because that software gave the correct answer for one instance of an assignment, that software has no right to exist. Maintainability has been a focus throughout the semester with changes being made to existing code base almost every week.
+
+Note that badly designed software should result in negative marks, but negative marks are not given so outcome is 0. Similar advice was given for Assignment 1 during the workshops and in the QandA.    
+
+Q:
+Can I use both std::map and my own Map in Assignment 2 and get the bonus?
+
+A:
+No.
+
+If you want the bonus, you must use Map throughout. std::map (or its STL variants) must not be visible in your assignment application. 
+
+Consider the implications for such a mix/match approach from a software design perspective and the maintenance issues such usage will cause.
+
+Or you can use std::map (or its STL variants) without the bonus. This is the only allowable usage of an STL data structure. 
+
+Note that you can use string and stringstream as before. Do not wrap these, as you would be causing an unnecessary speed hump when using an elementary data type. I am using the term "elementary" to distinguish from data types like STL set, stack, queues, vector, etc as these store anything you want. The "anything" is the parameterised type, like type T as in:
+template <class T>
+or more involved versions like 
+template <class T, class U> etc.
+
+string and stringstream are for characters, and thus elementary type.
+
+BTW, we are aware of some "clever" tricks used to get past the requirement to use both bst and map. The following doesn't meet the data structures requirement and there will be no marks for code.
+
+Open the data files, load the data into the map and tree, and then do nothing else with the map and/or tree. Then load data into the Vector just like assignment 1. Menu options addressed as in assignment 1 with the updates for menu in assignment 2 using only the Vector. As the map and bst wasn't being used in the processing it was not considered as assignment 2 at all.
+
+
+Q:
+i was just wondering cause i seem to remember someone said we weren't allowed to but I just wanted to double-check. am I allowed to use a break statement to break out of loops like so
+for (int i = 0; i < n;i++)
+{
+	if (conditiontobreak)
+	{
+		break;
+	}
+}
+
+
+A:
+There has been some discussion about this in class about the time we looked at coding standards for critical systems in topic 10.
+
+Revise AV Rule 191    (MISRA Rule 58) in folder "coding standards and rules" in Topic 10.
+
+Typically, the rule is single entry, single exit.
+
+As with all rules, there can be exceptions where the exceptions aid readability, because readability is our highest priority. 
+
+Readability has to do with rapid comprehension of program logic.  
+
+
+Q:
+ I am using the BST and Maps to store/organise/retrieve the data that I will be using. I was wondering if it would violate the requirement if I will retain the functions I used for the calculation of average and standard deviation and the PCC that requires the data to be passed into the function as an array/vector? do I need to rewrite such functions that it should do use only a BST/Map?
+ 
+A:
+There is no requirement on what is passed to these functions.
+
+Those functions need to be more general, so changing to use bst/map would not make them more useful. 
+
+Note: What is passed in cannot be std::vector. See lab 10. There are no marks if std::vector is used unwrapped.
+
+
+Q:
+I was wondering how accurate must the program be when outputting the data.
+
+The program sometimes gives a slightly different answer of the average and stdev past 5 d.p. but at 1.dp you cannot tell the difference. Should this be a concern?
+
+A:
+Follow the example in the sample output.
+
+It doesn't make sense to have more dp than the original data. Always follow this rule when working with data.
+
+Q:
+Can I use lambda functions in Assignment 2?
+
+A:
+No. Function pointers are specified.
+
+Q:
+This is probably a yes, I understand that we're allowed to use STL data structures for our assignment 2, not like assignment 1. STL Set (#include <set>) would be completely fine right? Cause we've covered it in lectures and it's no different from STL queues, stacks, etc? I just realised it solved a lot of my problems in assignment 2, thus I can easily justify it's use for my design and just wanted to make sure I'm allowed to use it.
+
+A:
+Yes you can use, but see next. The key thing is the bst and map must also be used as these two are the main data structures. So aim for more than just token use of the main data structures (just to tick a box) and you can mix/match with any other data structure.
+
+There is also the assignment requirement to encapsulate STL data structures in your own data structure. So encapsulate std::set in your own Set, and justify the public interface for Set and how Set works together with bst and map (or Map) to give the solution you are after.
+
+For set difference provide operator- has indicated in the PowerPoint notes. 
+
+Q:
+I have failed assignment 1 and failed the last lab. Is there any possibilty that I can pass. If I can't pass, I might as concentrate on my other units.
+
+A:
+Check the unit guide to see how much (or little) the earlier mistakes are worth. The earlier low stakes assessments are meant to build skill sets that you need to use in the later high stakes assessments. Also check passing requirements.
+
+The exam is worth 50%, and along with assignment 2 and later labs, that is more than just a pass possible provided you have learnt lessons from the earlier mistakes. Even if you obtained 0% in Assignment 1, a good grade is still possible. Learn from past mistakes.
+
+You need to be aware that you need to build up your skill sets to pass the exam. So please do your own work, attempting and iteratively improving your previous work.
+
+
+Q:
+Ive also done some tricky things to bst while remaining uncoupled. And abstractly, it aligns with the algorithm text book and what you've said in class, I just want to make sure I've done it right.
+
+A:
+If you align it to the algorithms textbook and in the justification, point that out and include your understanding of the reasons (use the stuff covered in this unit + advice in the algorithm textbook - cite it) you should be ok. 
+
+Q:
+I was wondering what procedure we are supposed to use when inserting a duplicate into the data structure. Do we keep old data, replace with new data, or add old and new together?
+
+The Q&A file did not quite specify which one to use. Should I just put in my assumptions that i'm choosing one and moving on? 
+
+A:
+It is also something that you get to decide and justify.
+
+There is more discussion about duplicate data below. Analyse the discussion first before you make a decision. 
+
+
+Q:
+I was wondering if I will lose marks using the BST only for storing the year and search the year and not using the BST traversal and function pointers? 
+
+
+A:
+The required function pointers would need to be there.
+
+If you use other data structures and approaches and you can't justify why the other data structures and approaches are not better than what is there already, then you wouldn't get the marks.
+
+Q:
+Can I increase my runtime stack size? Is it even possible?
+
+A:
+In codeblocks:
+Settings menu/compiler settings/Linker settings tab/Other Linker box
+Copy/paste the following:
+-Wl,--stack -Wl,512000000
+
+The number tells the linker the number of bytes for the stack space. This is quite large.
+
+After the above is set, Build menu, select clean. Then rebuild everything.
+
+Although I have shown how to do it, think carefully about why you would want to do it. The need to increase stack space is indicating an underlying problem.
+
+Note that for the lab work recursive routines were required in the BST. For the assignment you can use iterative or recursive and justify your approach by highlighting your actual experience that relates to theory/concepts of recursion vs iteration.
+
+
+Q:
+Is there a requirement that needs us to somehow implement the map INTO our BST data structure?
+
+A:
+There is no requirement to implement the map into the BST. So there is no requirement to have BST<map>.  It doesn't stop you from doing it if you can justify it. Note that this compile time bind to map will have the map data structure stored in the node in the same way that BST<int> will store integer into the node and BST<Date> will store Date objects in the node.
+
+If you had inserted a hard-coded map into the BST, then you have taken the wrong approach. The wrong approach will have the following line in BST.h, or anything that leads to the same outcome as below.
+#include <map>
+
+
+Q:
+Just a quick question regarding the Assign 2 documentation.
+
+With regards to the rationale, what format should it take? I noticed that in the Assign 2 specifications there is no requirement for a data dictionary like in Assign 1, however I just thought to double check if this is required for Assign 2 as well?
+
+If not should the rationale simply include pro’s and con’s for each data structure design choice or is it better to format it with pros and cons for each class/method.
+
+A:
+There is no UML or data dictionary asked for in Assignment 2.
+
+For assignment 2, it is about how you made use of the data structures to solve the problem.  See the first dot point in the Documentation section of the assignment. Defend your approach by justifying the usage of the data structures combinations.
+
+The defence/rationale would include your choice of public methods of BST and how that combines with other std::map (or variants). If you used your own Map, justify the public methods of Map and how that works with the public methods of your BST.
+
+If you have a method in the BST that we didn't have/discuss in the labs/lecture/clinics, then an explanation for it would be needed. Note that what was in the labs/lecture/clinics does not make the BST complete. The version provided in the textbook, makes the BST not minimal. So design thinking is involved.
+
+There is no requirement to explain every  method in Assignment 2. So you don't have to explain Date, Time. Only the extra parts of BST as indicated above (and your Map if you are using your own). Assignment 2 is not assessed like Assignment 1 as the data structures are different and the marks breakdown is different. 
+
+So provide only the documentation that is specified in Assignment 2. Assignment 1 is not a guide for this.
+
+
+Q:
+This week I’ve been working through Lab 10 e and have gotten a bit stuck when trying to insert a map into my BST.  I understand this is part of the assignment and you may not be able to say that much however I am hoping for a little bit of guidance in regards to my approach.
+
+I am using the STL Map and inserting a new instantiation of the Map into the BST for each line of file. The issue is I don’t know how to overload the ‘>’ operator in the BST to allow for the keys to be compared. Is this possible or do I need to rethink my approach? 
+
+A:
+It can be done, but not in a straight forward insertion of maps into a tree. To insert a map into a bst, there must be a way to compare two maps. You need a comparator function that compares two maps based on your needs.
+
+So it is better to have a outer level structure encapsulating the maps. As an example, if map1 stores only the data for 2020, map2 stores the data form 2019, etc, there is now a logical way to compare maps if the key is the year.
+
+But the above approach would require the programmer to keep track of what map1 has, what map2 has, and so on. If the outer structure also has the year stored as a separate field, the programmer doesn't have to keep track of what map has what data. Also, a comparison can be done on key, and you can write the comparison operator that compares this outer structure. The BST can then insert this outer structure, in essence storing the maps that you want stored. 
+
+The BST shouldn't care or want to know what is being stored in it, otherwise the utility of the BST will drop.
+
+All the BST needs to know is that there is a way to compare the objects in the BST as the BST needs to use this comparator to do insert and search. See the lab exercise on qsort. The qsort routine doesn't want to know about how the objects are actually compared. The application decides that and provides a function pointer to qsort to call back the application's comparator function.
+
+The needs of the application would decide how to compare. As an example, if you want to store blue whale objects in the BST, the needs of the specific application may dictate that blue whale objects are compared on the size of their eye lashes (assuming blue whale objects have eye lashes as I saw in one of the kids movies). So the application would need to have the implementation of the comparison operator or function that compares two blue whale objects by checking which one has the shorter (longer) eye lash.
+
+
+Q:
+I am only having one issue, that of too much recursion in my binary search tree causing a stack overflow.  Is it ok to state in my rational that I can only use the Bst with subsets of the data, because its recursive algorithms cannot deal with the full data set, or is that a failing of my Bst class itself which needs to be addressed?
+
+A:
+Yes, but that is not an good way as that assumes that for whatever reason, you decided to load everything into one tree. Look at other ways of organising the data. So look at logical organisation of data first.
+
+When the run-time stack overflows when the amount of data is not large, then it can indicate that bst is not balanced. A O(lg n) recursion would not stress the run-time stack for the number of items we are dealing with. The solution would be to not use recursion and explain the reasoning - a bit more discussion elsewhere in this QandA. 
+note:
+lg (log base 2)of a billion is approx 30. 30 calls shouldn't overflow the run time stack. The assignment doesn't have anywhere near a billion items.
+
+Some students are reporting that the run-time stack can't cope after 30,000 recursive calls.
+
+Consider the following for a balanced binary (perfect) tree:
+At the top of the binary tree, where the root node is, there is 1 data item (node). 2^0 (2 to the power of 0)
+If you go one down, where the depth=1, there are 2 data items at that depth. 2^1  (2 to the power of 1)
+When depth is 2, there are 4 data items. 2^2
+At a depth of 30,000, there would be 2^30000 items. 
+
+There was a related discussed in class, so check on your calculator how many items this would work out to. Find out (web search) how many atoms are there in the observable universe and then compare that to what a balanced binary tree can store at a depth of 30,000. (Note that the story of how much matter there is, has just got an updated recently).
+The data items (in nodes) are not on the  run time stack as each node is created using "new". So they are on the heap.
+
+If the tree's interface is separated from the implementation and the client program is not reliant on the implementation, changing the implementation would not break the client.
+
+
+Q:
+I have already changed my approached though currently im using the Search method to return node->data for the public method.
+
+I know returning the node is not allowed but is returning the data it points to ok. 
+
+A:
+Returning data is fine - the data belongs to the client anyway. But consider how it is returned. If it is returned in such a way (&) that the client modifies the actual key stored in the bst, would the client wreck the bst's invariant property and thus messing up your data structure. 
+
+Also see advice on Information Hiding (Rule 11) in the coding standards book
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988# 
+
+Rules in the Coding standards book can be used to justify your own approach. Quote the rule number and title with an explanation of how the rule is applied to your approach. The Coding standards book is part of the mandatory readings for the assignment.
+
+
+Q:
+For my assignment two i have modified my binary search trees InOrdertrav method to take in a string:
+
+template <typename T>
+void BST<T>::InOrderTrav(node  *inNode, flTyp2<T> fl, std::string &inString)const
+
+In order to be able to compare an inputted year called by my menu options helpers
+
+B.InOrderTrav(printYearRad, inYear);
+
+printYearRad is a function pointer which compares current node to inYear and prints.
+
+I was wondering if changing the Binary Tree methods like that would result in being marked down as it changes the 'generalness' of the Tree. 
+
+A:
+Using the proposed approach, the tree will become restricted in its usability to just a small subset of applications. 
+
+The way to look at data structures is that at no time should the data structure have any dependency on application. There is a related QandA (below) for this in LMS where someone put date as a member of the tree. 
+
+
+Q:
+Is it ok to have a search function in my BST that returns a Node* instead of a bool? Or rather, implement a new method that does that instead of modifying my search method? 
+
+A:
+Returning a node is not the correct approach for a public method. The node is an auxiliary data structure used by the tree. It is meant to be internal to the tree and tree users should not have to deal with it. 
+
+If it is a private method, then there is no problem.
+
+Remember the node has two pointers to two sub trees as well, so it makes no sense for the tree to expose its internal organisation. Letting users of the tree have access to Node gives users access to 2 sub-trees for your BST. The BST can't guarantee its invariant properties if this access is provided to users. 
+
+As the builder of any data structure, you must *never permit* users of your data structure to make a mess of the data structure. So users of the BST must *not* be allowed to accidentally or deliberately damage the BST. We have had a lot of discussions about this in class. So do not ignore it.
+
+Related to your question, the public methods of the tree must not require node to be passed in or out as parameters for the same reason as above. 
+
+Q:
+Is it ok to use assert to check for bounds.
+
+A:
+Yes, but you will need to see a fuller discussion in the coding standards book, Rule 68 "Assert liberally to document internal assumptions and invariants" before deciding. Other rules like 69 and 70 are also useful. 
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988# 
+
+Rule 70 also has advice about passing file names as parameters.
+
+Q:
+In BinarySearchTree.h included with the assignment, the function 
+pointer is defined as typedef void (*f1Typ)(elemType&); can I modify 
+it as " typedef int (*flTyp)(const elemType&, const elemType&); " ?
+
+A:
+Defend your decision (rationale). When you have parameter passing by reference (&) **always** consider why the parameters are not const &.
+
+In the version that was provided, it wasn't const &. Consider what problems this would cause for the BST's invariant property. Breaking this property, or allowing it to be broken is a very serious matter as the data structure is very badly damaged.
+
+The textbook example (print and update) shows passing by reference only, not const ref. If the client program (main program) in the textbook decided to change the value returned by the callback, what happens to the tree's invariant property. In the textbook's update example, the integer values in the tree are all doubled. Because all the values are doubled, the invariant property is not affected. But the tree is also open to other schemes for changing the data that can affect the invariant property.
+
+Please see Rule 15 in the coding standards book. "Use const proactively"
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988#
+
+
+Q:
+If I load all files into a BST to validate that there's no duplicate records, then move it to map to sort it according to year, so for each option 1-4 I can just use the map, is it counted as using the BST for 1-4?
+
+A:
+Yes, as from your description, the data used for the required 
+processing originates in the BST.
+
+Again, defend (provide rationale for) your approach.
+
+It doesn't guarantee that the approach used is optimal. Unlike assignment 1, there is *no* requirement to load everything into one tree object. It is up to you defend the approach you take. We are very interested in your thinking process when solving problems.
+
+
+Q:
+Is it antithetical to the concept of the BST if I allow for duplicate values to be inserted into it? There are so many duplicate values in the data files. It is unavoidable. But I just want to confirm my understanding with you. I think it should be okay for a BST to have duplicate values. However, I should be aware that they do not unbalance the tree too much. Otherwise, it's value to the programmer (quicker search as number of nodes are greatly reduced each time) is diminished.
+
+A:
+The BST property does not really prohibit duplicates. See the reference book "Introduction to Algorithms" by Cormen et al. The algorithms in the PowerPoint slides allows duplicates using a recursive approach. This is the version that I want everyone to try out first to see consequences.
+
+The textbook version doesn't allow duplicates. So you will see that there is some grey area (when keys are equal) when it comes to the invariant property for trees.
+
+So if a BST allows duplicates, if you just insert into a BST, the search will just get you the first one. Draw a BST with duplicates on paper and you will see. We can get away with search, but what if the user wants to delete a particular piece of data and duplicates exist. Which one is to be deleted? Just one, all of them?
+
+How would you store the duplicates so that all duplicates are found from the same node? Overflow containers (similar to collision in hash tables) in the node, or how about just a counter. During an insert operation, a duplicate is found, just increment the counter. Compare this approach with overflow containers. Deleting an element can use the same algorithm in the textbook where the BST doesn't allow duplicates.
+
+How would you deal with the situation where the keys are duplicates, but data values are different? Would the counter approach work?
+
+The usual BST doesn't deal with balancing, and the BST can get unbalanced, so that is why there are variants like AVL, and red-black trees (and variants like AA).
+
+***Note that you will be asked to explain your tree in-person. If you are unable to explain, no marks can be allocated as your tutor would not be able to verify that you did built that tree yourself.***
+
+Q:
+There are duplicated records in some of the data files. Do you expect us to calculate them all or eliminate the duplicates?
+
+A:
+If you use duplicates in your calculations, your calculations would give you the wrong result. The date-time combination is a unique identifier for the data records. In other situations, there would be some other unique identifiers (keys). These may not be just one field but a combination of keys. 
+
+Your processing must not use duplicates (same Date-time combination). Think about which approach is the best and use that approach. You have already done the revision/prerequisite exercise for it (ict159 revision) at the start of semester. So not keeping duplicates in your data structures is not a new thing.
+
+Lab 9 required use of the recursive BST algorithms from the PowerPoint notes where duplicates were permitted. When used on just the Date field from the weather data files, a lot of duplicates would have been inserted. What was noticed when you ran the program?
+
+Topic 11 covers a concept called "collision". Do you see similarities?
+
+
+Q:
+ If I use my own Vector for this assignment, do I have to encapsulate 
+the STL vector inside my Vector class?
+
+A:
+Assignment 2 is agnostic with regards to Vector. You can use Vector from Assignment 1 and lab exercises. If you are going to use Vector, you should use the Vector from Lab 8. Test the Lab 8 Vector before use.
+
+Although you can use the Vector if you want to, the other data 
+structures (BST, map/multimap) for assignment 2 *must* be used.
+
+The STL vector (std::vector) must be wrapped in your Assignment 1 Vector. If you don't, there are no marks given.
+
+
+Q:
+Do I need the assignment operator for my Vector class?
+
+A:
+Any class that has a pointer would need the assignment operator and copy constructor to prevent shallow copy. A destructor is also needed to prevent memory leak.
+
+
+q:
+- this wasn't a question but I noticed too many students with this problem.
+Study the logic of this compare operator for Date - not interested in syntax, just logic
+
+a:
+// comparing if one date < other date
+bool Date::operator<(const Date & d) const
+{
+    if(year < d.year)
+    {
+        return true;
+    }
+    else if(month < d.month)
+    {
+        return true;
+    }
+    else if (day < d.day)
+    {
+        return true;
+    }
+    else
+	{
+		return false;
+	}
+
+}
+
+What would happen if the following were true
+year > d.year
+and 
+month < d.month
+
+A well thought out testplan would detect issues like the above.
+
+
+Q:
+Would the same things be looked for when marking assignment 2 as when marking assignment 1?
+
+A:
+Not really as assignment 2 is using non-linear data structures. You can see that in the assignment specs and the marks breakdown in the specs. The labs leading up to assignment 2 are more relevant as these labs are stage 3 in the arrangement of the practical work in the unit.
+
+
+Q:
+... i think the only real question i had was when does an overloaded operator become a member function.
+
+A:
+Two situations listed in priority order:
+
+1. If the comparison is inherent usual behaviour of the class. For example, you create you own VeryLargeInteger class.
+
+Creating a type requires having a range of values that are part of the type and the operations on these values. So you will provide the usual integer operations as members.
+
+2. Execution efficiency. By being members, they have direct access to data members without the overhead of method/function calls of the getters. This situation has very low priority. If you ever use this reason, you will need to make very good justification for taking this approach as there is a cost in marks obtained.
+
+
+Q:
+I know it's very hard to get solutions to problems without seeing code but I thought i'd give it a shot anyway. There's problems with my BST. Specifically it can read in primitive data types like ints and so on, but as soon as i try to give it an object data type such as date it won't compile.
+
+I get this error code in my treeInsert method error: no match for 'operator<' 
+(operand types are 'Date' and 'Date') and the line it refers to is this: 
+if(newnode->key < root->key)
+
+A:
+For any object to be inserted into a tree, there should be some way to compare them. The tree doesn't want to know about how the comparison is done, just that the comparison can be done. So for built in types the comparison operators work, but your own user defined types, you need to define the comparison operators. So you need to write the comparison operator for Date. Make sure that this operator is not declared or defined in the BST.
+
+Q:
+One more question, the assignment details state to use an stl map, how strict does this have to be though? Right now i'm planning the use of a multimap and have a good idea of how i want to use it, am i allowed to use a multimap?? 
+
+A:
+Multimap is ok, as it is a variant of map. See minimum requirements in the assignment. But you *need to* justify whatever usage the approach (map or multimap). Justify, means why did you use map (or multimap) in your particular way. Couldn't it be used in a better way?
+
+
+Q:
+Can I use the advice in the c++ coding standards book as rationale.
+
+
+A:
+Yes, that is the expectation and it is mandatory reading for the assignment 2,  
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988#
+
+For example the creator of the C++ language is an authoritative source and he has a lot to say about various approaches. So are the language standard committee members. BTW, Stackoverflow is *not* considered authoritative even though you might be able to get good ideas there. If you get some good ideas there, trace the ideas back to the authoritative sources and cite the advice and those sources in your rationale.
+
+You can also use advice from other authoritative sources like the JSF C++ Coding Standards. 
+
+To explore further, see https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+
+
+Q:
+You failed my lab exercise even though I had a BSType class that worked and output was correct. You also said "This class cannot be justified". Why can't it as it works?
+
+A:
+
+You had hacked the BST class to make it work. Date was a protected data member of the tree, so was an int. BSTs are not meant just for Date and ints. The BST must not even know about Date or int.
+
+You made it work for having BSType<int> inttree and BSType<Date> datetree in the main program. A template data structure needs to be able to store other data types. What if the requirement was to have a BST of floats, char or some user defined type. Your BSType can't cater for it.
+
+You had provided an UML diagram where template BSTtype contained Date and int. The template BST should not contain a specific type as the type is template. The type is bound at compile time when the user of BST indicates that they want a particular BST. This is called a realisation. See lecture notes and this unit's UML reference book - readings from Topic 1. The realisation is depicted with a dotted line in the triangular arrow.
+
+Although not required for Lab 9, your class can't be justified as you wouldn't be able to make a sound theoretical/design case for the way you have encapsulated BSTtype. The assignments require that every design that you use needs a justification. Without the justification for the particular encapsulation you used, your approach can't be accepted for the assignments. 
+
+As far as the lab is concerned, BSType does not fulfil the requirements of a template Binary Search Tree as binding the template parameter with types other than int or Date will break BSTtype. You had other issues you were informed about. Pointer data was part of BSType. You had provided the destructor, but other methods to prevent shallow copy were not provided. It is part of good OO when implementing a class. 
+
+Think about how would you explain why you had protected encapsulation? Was inheritance being envisaged? If so, the destructor wasn't declared virtual. If the original base type can't be justified, avoid inheritance from that type.
+
+It is actually a mandatory fail to provide a data structure whose design is broken. Such data structures would, by your design choices have memory leak or shallow copy. Implementation might be buggy as that can be fixed by careful testing, but design issues should not be there. 
+
+
+Q:
+I was told that I need a search for the bst. Is this true? I don’t need it for the assignment.
+
+A:
+The T in BST stands for Tree, B stands for Binary to indicate that it is a 2-way tree. The S indicates that it a particular variant of a binary tree. The S in the BST is needed, so search has to be provided.
+
+
+Q:
+I did lab 4 by making output and input as non friends. I am wondering if the routines could be made members instead. I want my Date to read using the input operator method.
+
+A:
+NO. 
+
+See earlier discussion. The I/O routines are tied to particular data format requirements. These format requirements are the domain of the application program. So if the application format requirements change you will end up having to change the code for the data structure classes. But if you change that, then the previous application wouldn't work if you had to rebuild. So what is the point of designing classes for maximal reuse? 
+
+You do not get good design by adding everything you that can possibly imagine to the class. You get there when there is nothing more that you can take away from the class without changing the essential nature of the class.
+
+You have come across the Liskov Substitution Principle and the Open-Closed Principle. You would know the meaning of "cohesion" and "coupling". These OO principles are part of 5 principles known as SOLID. For a quick overview of SOLID, see
+https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
+
+Robert Martin who came up with the 5 principles explains in this youtube video at a lecture at Yale University. He takes a while to get going but should watch.
+https://www.youtube.com/watch?v=TMuno5RZNeE. All this is from 
+Lec-01-intro.ppt. We are coming back full circle. Also see Martin's explanation of polymorphism. We covered similar material.
+
+There is more advice related to your question in rule 44 of the reference book for this unit:
+C++ Coding standards
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988# 
+ 
+Moderate the advice in rule 44 so that it fits in with the advice about
+input/output formats.
+
+If you haven’t been referring to this book, you should, as the expectation is that you are aware of what is there. See topics reading lists. 
+
+So look at the other rules that are there.
+
+Q:
+My friends were saying smart pointers are better than
+raw pointers. Are they right?
+
+A:
+Yes, they are. But learn the raw form first as you have to use the raw form in this unit.
+
+For one thing, smart pointers manage their own memory as smart pointers encapsulate the raw pointers that we have been using so far. The raw pointer is created in the constructor of the smart pointer. This means that the smart pointer can return memory back to the heap once the smart pointer goes out of scope - so no memory leak. 
+
+There is also another very important advantage. The smart pointer always has an initial value. This reduces chance of your programming breaking/crashing because of a pointer error. You may already experience so of the issues related to pointer issues and this experience is good. It is an important concept called RAII. It applies not just to pointers.
+
+Follow the advice given in the unit’s reference book C++
+coding standards rule 13 
+https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988#
+
+Microsoft provides specific examples of usage at
+https://msdn.microsoft.com/en-us/library/hh279674.aspx
+
+**Don't go over the top with smart pointers.** See the advice at the end of rule 13 of the coding standards book. For example, the tree node will be like what I have pointed out in class. Do not use smart pointers here.
+
+Q:
+What about the range-for someone mentioned?
+
+A:
+The range over all elements aka range-for or range-based for is used by developers. C++11 onwards and a number of other languages support this. 
+
+While you are still learning about issues, like algorithm efficiency associated with traversing containers use explicit traversals of elements of a data structure. Other performance issues like moving data/code from RAM/Cache/CPU is more obvious if you write the traversals yourself. 
+
+Once your understanding of these issues become second nature to you, start using the range-for constructs. But not in this unit. These high level constructs are quite nice and older versions of C++ had these too via external libraries.
+
+Q:
+I have seen code on stackoverflow that use std::cout and std::string 
+every time. What is the proper approach?
+
+A:
+Follow the advice given in the unit’s reference book C++
+coding standards rule 59 https://ebookcentral.proquest.com/lib/murdoch/detail.action?docID=5135988#  
+
+Not quite what is in stack overflow, but organisations have coding standards, some do require the namespace qualification. 
+
+There are also subtle issues when exposing selected parts of your own namespace. Rule 59 has advice on when to always use namespace qualification.
+
+
+Q:
+In your comment, you indicated that "your output printed values of 0.0 when the value is meant to be small but not 0.0". I don't now why this is occurring.
+
+A:
+I am using my own data for testing. I have calculated the results manually so I know what output your program will give if it is working correctly.
+
+There are two issues. One, you may have set a precision that is too low. This is an easy fix. Adjust precision settings and document why you did it. I am happy with that. 
+
+The second issue is a little more involved. When processing floating point numbers, errors in the floating point representation accumulate. 
+
+What happens if you had a whole bunch of 100 W/m^2 in the data with very much larger values in the data. Small values of kWh/m^2 would be added up with the large values. The final sum would have errors as the "obvious" way of using rad_sum += rad_data is fraught with problems when it comes to floating point numbers. See the following for some advice, (although you would have covered floating  point error issues in your maths unit).
+
+1. Kahan summation algorithm https://en.wikipedia.org/wiki/Kahan_summation_algorithm
+
+2. A more detailed discussion is found in "What Every Computer Scientist 
+Should Know About Floating-Point Arithmetic" See Appendix D.
+https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html. 
+
+To ensure that no one thinks that this issue only applies to this assignment, I want to point out that this is a common problem any time you work with floating point numbers as computer floating point representation is unable to represent most Real numbers accurately. 
+
+You don't always see the issue cropping up if you work with "toy" 
+data sets.
+
+You would have also come across issues related to checking two floating point numbers for equality. The approach is not the same as when comparing integers. Please see Andrew Koenig's explanation
+http://www.drdobbs.com/cpp/its-hard-to-compare-floating-point-numbe/240149806 (introduction)
+http://www.drdobbs.com/cpp/comparing-an-integer-with-a-floating-poi/240150323 (Part 1)
+http://www.drdobbs.com/cpp/comparing-an-integer-with-a-floating-poi/240150886 (Part 2)
+
+and then http://floating-point-gui.de/errors/comparison/
+
+A number of job interview questions has been about issues with summing
+and comparing numbers. There is no need to get to the level detail in 
+the sites above, but you need to have a decent idea about issues.
+
+ 
+Q:
+Can I use the restriction where solar values >= 80?
+
+A:
+Use the same restriction as in assignment 1. It is not 80 but 100 W/m2.
+
+
+Q:
+From my understanding, the assignment requires us to read multiple 
+file into some data structure and make calculation according to the 
+option selected.
+
+Let's say, if file 1 contains record of 2013 and 2014, file 2 
+contains record of 2014 and 2015 and I want to calculate something 
+using 2014 records. Do I do one calculation for each file ? or one 
+for all files?
+
+A:
+The files have a physical organisation. Once the files are read in 
+by your program (irrespective of what data structure is being used), 
+they need to have a logical organisation. So some part of 2014 data 
+is in one file and another part of 2014 data is in a separate file, 
+but once both files are read in, the program has access to *all* the 
+data for 2014 that is available. So calculations for 2014, would use 
+all the required 2014 data that is available.
+
+This understanding of converting physical to logical organisation 
+applies every time you design and write a program and not just for 
+this assignment.
+
+If, for some reason, there is a requirement to keep track of the 
+physical organisation, you will use auxiliary (helper) data 
+structures to keep track of the source's physical organisation. This 
+assignment does not require this tracking.
+
+
+Q:
+Am I allowed to use the looping way in the bst method instead
+of recursive ones?
+
+A:
+The assignment has no explicit stated requirement for any approach 
+within the methods in the BST. 
+
+For assignment 2, you can use iterative approaches (as shown in the 
+textbook). There can be good reasons for using an iterative approach 
+and you need to make a case using *actual experience* with the data 
+set you are working with. Relate your experience to the theory when 
+writing up the documentation.
+
+
+Q:
+I realise that stl::map stores its data in a balancing BST using the 
+key to sort, but for the assignment you asked that we use both the 
+stl::map and our own BST. I'm not sure whether to have our BST like 
+stl::map and encapsulate stl::map or something else
+
+A:
+This is a good question.
+
+As the user of the map (or its variants like multimap), you must *not* assume anything about how the map data is stored. The map is *known only by its public behaviours* otherwise you introduce a "coupling" between the client (your program) and private parts (data or algorithm) of map. Defeats the whole purpose of having private data and information hiding.
+
+So for the assignment, you use the BST you built, and the map - two
+different data structures. You can encapsulate the stl::map in your 
+own map class, if that is what you are asking. Explain your approach
+in the write up for rationale. 
+
+Q:
+Are we allowed to use more than one tree? I thought I could use only 
+one tree and one map.
+
+A:
+It wasn't ever a case that no one was allowed to use multiple tree objects. It is usual that some people don't realise that because a class exists, multiple objects of that class can be created. This is after all a good reason for creating a class - so that it can be reused.
+
+So a vector of trees, queues of trees, stacks of trees, trees of 
+vectors, trees of queues, trees of stacks, trees of trees, maps of 
+trees .. etc are possible. There are so many choices. So the best way 
+is step back from the code and look at the requirements of the 
+problem to be solved along with the specified constraints and think 
+at the highest (most abstract) level what a solution can be and why. Think of how you would group the data.
+
+If you think at the code level, then the chances of getting lost in the
+detail is high. It will be a case of "missing the forest for the trees"
+(no pun intended). 
+
+
+Q:
+Is there an perfect way to use the tree and map in the assignment?
+
+A:
+The intention was that there shouldn't be but with well thought out approaches using the material covered in workshops and PowerPoint notes, optimal approaches are possible. 
+
+If there is a perfect way, then there is not a lot of thinking involved to meet the data structure constraints on the assignment, and it becomes a pointless assignment about learning how to make design choices, including weighing up the pros/cons of the various design choices. 
+
+I am looking for what is going on in your mind when you made the choice of where you are going to use the tree and map (or map variant like multimap). Expected trade-offs between one approach and another.
+
+Provide a written argument (defence) for the approach you have taken with the usage of tree and map.
+
+
+Q:
+Just want to clarify what it means in the requirements when it states "Build mechanism must be provided".
+
+A:
+It is the codeblocks project file. It is a general term to indicate what mechanism is being used and is not restricted to codeblocks. But we don't need to consider the other ways, like makefiles, cmake - out of scope as codeblocks is specified.
+
+The tutor must be able to load your project and hit the build or run 
+button in the Codeblocks IDE. Your tutor must be able to build and run your program without making modifications. If it only builds and runs on your laptop, then it doesn't count as being buildable. Your tutor will have no choice but to give no marks.
+
+Don't forget to set your compiler settings to that required. Advice is in LMS, software for the unit which you downloaded.
+
+
+Q: 
+I was thinking of using the Vector as in a vector of trees. can
+I use the vector in this way.
+
+A:
+Yes, you can. You need to justify the particular usage in carrying
+out the assignment tasks. Also see an earlier related question.
+Don't forget, the STL map (and/or its variant like multimap) needs to be used too. 
+
+std::vector or any other STL data structure (except std::map or variants of map) must be wrapped in your own data structure. 
+
+So, if you want to use a Linked List of BSTs, you need your own Linked List. Your own Linked List  can wrap the STL linked list. If you don't wrap, there are no marks given. 
+
+"Wrap" means to encapsulate as a private data member.
+
+
+Q:
+I thought from your lecture from some time ago that "this->" was used 
+to de-reference class member pointer objects?
+
+Any chance you can explain the difference with *this?
+
+A:
+Within a object (class instance), a member can be referred to as 
+either the member name on its own or via the "this" pointer. 
+
+Example:
+
+class A{
+    public:
+        f1(int b);
+
+    private:
+        int data;
+};
+
+A number of languages have this concept.
+All 3 ways (shown below) to assign to private member data mean the same thing. The pointer "this" exists only when the object exists and so the "this" pointer is not available in static methods. (As an aside, there is a peculiarity where static methods are not declared const because the "this" pointer is not available. Static methods can only access static data.)
+
+
+A::f1(int b){
+   data = b;		//1st way
+   this->data = b;	//2nd way
+   (*this).data = b;	//3rd way
+}
+
+The 2nd and 3rd way uses the "this" pointer and are equivalent. 
+
+The 3rd way de-references "this" to get the object pointed  to by 
+"this" first, then the object.name notation is used to access the 
+member.
+
+Q:
+I can do the assignment without using the tree or map. It works and
+does what is required according to the question. Must the tree and map
+be included?
+
+A:
+The assignment can be done in many ways where no tree, map or Vectors are used. In fact, the assignment can be done without any Object Orientation. But the specifications require Object Orientation and the use of both the tree and the map. You must use both tree and map. And you need to also provide justification for their use. 
+
+This justification is *not* because the specification asked for it. 
+You need to think of the properties of trees and maps and the 
+justification needs to be related to their properties and tasks for 
+the assignment. You may have to think really hard about this because 
+it is possible that trees or maps might not really needed for this 
+assignment but you need to make a case for their use in solving the 
+assignment problem. 
+
+A rather complicated issue would be that you can't think of any good reason(s) to use tree and/or map, and all the reasons that you can come up with are bad. In such a situation, provide the best of the bad approaches and discuss this in the rationale.  We are after your thinking process. It is not just programming, it is also "what were you thinking when you took a particular approach?"
+
+In a business environment (real world), not meeting the specifications has significant financial penalties. When applying for a job, and not addressing the job requirements in your application will result in not getting the job. When applying for a grant, not addressing the grant criteria, would result in no grant. If you are not used to these realities, you need to start to start getting used to them. Attention to the details of specifications and requirements is very important.
+
+
+Q: Can I use multimap instead of map?
+
+A:
+Yes you can, multimap is a map variant.
+
+
+Q:
+Are we meant to only display the output to 1 decimal place? E.g. 29.2
+
+A:
+Yes, that is the intention.
+
+So when a client shows an output format, the format needs to be followed. 
+
+The output format was shown in assignment 1.
+
+Parts of Assignment 2 may specify a different format.
+
