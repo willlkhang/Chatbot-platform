@@ -24,11 +24,6 @@ class ClientInput(Resource):
         query = args['query']
         rag_output = asyncio.run(run_request(query))
 
-        # try:
-        #     ai_text = rag_output[0]['text']
-        # except (IndexError, KeyError, TypeError):
-        #     ai_text = "Error: Could not parse the agent's response."
-
         return {'ai': rag_output}
 
 api.add_resource(ClientInput, '/api/response')
