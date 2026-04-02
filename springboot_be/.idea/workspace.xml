@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/ChatApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/ChatApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/personalization-service/src/main/java/com/project/personalization/PersonalizationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/personalization-service/src/main/java/com/project/personalization/PersonalizationApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -362,7 +357,8 @@
       <option name="presentableId" value="Default" />
       <updated>1774441532208</updated>
       <workItem from="1774441533287" duration="10921000" />
-      <workItem from="1774605255812" duration="2074000" />
+      <workItem from="1774605255812" duration="4051000" />
+      <workItem from="1775097063029" duration="2417000" />
     </task>
     <servers />
   </component>
