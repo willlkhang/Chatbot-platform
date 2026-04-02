@@ -10,6 +10,7 @@
         <module name="base-service" />
         <module name="gateway-service" />
         <module name="chat-service" />
+        <module name="authorization-service" />
         <module name="personalization-service" />
         <module name="discovery-service" />
       </profile>
@@ -27,6 +28,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ai-chat" options="-parameters" />
+      <module name="authorization-service" options="-parameters" />
       <module name="chat-service" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
