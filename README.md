@@ -4,7 +4,7 @@ Date: 03/04/2026
 --This is the guide to run our demo.
 1. Please create a new conda environment and install our requirements.txt
 2. To run, frontend, please move to frontend/my-fe.
-3. Open your browser and install nodejs (if you are using Window, please find the window installer, if you are using MacOS, please find the Mac Install. These should be green bottons below the Bash/terminal/cmd window)
+3. Open your browser and install nodejs https://nodejs.org/en/download/current (if you are using Window, please find the window installer, if you are using MacOS, please find the Mac Install. These should be green bottons below the Bash/terminal/cmd window)
 4. After installing NodeJs. Please go back to frontend/my-fe.
 5. Open your terminal at this directory, and run: npm run dev
     You should have something like this:
@@ -53,8 +53,9 @@ Date: 03/04/2026
 41. Copy and paste that to PINECONE_API_KEY=
 42. The index name is the name we gave while we creating this in Pinecone which is "testing" in point(35)
 43. After this, open your terminal with the activated conda env.
-44. Then, run the controller.py
-45. Then, you can go back to the running fronttend and interact with the system.
+44. We need to run the ingestion.py first. Make sure the data file sample "A1-QandA.txt" is in the same place. This helps you load, split, and embed the data to Pinecone.
+45. Then, run the controller.py
+46. Then, you can go back to the running fronttend and interact with the system.
 
 
 
