@@ -5,13 +5,8 @@ from dotenv import load_dotenv
 import asyncio
 
 #LangChain / LangGraph imports
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_tavily import TavilySearch
-from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.sqlite import SqliteSaver
-from langgraph.graph import START, MessagesState, StateGraph, END
-from langgraph.prebuilt import ToolNode
 
 from graph import workflow
 
@@ -25,7 +20,7 @@ memory = SqliteSaver(conn)
 app = workflow.compile(checkpointer=memory)
 
 async def run_request(query):
-    config = {"configurable": {"thread_id": "convo_2"}}
+    config = {"configurable": {"thread_id": "convo_1"}}
 
     res = app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
     raw = res['messages'][-1].content

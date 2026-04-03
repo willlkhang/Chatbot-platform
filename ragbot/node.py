@@ -11,6 +11,9 @@ load_dotenv()
 SYSTEM_MSG = SystemMessage(content="You are a helpful assistant. " \
 "Use search_assignment_docs for homework and Tavily for general web info.")
 
+SYSTEM_MSG = SystemMessage(content="You are a helpful assistant. " \
+"provided keywords to use the appropreate tools.")
+
 
 def run_agent_reasoning(state: MessagesState):
     response = llm_with_tools.invoke([SYSTEM_MSG] + state["messages"])
@@ -22,4 +25,4 @@ def should_continue(state: MessagesState):
         return END
     return "tools"
 
-tool_node = ToolNode(tools)
+tool_node = ToolNode(tools)  

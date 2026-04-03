@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/authorization-service/src/main/java/com/project/auth/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ai/vector_db_data_processing.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../ai/vector_db_data_processing.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ragbot/node.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ragbot/node.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -359,7 +361,7 @@
       <updated>1774441532208</updated>
       <workItem from="1774441533287" duration="10921000" />
       <workItem from="1774605255812" duration="4051000" />
-      <workItem from="1775097063029" duration="3258000" />
+      <workItem from="1775097063029" duration="17086000" />
     </task>
     <servers />
   </component>
