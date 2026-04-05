@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/authorization-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/authorization-service.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
@@ -57,6 +57,7 @@
     "Spring Boot.UserApplication.executor": "Debug",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/will/A MyDoc/project/project/uni-project-1/springboot_be/authorization-service/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,6 +68,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/authorization-service/src/main/resources" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -361,7 +367,7 @@
       <updated>1774441532208</updated>
       <workItem from="1774441533287" duration="10921000" />
       <workItem from="1774605255812" duration="4051000" />
-      <workItem from="1775097063029" duration="21274000" />
+      <workItem from="1775097063029" duration="22046000" />
     </task>
     <servers />
   </component>
