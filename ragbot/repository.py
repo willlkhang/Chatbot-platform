@@ -1,10 +1,11 @@
 import os
 import json
-import math
 import sqlite3
 from dotenv import load_dotenv
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.documents import Document
+
+from utils.cosine import _cosine_similarity
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ class RagRepository:
         embedding_dimensions: int = 1536,
         k: int = 3,
     ) -> None:
-        self._sqlite_path = sqlite_path or os.environ.get("RAG_MEMORY_DB") or "rag_memory.sqlite"
+        self._sqlite_path = sqlite_path or os.environ.get("RAG_MEMORY_DB") or "./data/rag_memory.sqlite"
         self._google_api_key = google_api_key or os.environ.get("GOOGLE_API_KEY")
         self._embedding_model = embedding_model
         self._embedding_dimensions = embedding_dimensions
@@ -101,24 +102,4 @@ class _SqliteRetriever:
     def invoke(self, query: str):
         return self._repo.similarity_search(query)
 
-
-def _cosine_similarity(a: list[float], b: list[float]) -> float:
-    if not a or not b:
-        return 0.0
-    # If dimensions mismatch, compare on overlap.
-    n = min(len(a), len(b))
-    dot = 0.0
-    na = 0.0
-    nb = 0.0
-    for i in range(n):
-        ai = float(a[i])
-        bi = float(b[i])
-        dot += ai * bi
-        na += ai * ai
-        nb += bi * bi
-    denom = math.sqrt(na) * math.sqrt(nb)
-    return dot / denom if denom else 0.0
-
-
-# Backwards-compatible module-level retriever.
 retriever = RagRepository().retriever

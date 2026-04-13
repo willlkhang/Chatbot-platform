@@ -1,0 +1,2 @@
+{"id":"docs-001","query":"What are the key requirements for Assignment 1?","requires_docs":true,"expected_tool":"search_assignment_docs","retrieval_must_include":["Assignment 1"],"answer_must_include":["Assignment 1"],"answer_must_not_include":[]}
+{"id":"general-001","query":"Explain what SOLID principles are in simple terms.","requires_docs":false,"expected_tool":null,"retrieval_must_include":[],"answer_must_include":["Single Responsibility"],"answer_must_not_include":[]}

@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 import asyncio
 
-#LangChain / LangGraph imports
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.sqlite import SqliteSaver
 
@@ -14,7 +13,7 @@ load_dotenv()
 
 
 class RagbotService:
-    def __init__(self, *, sqlite_path: str = "checkpoints.sqlite", thread_id: str = "convo_1") -> None:
+    def __init__(self, *, sqlite_path: str = "./data/checkpoints.sqlite", thread_id: str = "convo_1") -> None:
         self._sqlite_path = sqlite_path
         self._thread_id = thread_id
 
@@ -22,9 +21,13 @@ class RagbotService:
         self._memory = SqliteSaver(self._conn)
         self._app = workflow.compile(checkpointer=self._memory)
 
-    def invoke(self, query: str) -> str:
+    def invoke_raw(self, query: str):
+        """Invoke the LangGraph app and return the full state (messages, etc.)."""
         config = {"configurable": {"thread_id": self._thread_id}}
-        res = self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
+        return self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
+
+    def invoke(self, query: str) -> str:
+        res = self.invoke_raw(query)
         raw = res["messages"][-1].content
 
         if isinstance(raw, list):
@@ -40,7 +43,6 @@ class RagbotService:
 _service = RagbotService()
 
 async def run_request(query):
-    # Keep async signature for existing callers, even though invoke is sync.
     return _service.invoke(query)
 
 if __name__ == "__main__":

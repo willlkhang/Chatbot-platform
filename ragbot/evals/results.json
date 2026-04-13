@@ -1,0 +1,44 @@
+[
+  {
+    "id": "docs-001",
+    "query": "What are the key requirements for Assignment 1?",
+    "retrieval": {
+      "retrieval_pass": false,
+      "retrieved_preview": ""
+    },
+    "behavior": {
+      "behavior_pass": true,
+      "tools_called": [
+        "search_assignment_docs"
+      ]
+    },
+    "answer": {
+      "text_preview": "The documentation emphasizes that Assignment 1 requirements are strictly enforced and must be read in conjunction with the **Lab 5 Q&A document**. Failure to adhere to these specifications is treated as a contract violation, which will result in **no marks** for the assignment.\n\n### **Mandatory Constraints (Zero Marks if Used)**\nYou are strictly prohibited from using the following C++ features. Using them will result in zero marks:\n*   **Range-based loops**\n*   `auto` declarations\n*   Move semantics (any parameter containing `&&`)\n*   Trailing return types\n\n### **Key Operational Requirements**\n*   **Data File Processing:** Do **not** delete the first row of the provided data files. Your program must handle this row (the sensor list) exactly as required in Question 5 of Lab 5 to determine c",
+      "answer_pass": true,
+      "must_include_ok": true,
+      "must_not_include_ok": true
+    }
+  },
+  {
+    "id": "general-001",
+    "query": "Explain what SOLID principles are in simple terms.",
+    "retrieval": {
+      "retrieval_pass": null,
+      "retrieved_preview": ""
+    },
+    "behavior": {
+      "behavior_pass": false,
+      "tools_called": [
+        "search_assignment_docs",
+        "search_assignment_docs",
+        "tavily_search"
+      ]
+    },
+    "answer": {
+      "text_preview": "The **SOLID** principles are a set of five design guidelines for Object-Oriented programming. Their goal is to make software easier to understand, maintain, and extend as it grows.\n\nThink of them as \"rules of the road\" for writing code that doesn't break easily when you try to add new features.\n\n---\n\n### The 5 Principles Explained Simply\n\n#### 1. **S**ingle Responsibility Principle (SRP)\n*   **The Idea:** A class should have **one job**, and one job only.\n*   **Simple Terms:** If a class is doing three different things (e.g., calculating math, saving data to a file, and sending emails), it's too busy. If you need to change the email format, you shouldn't risk breaking the math calculations. Give each class a single purpose.\n\n#### 2. **O**pen/Closed Principle (OCP)\n*   **The Idea:** You sho",
+      "answer_pass": false,
+      "must_include_ok": false,
+      "must_not_include_ok": true
+    }
+  }
+]

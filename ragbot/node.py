@@ -36,5 +36,4 @@ def should_continue(state: MessagesState):
 
 _nodes = AgentNodes()
 
-# Backwards-compatible module-level ToolNode.
 tool_node = _nodes.tool_node
