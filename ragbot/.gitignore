@@ -1,4 +1,5 @@
 .env
+/.venv
 
 unsloth_compiled_cache/
 
