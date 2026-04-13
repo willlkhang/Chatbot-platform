@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import CharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_pinecone import PineconeVectorStore
+
+from repository import RagRepository
 
 load_dotenv()
 
@@ -20,12 +20,8 @@ if __name__ == "__main__":
 
     print(f"Created {len(texts)} chunks")
 
-    embeddings = GoogleGenerativeAIEmbeddings(model="gemini-embedding-001",
-                                              google_api_key=os.environ.get("GOOGLE_API_KEY"),
-                                              output_dimensionality=1536)
-    
-    print("ingesting...")
-    PineconeVectorStore.from_documents(
-        texts, embeddings, index_name=os.environ['INDEX_NAME']
-        )
-    print("Done, Will")
+    print("ingesting into sqlite long-term memory...")
+    repo = RagRepository(sqlite_path=os.environ.get("RAG_MEMORY_DB") or "rag_memory.sqlite")
+    inserted = repo.add_documents(texts)
+    print(f"Inserted {inserted} chunks")
+    print("Done, Will, This is new data ingestion")
