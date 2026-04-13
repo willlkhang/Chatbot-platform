@@ -5,10 +5,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-workflow = StateGraph(MessagesState)
-workflow.add_node("agent", run_agent_reasoning)
-workflow.add_node("tools", tool_node)
+class WorkflowFactory:
+    def __init__(self, *, state_type=MessagesState) -> None:
+        self._state_type = state_type
 
-workflow.add_edge(START, "agent")
-workflow.add_conditional_edges("agent", should_continue) # Decide: Tools or End?
-workflow.add_edge("tools", "agent") # Back to agent after using tool
+    def build(self):
+        workflow = StateGraph(self._state_type)
+        workflow.add_node("agent", run_agent_reasoning)
+        workflow.add_node("tools", tool_node)
+
+        workflow.add_edge(START, "agent")
+        workflow.add_conditional_edges("agent", should_continue)
+        workflow.add_edge("tools", "agent")
+        return workflow
+
+
+workflow = WorkflowFactory().build()

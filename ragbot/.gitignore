@@ -13,3 +13,5 @@ __pycache__/
 checkpoints.sqlite-shm
 checkpoints.sqlite-wal
 checkpoints.sqlite
+
+.python-version

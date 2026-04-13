@@ -13,28 +13,35 @@ from graph import workflow
 load_dotenv()
 
 
-conn = sqlite3.connect("checkpoints.sqlite", check_same_thread=False)
+class RagbotService:
+    def __init__(self, *, sqlite_path: str = "checkpoints.sqlite", thread_id: str = "convo_1") -> None:
+        self._sqlite_path = sqlite_path
+        self._thread_id = thread_id
 
-memory = SqliteSaver(conn)
+        self._conn = sqlite3.connect(self._sqlite_path, check_same_thread=False)
+        self._memory = SqliteSaver(self._conn)
+        self._app = workflow.compile(checkpointer=self._memory)
 
-app = workflow.compile(checkpointer=memory)
+    def invoke(self, query: str) -> str:
+        config = {"configurable": {"thread_id": self._thread_id}}
+        res = self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
+        raw = res["messages"][-1].content
+
+        if isinstance(raw, list):
+            text = ""
+            for block in raw:
+                if isinstance(block, dict) and block.get("type") == "text":
+                    text += block.get("text", "")
+            return text
+
+        return raw
+
+
+_service = RagbotService()
 
 async def run_request(query):
-    config = {"configurable": {"thread_id": "convo_1"}}
-
-    res = app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
-    raw = res['messages'][-1].content
-    print(f"\nAgent: {raw}")
-
-    if isinstance(raw, list):
-        text = ""
-        for block in raw:
-            if isinstance(block, dict) and block.get('type') == 'text':
-                text += block.get('text', '')
-    else:
-        text = raw
-
-    return text
+    # Keep async signature for existing callers, even though invoke is sync.
+    return _service.invoke(query)
 
 if __name__ == "__main__":
     query = "What is my name?"
