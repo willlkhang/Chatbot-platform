@@ -1,1 +1,7 @@
-Quick Start: uv run controller.py
+Quick Start: 
+
+uv init
+
+uv sync
+
+uv run controller.py
