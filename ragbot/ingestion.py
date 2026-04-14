@@ -11,7 +11,7 @@ load_dotenv()
 if __name__ == "__main__":
     print("Woring, Will !!!")
     
-    loader = TextLoader(".knowledge/A1-QandA.txt", encoding='UTF-8')
+    loader = TextLoader("./A1-QandA.txt", encoding='UTF-8')
     document = loader.load()
 
     print("Splitting...")

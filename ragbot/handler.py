@@ -21,13 +21,9 @@ class RagbotService:
         self._memory = SqliteSaver(self._conn)
         self._app = workflow.compile(checkpointer=self._memory)
 
-    def invoke_raw(self, query: str):
-        """Invoke the LangGraph app and return the full state (messages, etc.)."""
-        config = {"configurable": {"thread_id": self._thread_id}}
-        return self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
-
     def invoke(self, query: str) -> str:
-        res = self.invoke_raw(query)
+        config = {"configurable": {"thread_id": self._thread_id}}
+        res = self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
         raw = res["messages"][-1].content
 
         if isinstance(raw, list):
