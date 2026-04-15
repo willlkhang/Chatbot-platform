@@ -1,4 +1,5 @@
 categories = {
+    # Software Engineering Principles & Design
     "SOLID Principles": "SOLID, single responsibility, open-closed principle, liskov substitution, interface segregation, dependency inversion, software architecture, class design",
     "MVC Pattern": "MVC Pattern, model view controller, separation of concerns, decoupling UI from data logic, user interface design pattern, preventing jelly effect",
     "Coupling and Cohesion": "Coupling and Cohesion, low coupling high cohesion, modular programming, minimizing inter-dependencies between classes, single responsibility of methods",
@@ -6,6 +7,7 @@ categories = {
     "Design Patterns": "Design Patterns, factory pattern, dependency injection, adapter pattern, repository pattern, software design templates, gang of four",
     "Anti-Patterns": "Anti-Patterns, constant interface antipattern, god object, spaghetti code, design flaws, software development pitfalls, monolithic classes",
 
+    #unit keys
     "Assignment 1": "Assignment 1",
     "Assignment 2": "Assignment 2",
     "ICT283": "ICT283",
@@ -17,16 +19,19 @@ categories = {
     "Keyword Usage": "const correctness, explicit constructors, read-only parameters, strict type conversion, static keyword limitations",
     "Operator Overloading": "overload binary operators, istream and ostream overloading as non-members, custom class comparison, changing operator semantics",
 
+    # Data Structures & Algorithms
     "Trees": "binary search tree, BST traversal, B-Trees, AVL trees, Patricia trie, balancing trees, root nodes, recursive node insertion",
     "Graphs": "directed acyclic graph, DAG, topological sort, detecting cycles, strongly connected components, nodes and edges, networkx",
     "Collections": "hash tables, maps, multimaps, custom vectors, linked lists, STL containers, dynamic arrays, collision handling",
     "Complexity": "Big-O notation, time complexity, space complexity, asymptotic analysis, algorithm efficiency, empirical computational complexity",
 
+    # Multi-Language Technical Terms
     "Java": "Java concurrency, Future, TimeUnit, default interface methods, annotations, @Override, type erasure, Spring Framework",
     "C# / .NET": "async await, C# asynchronous programming, COM interfaces, covariance and contravariance, WCF serialization, dependency injection in .NET",
     "TypeScript": "generic interfaces in TS, union types, partial types, inline interface implementation, anonymous implementations, static typing",
     "Swift": "Swift protocols, protocol conformance, iOS development, replace interfaces with protocols, Swift structs and classes, blueprints",
 
+    # Academic & Process Keywords
     "Test Plan": "software testing, manual calculation of expected results, stress testing, boundary edge cases, validating program console output",
     "Rationale/Justification": "defend design decisions, architectural rationale, code documentation, explaining pros and cons of trade-offs, design choices",
     "Data Validation": "handling NA fields, sanitizing input, CSV parsing, range checking, exception handling, data integrity, handling missing sensor data",
