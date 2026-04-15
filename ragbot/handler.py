@@ -13,7 +13,7 @@ load_dotenv()
 
 
 class RagbotService:
-    def __init__(self, *, sqlite_path: str = "./data/checkpoints.sqlite", thread_id: str = "convo_1") -> None:
+    def __init__(self, *, sqlite_path: str = "./data/checkpoints.sqlite", thread_id: str = "convo_2") -> None:
         self._sqlite_path = sqlite_path
         self._thread_id = thread_id
 

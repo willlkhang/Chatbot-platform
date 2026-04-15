@@ -41,29 +41,28 @@ class ToolRegistry:
     def __init__(
         self,
         *,
-        retriever_instance=None,
         model: str | None = None,
         tavily_max_results: int = 1,
+        enable_web: bool = True,
+        extra_tools: list | None = None,
     ) -> None:
-        self._retriever = retriever_instance or retriever
         self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen2.5:7b"
         self._tavily_max_results = tavily_max_results
+        self._enable_web = enable_web
+        self._extra_tools = extra_tools or []
 
     def build_tools(self):
-        # search_assignment_docs uses module-level retriever by default; allow override.
-        if self._retriever is not retriever:
-            def _search(query: str) -> str:
-                docs = self._retriever.invoke(query)
-                return "\n\n".join(doc.page_content for doc in docs)
+        tool_list = []
+        if self._enable_web:
+            tool_list.append(TavilySearch(max_results=self._tavily_max_results))
 
-            override_search_assignment_docs = tool(_search)
-            override_search_assignment_docs.name = "ICT283_questions"
-            override_search_assignment_docs.description = ICT283_questions.description
-            assignment_tool = override_search_assignment_docs
-        else:
-            assignment_tool = ICT283_questions
+        # Your local tools
+        tool_list.extend([ICT283_questions, Stack_overflow_questions])
 
-        return [TavilySearch(max_results=self._tavily_max_results), assignment_tool]
+        # Any additional tools you want to plug in from elsewhere
+        tool_list.extend(self._extra_tools)
+
+        return tool_list
 
     def build_llm(self):
         return ChatOllama(model=self._model)
