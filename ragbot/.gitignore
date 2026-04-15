@@ -19,4 +19,7 @@ rag_memory.sqlite
 rag_memory.sqlite-shm
 rag_memory.sqlite-wal
 
+ICT283_rag_memory.sqlite
+Stack_overflow_rag_memory.sqlite
+
 .python-version
