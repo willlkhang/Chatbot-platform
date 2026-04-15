@@ -9,7 +9,8 @@ from react import tools, llm_with_tools
 load_dotenv()
 
 SYSTEM_MSG = SystemMessage(content="You are a helpful assistant. " \
-"Use search_assignment_docs for homework and Tavily for general web info.")
+"Use ICT283_questions or Stack_overflow_questionsfor tools \
+    consider keywords in user's prompt to use the appropriate tool.")
 
 class AgentNodes:
     def __init__(self, *, system_message: SystemMessage | None = None, llm_with_tools_instance=None, tools_list=None) -> None:
