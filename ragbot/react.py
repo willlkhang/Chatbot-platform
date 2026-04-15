@@ -4,7 +4,7 @@ from langchain_core.tools import tool
 from langchain_tavily import TavilySearch
 from langchain_ollama import ChatOllama
 
-from repository import retriever
+from repository import retriever_ICT283, retriever_SOF
 
 load_dotenv()
 
@@ -20,7 +20,21 @@ def ICT283_questions(query: str) -> str:
         - No marks, zero marks
         - Demostrate, demo, demostration
     """
-    docs = retriever.invoke(query)
+    docs = retriever_ICT283.invoke(query)
+    return "\n\n".join(doc.page_content for doc in docs)
+
+@tool
+def Stack_overflow_questions(query: str) -> str:
+    """Search assignments questions.
+        Look for keywords:
+        - Tree
+        - Graph
+        - DSA
+        - Programming language
+        - Interface, Abstract Classes
+        - C, C++, Java, Python, C#, JavaScript, TypeScript
+    """
+    docs = retriever_SOF.invoke(query)
     return "\n\n".join(doc.page_content for doc in docs)
 
 class ToolRegistry:

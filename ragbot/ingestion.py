@@ -11,17 +11,18 @@ load_dotenv()
 if __name__ == "__main__":
     print("Woring, Will !!!")
     
-    loader = TextLoader("./A1-QandA.txt", encoding='UTF-8')
+    loader = TextLoader("./knowledge/stack_overflow_data.txt", encoding='UTF-8')
     document = loader.load()
 
     print("Splitting...")
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    # This split is "coarse"; the repository will still enforce safe embedding chunks.
+    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=10)
     texts = text_splitter.split_documents(document)
 
     print(f"Created {len(texts)} chunks")
 
     print("ingesting into sqlite long-term memory...")
-    repo = RagRepository(sqlite_path=os.environ.get("RAG_MEMORY_DB") or "./data/rag_memory.sqlite")
+    repo = RagRepository(sqlite_path=os.environ.get("RAG_MEMORY_DB") or "./data/Stack_overflow_rag_memory.sqlite")
     inserted = repo.add_documents(texts)
     print(f"Inserted {inserted} chunks")
     print("Done, Will, This is new data ingestion")
