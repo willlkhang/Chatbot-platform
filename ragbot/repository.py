@@ -2,7 +2,7 @@ import os
 import json
 import sqlite3
 from dotenv import load_dotenv
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_core.documents import Document
 
 from utils.cosine import _cosine_similarity
@@ -14,19 +14,12 @@ class RagRepository:
         self,
         *,
         sqlite_path: str | None = None,
-        google_api_key: str | None = None,
-        embedding_model: str = "gemini-embedding-001",
-        embedding_dimensions: int = 1536,
+        embedding_model: str | None = None,
         k: int = 3,
     ) -> None:
         self._sqlite_path = sqlite_path or os.environ.get("RAG_MEMORY_DB") or "./data/rag_memory.sqlite"
-        self._google_api_key = google_api_key or os.environ.get("GOOGLE_API_KEY")
-        self._embedding_model = embedding_model
-        self._embedding_dimensions = embedding_dimensions
+        self._embedding_model = embedding_model or os.environ.get("OLLAMA_EMBED_MODEL") or "nomic-embed-text"
         self._k = k
-
-        if not self._google_api_key:
-            raise ValueError("Missing GOOGLE_API_KEY for embeddings.")
 
         self._conn = sqlite3.connect(self._sqlite_path, check_same_thread=False)
         self._conn.execute(
@@ -44,11 +37,7 @@ class RagRepository:
         )
         self._conn.commit()
 
-        self._embeddings = GoogleGenerativeAIEmbeddings(
-            model=self._embedding_model,
-            google_api_key=self._google_api_key,
-            output_dimensionality=self._embedding_dimensions,
-        )
+        self._embeddings = OllamaEmbeddings(model=self._embedding_model)
 
     @property
     def retriever(self):

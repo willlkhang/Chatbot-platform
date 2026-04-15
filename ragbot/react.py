@@ -1,14 +1,15 @@
+import os
 from dotenv import load_dotenv
 from langchain_core.tools import tool
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_tavily import TavilySearch
+from langchain_ollama import ChatOllama
 
 from repository import retriever
 
 load_dotenv()
 
 @tool
-def search_assignment_docs(query: str) -> str:
+def ICT283_questions(query: str) -> str:
     """Search assignments questions.
         Look for keywords:
         - Assignment 1
@@ -27,11 +28,11 @@ class ToolRegistry:
         self,
         *,
         retriever_instance=None,
-        model: str = "gemini-3.1-flash-lite-preview",
+        model: str | None = None,
         tavily_max_results: int = 1,
     ) -> None:
         self._retriever = retriever_instance or retriever
-        self._model = model
+        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen2.5:7b"
         self._tavily_max_results = tavily_max_results
 
     def build_tools(self):
@@ -42,16 +43,16 @@ class ToolRegistry:
                 return "\n\n".join(doc.page_content for doc in docs)
 
             override_search_assignment_docs = tool(_search)
-            override_search_assignment_docs.name = "search_assignment_docs"
-            override_search_assignment_docs.description = search_assignment_docs.description
+            override_search_assignment_docs.name = "ICT283_questions"
+            override_search_assignment_docs.description = ICT283_questions.description
             assignment_tool = override_search_assignment_docs
         else:
-            assignment_tool = search_assignment_docs
+            assignment_tool = ICT283_questions
 
         return [TavilySearch(max_results=self._tavily_max_results), assignment_tool]
 
     def build_llm(self):
-        return ChatGoogleGenerativeAI(model=self._model)
+        return ChatOllama(model=self._model)
 
     def build_llm_with_tools(self):
         tools_local = self.build_tools()
