@@ -1,7 +1,6 @@
 from langchain_core.tools import tool
 from repository import retriever_ICT283, retriever_SOF
 
-
 @tool
 def ICT283_questions(query: str) -> str:
     """ALWAYS use this tool when the user asks a question has ICT283_questions keywords.

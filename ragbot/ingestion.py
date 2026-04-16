@@ -15,7 +15,6 @@ if __name__ == "__main__":
     document = loader.load()
 
     print("Splitting...")
-    # This split is "coarse"; the repository will still enforce safe embedding chunks.
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     texts = text_splitter.split_documents(document)
 

@@ -18,7 +18,7 @@ class ToolRegistry:
         enable_web: bool = True,
         extra_tools: list | None = None,
     ) -> None:
-        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen2.5:7b"
+        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen3.5"
         self._tavily_max_results = tavily_max_results
         self._enable_web = enable_web
         self._extra_tools = extra_tools or []
@@ -35,8 +35,8 @@ class ToolRegistry:
         return tool_list
 
     def build_llm(self):
-        #return ChatOllama(model=self._model)
-        return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview")
+        return ChatOllama(model=self._model)
+        #return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview")
 
     def build_llm_with_tools(self):
         tools_local = self.build_tools()
