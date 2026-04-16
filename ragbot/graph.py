@@ -15,7 +15,10 @@ class WorkflowFactory:
         workflow.add_node("tools", tool_node)
 
         workflow.add_edge(START, "agent")
-        workflow.add_conditional_edges("agent", should_continue)
+        workflow.add_conditional_edges("agent", should_continue, {
+            END:END,
+            "tools":"tools"
+        })
         workflow.add_edge("tools", "agent")
         return workflow
 

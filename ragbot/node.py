@@ -5,12 +5,11 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import START, MessagesState, StateGraph, END
 
 from react import tools, llm_with_tools
+from prompts.system_prompts import system__prompt
 
 load_dotenv()
 
-SYSTEM_MSG = SystemMessage(content="You are a helpful assistant. " \
-"Use ICT283_questions or Stack_overflow_questionsfor tools \
-    consider keywords in user's prompt to use the appropriate tool.")
+SYSTEM_MSG = SystemMessage(content=system__prompt)
 
 class AgentNodes:
     def __init__(self, *, system_message: SystemMessage | None = None, llm_with_tools_instance=None, tools_list=None) -> None:
@@ -23,9 +22,8 @@ class AgentNodes:
         response = self.llm_with_tools.invoke([self.system_message] + state["messages"])
         return {"messages": [response]}
 
-    def should_continue(self, state: MessagesState):
-        last_message = state["messages"][-1]
-        if not last_message.tool_calls:
+    def should_continue(self, state: MessagesState) -> str:
+        if not state["messages"][-1].tool_calls:
             return END
         return "tools"
 
