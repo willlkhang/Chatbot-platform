@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import ReactMarkdown from 'react-markdown';
+
 export default function Home(){
 
     const [messages, setMessages] = useState([]);
@@ -78,8 +80,8 @@ export default function Home(){
                     + New Chat
                 </button>
                 <div className="historyList">
-                    <div className="historyItem">Previous Array Problem</div>
-                    <div className="historyItem">Linked List Reverval</div>
+                    <div className="historyItem">Test 1</div>
+                    <div className="historyItem">Test 2</div>
                 </div>
             </aside>
 
@@ -98,7 +100,11 @@ export default function Home(){
                                 className={`messageWrapper ${msg.role}`}
                             >
                                 <div className={`message ${msg.role}`}>
-                                    {msg.content}
+                                    {msg.role === 'ai' ? (
+                                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                    ) : (
+                                        msg.content
+                                    )}
                                 </div>
                             </div>
                         ))}
