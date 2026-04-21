@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ReactMarkdown from 'react-markdown';
 
@@ -10,6 +10,16 @@ export default function Home(){
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [isResponseLoading, setIsResponseLoading] = useState(false);
+
+    const messageEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isResponseLoading]);
 
     const isChatting = messages.length > 0;
 
@@ -121,6 +131,8 @@ export default function Home(){
                                 </div>
                             </div>
                         )}
+
+                        <div ref={messageEndRef}></div>
                     </div>
                 )}
 
