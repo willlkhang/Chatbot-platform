@@ -4,12 +4,17 @@ import { useEffect, useRef, useState } from "react";
 
 import ReactMarkdown from 'react-markdown';
 
+//for code block (mordern ai tool standard, user-friendly)
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 export default function Home(){
 
     const [messages, setMessages] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [isResponseLoading, setIsResponseLoading] = useState(false);
+    const [copiedCode, setCopiedCode] = useState(null);
 
     const messageEndRef = useRef(null);
 
@@ -84,6 +89,54 @@ export default function Home(){
         }
     };
 
+    const handleCopy = (text) => {
+        navigator.clipboard.writeText(text);
+        setCopiedCode(text);
+        setTimeout(() => setCopiedCode(null, 2000));
+    }
+
+    const MarkdownComponents = {
+
+        pre({ children }){
+            return <div className="preWrapper">{children}</div>
+        },
+        code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+            const codeText = String(children).replace(/\n$/, '');
+            
+            if (!inline && match) {
+                return (
+                    <div className="customCodeBlock">
+                        <div className="codeHeader">
+                            <span className="codeLanguage">{match[1]}</span>
+                            <button 
+                                className="copyBtn" 
+                                onClick={() => handleCopy(codeText)}
+                            >
+                                {copiedCode === codeText ? "Copied!" : "Copy"}
+                            </button>
+                        </div>
+                        <SyntaxHighlighter
+                            {...props}
+                            style={oneLight}
+                            language={match[1]}
+                            PreTag="div"
+                            customStyle={{ margin: 0, padding: '16px', backgroundColor: '#f9f9f9' }}
+                        >
+                            {codeText}
+                        </SyntaxHighlighter>
+                    </div>
+                );
+            }
+            
+            return (
+                <code className="inlineCode" {...props}>
+                    {children}
+                </code>
+            );
+        }
+    };
+
     return (
 
         <div className="container">
@@ -114,7 +167,9 @@ export default function Home(){
                             >
                                 <div className={`message ${msg.role}`}>
                                     {msg.role === 'ai' ? (
-                                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                        <ReactMarkdown components={MarkdownComponents}>
+                                            {msg.content}
+                                        </ReactMarkdown>
                                     ) : (
                                         msg.content
                                     )}
