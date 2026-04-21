@@ -9,6 +9,7 @@ export default function Home(){
     const [messages, setMessages] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isResponseLoading, setIsResponseLoading] = useState(false);
 
     const isChatting = messages.length > 0;
 
@@ -46,6 +47,7 @@ export default function Home(){
 
         try {
             setLoading(true)
+            setIsResponseLoading(true)
             const respond = await fetch(
                 "http://localhost:5000/api/response",
             {
@@ -68,6 +70,7 @@ export default function Home(){
             console.log("Fetch Failed ", error);
         } finally {
             setLoading(false);
+            setIsResponseLoading(false);
         }
     };
 
@@ -108,6 +111,16 @@ export default function Home(){
                                 </div>
                             </div>
                         ))}
+
+                        {isResponseLoading && (
+                            <div className="messageWrapper ai">
+                                <div className="message ai typingIndicator">
+                                    <div className="dot"></div>
+                                    <div className="dot"></div>
+                                    <div className="dot"></div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
