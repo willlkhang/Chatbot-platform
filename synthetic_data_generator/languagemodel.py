@@ -16,7 +16,7 @@ class MyModel():
             model_name = self.model_name,
             max_seq_length = self.max_seq_length,
             dtype = None,
-            load_in_4bit = self.load_in_4bit,
+            load_in_4bit = self.load_in_4bit
         )
 
         return model, tokenizer
