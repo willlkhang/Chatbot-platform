@@ -1,12 +1,30 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import ReactMarkdown from 'react-markdown';
+
+//for code block (mordern ai tool standard, user-friendly)
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export default function Home(){
 
     const [messages, setMessages] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isResponseLoading, setIsResponseLoading] = useState(false);
+    const [copiedCode, setCopiedCode] = useState(null);
+
+    const messageEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isResponseLoading]);
 
     const isChatting = messages.length > 0;
 
@@ -44,6 +62,7 @@ export default function Home(){
 
         try {
             setLoading(true)
+            setIsResponseLoading(true)
             const respond = await fetch(
                 "http://localhost:5000/api/response",
             {
@@ -66,6 +85,55 @@ export default function Home(){
             console.log("Fetch Failed ", error);
         } finally {
             setLoading(false);
+            setIsResponseLoading(false);
+        }
+    };
+
+    const handleCopy = (text) => {
+        navigator.clipboard.writeText(text);
+        setCopiedCode(text);
+        setTimeout(() => setCopiedCode(null, 2000));
+    }
+
+    const MarkdownComponents = {
+
+        pre({ children }){
+            return <div className="preWrapper">{children}</div>
+        },
+        code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+            const codeText = String(children).replace(/\n$/, '');
+            
+            if (!inline && match) {
+                return (
+                    <div className="customCodeBlock">
+                        <div className="codeHeader">
+                            <span className="codeLanguage">{match[1]}</span>
+                            <button 
+                                className="copyBtn" 
+                                onClick={() => handleCopy(codeText)}
+                            >
+                                {copiedCode === codeText ? "Copied!" : "Copy"}
+                            </button>
+                        </div>
+                        <SyntaxHighlighter
+                            {...props}
+                            style={oneLight}
+                            language={match[1]}
+                            PreTag="div"
+                            customStyle={{ margin: 0, padding: '16px', backgroundColor: '#f9f9f9' }}
+                        >
+                            {codeText}
+                        </SyntaxHighlighter>
+                    </div>
+                );
+            }
+            
+            return (
+                <code className="inlineCode" {...props}>
+                    {children}
+                </code>
+            );
         }
     };
 
@@ -78,8 +146,8 @@ export default function Home(){
                     + New Chat
                 </button>
                 <div className="historyList">
-                    <div className="historyItem">Previous Array Problem</div>
-                    <div className="historyItem">Linked List Reverval</div>
+                    <div className="historyItem">Test 1</div>
+                    <div className="historyItem">Test 2</div>
                 </div>
             </aside>
 
@@ -98,10 +166,28 @@ export default function Home(){
                                 className={`messageWrapper ${msg.role}`}
                             >
                                 <div className={`message ${msg.role}`}>
-                                    {msg.content}
+                                    {msg.role === 'ai' ? (
+                                        <ReactMarkdown components={MarkdownComponents}>
+                                            {msg.content}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        msg.content
+                                    )}
                                 </div>
                             </div>
                         ))}
+
+                        {isResponseLoading && (
+                            <div className="messageWrapper ai">
+                                <div className="message ai typingIndicator">
+                                    <div className="dot"></div>
+                                    <div className="dot"></div>
+                                    <div className="dot"></div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div ref={messageEndRef}></div>
                     </div>
                 )}
 

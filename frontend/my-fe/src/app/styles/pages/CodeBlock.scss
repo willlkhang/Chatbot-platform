@@ -1,0 +1,57 @@
+/* The outer wrapper for the new code block */
+.customCodeBlock {
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e3e3e3; /* Soft border like ChatGPT */
+  background-color: #f9f9f9;
+}
+
+/* The top bar */
+.codeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 8px 16px;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.codeLanguage {
+  font-family: sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  text-transform: capitalize; /* Makes "python" look like "Python" */
+}
+
+.copyBtn {
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  color: #555;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+
+.copyBtn:hover {
+  color: #000;
+}
+
+/* Styling for small `inline` code */
+.inlineCode {
+  background-color: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  color: #e83e8c; /* Optional: gives inline code a distinct color */
+}
+
+.preWrapper {
+    margin: 0;
+    padding: 0;
+}

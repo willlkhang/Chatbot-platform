@@ -16,7 +16,7 @@ if __name__ == "__main__":
                             tokenizer=tokenizer, 
                             generation_prompt=generation_prompt, 
                             categories=categories, 
-                            save_model_name="./generated_data/train.jsonl")
+                            save_model_name="./generated_data/train1.jsonl")
 
     generator.generating()
     generator.save_data()
