@@ -7,6 +7,9 @@ node_modules/
 
 .next/
 
+./ai/all_data/raw
+
+./ai/ai_tools/data_extractor/data/raw
 .vscode/
 
 .env
