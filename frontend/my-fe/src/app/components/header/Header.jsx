@@ -9,7 +9,7 @@ const Header = () =>{
                     <div className="block-center">
                         <div className="logo">
                             <a href="">
-                                <img src="/logo/logo.png" alt="/error/error.png" />
+                                <img src="/logo/graph.png" alt="/error/error.png" />
                             </a>
                         </div>
                         <p className="slogan">Ask Me Anything in your ICT283</p>

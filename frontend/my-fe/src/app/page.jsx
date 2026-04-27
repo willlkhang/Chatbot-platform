@@ -2,11 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 
+//markdown for neat response text
 import ReactMarkdown from 'react-markdown';
 
 //for code block (mordern ai tool standard, user-friendly)
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+//logo
+import { FaRegCopy } from "react-icons/fa6";
+import { LuSendHorizontal } from "react-icons/lu";
 
 export default function Home(){
 
@@ -113,6 +118,7 @@ export default function Home(){
                                 className="copyBtn" 
                                 onClick={() => handleCopy(codeText)}
                             >
+                                <FaRegCopy />
                                 {copiedCode === codeText ? "Copied!" : "Copy"}
                             </button>
                         </div>
@@ -200,7 +206,7 @@ export default function Home(){
                                 onChange={(e) => setQuery(e.target.value)} 
                         />
                         <button type="submit" disabled={!query.trim()}>
-                            Send
+                            <LuSendHorizontal />
                         </button>
                     </form>
                 </div>

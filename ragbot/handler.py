@@ -9,8 +9,6 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 
 from graph import workflow
 
-from IPython.display import Image, display
-
 load_dotenv()
 
 

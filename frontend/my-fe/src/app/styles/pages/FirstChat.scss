@@ -95,7 +95,7 @@
     display: flex;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto; // Centers the chat bubbles in the middle of the screen
+    margin: 0 auto; //centers the chat bubbles in the middle of the screen
 
     &.user {
         justify-content: flex-end;
@@ -183,7 +183,7 @@
         background-color: #1a73e8;
         color: white;
         border: none;
-        border-radius: 50%;
+        border-radius: 35%;
         width: 50px;
         height: 50px;
         cursor: pointer;
