@@ -53,6 +53,21 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerNewUser(@RequestBody UserSignUp userSignUp){
 
-        if
+        if (!userService.isDuplicatedEmail(userSignUp.getEmail()) ||
+                !userService.isDuplicatedUsername(userSignUp.getUsername())){
+            User user = new User();
+            user.setEmail(userSignUp.getEmail());
+            user.setUsername(user.getUsername());
+            user.setPassword(passwordEncoder.encode(userSignUp.getPassword()));
+            user.setFullName(userSignUp.getFullName());
+            user.setPhone(userSignUp.getPhone());
+
+            userService.saveUser(user);
+
+            return ResponseEntity.ok().body(user);
+        }
+        else {
+            return ResponseEntity.ok("This Username or email is already exited");
+        }
     }
 }
