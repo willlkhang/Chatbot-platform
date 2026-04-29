@@ -30,6 +30,12 @@ public class GatewayConfig {
                 .route("user-service", r -> r.path("/api/user/**")
                         .filters(f -> f.stripPrefix(2))
                         .uri("lb://user-service"))
+                .route("personalization-service", r -> r.path("/api/personalization/**")
+                        .filters(f -> f.stripPrefix(2))
+                        .uri("lb://personalization-service"))
+                .route("chat-service", r -> r.path("/api/chat/**")
+                        .filters(f -> f.stripPrefix(2))
+                        .uri("lb://chat-service"))
                 .build();
     }
 

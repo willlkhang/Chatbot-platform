@@ -13,4 +13,6 @@ public interface PersonalizationService {
     void clearPersonalization(Long userId, Long perId);
 
     List<Personalization> getAllPer();
+
+    List<Personalization> getPersonalizationByUserId(Long userId);
 }

@@ -18,6 +18,10 @@ public interface PersonalizationRepository extends JpaRepository<Personalization
     @Query("SELECT p FROM Personalization p WHERE p.personalizationId =:perId AND p.userId =:userId")
     Personalization getPersonalizationByUserAndId(@Param("userId") Long userId, @Param("perId") Long perId);
 
+    @Query("SELECT p FROM Personalization p WHERE  p.userId =:userId")
+    List<Personalization> getPersonalizationByUserId(@Param("userId") Long userId);
+    //List<Personalization> findByUserId(Long userId);
+
     @Query("SELECT p FROM Personalization p")
     List<Personalization> getAllPer();
 }

@@ -37,6 +37,13 @@ public class PersonalizationServiceImpl implements PersonalizationService {
     public List<Personalization> getAllPer() {
 
         List<Personalization> pers = personalizationRepository.findAll();
-        return new ArrayList<>(pers);
+        return pers.stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Personalization> getPersonalizationByUserId(Long userId) {
+        List<Personalization> pers = personalizationRepository.getPersonalizationByUserId(userId);
+
+        return pers.stream().collect(Collectors.toList());
     }
 }
