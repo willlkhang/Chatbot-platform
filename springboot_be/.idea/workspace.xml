@@ -7,7 +7,7 @@
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/authorization-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/authorization-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/project/user/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +89,7 @@
         <entry key="SpringBootApplicationConfigurationType">
           <value>
             <map>
+              <entry key="AuthorizationApplication" value="STOPPED" />
               <entry key="ChatApplication" value="STOPPED" />
               <entry key="ConfigApplication" value="STOPPED" />
               <entry key="DiscoveryApplication" value="STOPPED" />
@@ -379,7 +380,7 @@
       <workItem from="1774605255812" duration="4051000" />
       <workItem from="1775097063029" duration="29042000" />
       <workItem from="1776782868091" duration="422000" />
-      <workItem from="1777306765907" duration="7730000" />
+      <workItem from="1777306765907" duration="9319000" />
     </task>
     <servers />
   </component>

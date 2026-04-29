@@ -50,14 +50,14 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registery")
     public ResponseEntity<?> registerNewUser(@RequestBody UserSignUp userSignUp){
 
         if (!userService.isDuplicatedEmail(userSignUp.getEmail()) ||
                 !userService.isDuplicatedUsername(userSignUp.getUsername())){
             User user = new User();
             user.setEmail(userSignUp.getEmail());
-            user.setUsername(user.getUsername());
+            user.setUsername(userSignUp.getUsername());
             user.setPassword(passwordEncoder.encode(userSignUp.getPassword()));
             user.setFullName(userSignUp.getFullName());
             user.setPhone(userSignUp.getPhone());
