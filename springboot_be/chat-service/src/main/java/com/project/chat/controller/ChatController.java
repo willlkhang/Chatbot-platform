@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/chat")
+//@RequestMapping("/api/chat")
 public class ChatController {
 
     @Autowired

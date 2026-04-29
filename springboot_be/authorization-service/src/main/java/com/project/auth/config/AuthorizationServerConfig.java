@@ -51,6 +51,9 @@ public class AuthorizationServerConfig {
     @Value("${security.client-secret}")
     private String clientSecret;
 
+    @Value("${security.issuer}")
+    private String issuer;
+
     @Value("${security.jwt.duration}")
     private Integer jwtDurationSeconds;
 
@@ -171,7 +174,9 @@ public class AuthorizationServerConfig {
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().build();
+        return AuthorizationServerSettings.builder()
+                .issuer(issuer)
+                .build();
     }
 
 }

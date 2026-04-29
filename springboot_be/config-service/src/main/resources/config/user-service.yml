@@ -44,7 +44,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://192.168.8.200:8087
+          issuer-uri: http://localhost:8087
 
 ---
 #vps production config

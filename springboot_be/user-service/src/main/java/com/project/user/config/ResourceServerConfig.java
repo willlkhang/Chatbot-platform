@@ -24,9 +24,13 @@ public class ResourceServerConfig {
                         .requestMatchers("/registery").permitAll()
                         //.requestMatchers("/register/**").hasAuthority("USER")
                         //.requestMatchers("/all").permitAll()
-                        .requestMatchers("/{id}").permitAll()
+//                        .requestMatchers("/{id}").permitAll()
                         .anyRequest().authenticated());
-        http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
+        http.oauth2ResourceServer(oauth2ResourceServer ->
+                oauth2ResourceServer.jwt(jwt ->
+                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+                )
+        );
         return http.build();
     }
 
