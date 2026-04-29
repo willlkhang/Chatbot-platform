@@ -3,6 +3,7 @@ package com.project.user.controller;
 // user domain group
 import com.project.base.domain.User;
 import com.project.base.outputDto.UserResponse;
+import com.project.user.dto.UserSignUp;
 import com.project.user.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,11 @@ public class UserController {
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerNewUser(@RequestBody UserSignUp userSignUp){
+
+        if
     }
 }

@@ -5,19 +5,17 @@ public class UserSignUp {
     private String username;
     private String email;
     private String password;
-    private String phone;
+//    private String phone;
     private String fullName;
-    private String userType;
+//    private String userType;
 
     public UserSignUp() {}
 
-    public UserSignUp(String username, String email, String password, String phone, String userType, String fullName) {
+    public UserSignUp(String username, String fullName, String password, String email) {
         this.username = username;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.userType = userType;
         this.fullName = fullName;
+        this.password = password;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -44,27 +42,11 @@ public class UserSignUp {
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getFullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 }

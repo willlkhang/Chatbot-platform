@@ -38,4 +38,16 @@ public class UserServiceImpl implements UserService{
     public void saveUser(User user) {
         userRepository.save(user);
     }
+
+    @Override
+    public boolean isDuplicatedUsername(String username) {
+        User user = userRepository.findUserByUsername(username);
+        return user != null;
+    }
+    @Override
+    public boolean isDuplicatedEmail(String email) {
+        User user = userRepository.findUserByUserEmail(email);
+        return user != null;
+    }
+
 }

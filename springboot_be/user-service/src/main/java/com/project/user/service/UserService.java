@@ -11,4 +11,7 @@ public interface UserService {
     User getUserById(Long id);
     List<UserResponse> getAllUsers();
     void saveUser(User user);
+
+    boolean isDuplicatedEmail(String email);
+    boolean isDuplicatedUsername(String username);
 }
