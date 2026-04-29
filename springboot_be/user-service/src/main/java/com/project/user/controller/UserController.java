@@ -9,9 +9,11 @@ import com.project.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 
@@ -24,6 +26,14 @@ public class UserController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @GetMapping("user-profile")
+    public ResponseEntity<?> getUserProfile(@AuthenticationPrincipal Jwt jwt) {
+        String username = jwt.getClaimAsString("username");
+//        Long userId = jwt.getClaim("userId");
+
+        return ResponseEntity.ok("Profile of " + username);
+    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
