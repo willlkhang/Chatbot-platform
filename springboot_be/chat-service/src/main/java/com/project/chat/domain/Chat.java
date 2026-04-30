@@ -11,17 +11,16 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
-    private Long chatHistoryId;
+//    private Long chatHistoryId;
     private Long userId;
     private List<String> messages;
 
     public Chat(){}
 
-    public Chat(Long chatId, List<String> messages, Long userId, Long chatHistoryId) {
+    public Chat(Long chatId, List<String> messages, Long userId) {
         this.chatId = chatId;
         this.messages = messages;
         this.userId = userId;
-        this.chatHistoryId = chatHistoryId;
     }
 
     public Long getChatId() {
@@ -32,14 +31,6 @@ public class Chat {
         this.chatId = chatId;
     }
 
-    public List<String> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<String> messages) {
-        this.messages = messages;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -48,11 +39,11 @@ public class Chat {
         this.userId = userId;
     }
 
-    public Long getChatHistoryId() {
-        return chatHistoryId;
+    public List<String> getMessages() {
+        return messages;
     }
 
-    public void setChatHistoryId(Long chatHistoryId) {
-        this.chatHistoryId = chatHistoryId;
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
     }
 }

@@ -1,6 +1,7 @@
 package com.project.chat.controller;
 
 import com.project.chat.domain.Chat;
+import com.project.chat.dto.ChatMessageRequest;
 import com.project.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ChatController {
         return ResponseEntity.ok().body(chat);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getChatByUserId(@PathVariable Long userId){
         Chat chat = chatService.getChatByUserId(userId);
         if(chat == null){
@@ -39,11 +40,12 @@ public class ChatController {
         return ResponseEntity.ok().body(chat);
     }
 
-    @PostMapping("/user/{chatId}/chat/{userId}")
-    public ResponseEntity<?> updateConversation(@RequestParam Long chatId,
-                                                @RequestParam Long userId,
-                                                @RequestParam List<String> messages){
-        chatService.updateConversation(chatId, userId, messages);
+    @PostMapping("/user/{userId}/chat/{chatId}")
+    public ResponseEntity<?> updateConversation(@PathVariable Long chatId,
+                                                @PathVariable Long userId,
+                                                @RequestBody ChatMessageRequest incomingMessage){
+
+
 
         return ResponseEntity.ok(messages);
     }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
@@ -24,4 +25,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     void updateConversation(@Param("chatId") Long chatId,
                             @Param("userId") Long userId,
                             @Param("messages") List<String> messages);
+
+    @Query("SELECT c FROM Chat c WHERE c.userId=:userId AND c.chatId=:chatid")
+    Optional<Chat> findByChatIdAndUserId(Long chatId, Long userId);
 }
