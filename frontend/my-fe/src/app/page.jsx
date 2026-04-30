@@ -13,6 +13,24 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FaRegCopy } from "react-icons/fa6";
 import { LuSendHorizontal } from "react-icons/lu";
 
+const API_GATEWAY = "http://localhost:8060";
+const RAGBOT_API = "http://localhost:5000";
+
+function safeJsonParse(s) {
+    try { return JSON.parse(s); } catch { return null; }
+}
+
+function decodeJwtPayload(token) {
+    if (!token) return null;
+    const parts = token.split(".");
+    if (parts.length < 2) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+    const json = atob(padded);
+    return safeJsonParse(json);
+}
+
 export default function Home(){
 
     const [messages, setMessages] = useState([]);
@@ -23,13 +41,70 @@ export default function Home(){
 
     const messageEndRef = useRef(null);
 
+    const [accessToken, setAccessToken] = useState(null);
+    const [userClaims, setUserClaims] = useState(null);
+    const isLoggedIn = !!accessToken;
+
+    const [conversations, setConversations] = useState([]); // logged-in only
+    const [activeChatId, setActiveChatId] = useState(null); // logged-in: numeric chatId, guest: null
+    const [guestThreadId, setGuestThreadId] = useState(() => {
+        // guest mode: ephemeral per refresh
+        if (typeof crypto !== "undefined" && crypto.randomUUID) return `guest-${crypto.randomUUID()}`;
+        return `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    });
+
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const authHeaders = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
+
+    const refreshAuth = () => {
+        const token = localStorage.getItem("accessToken");
+        setAccessToken(token || null);
+        setUserClaims(decodeJwtPayload(token));
     };
 
     useEffect(() => {
         scrollToBottom();
     }, [messages, isResponseLoading]);
+
+    useEffect(() => {
+        refreshAuth();
+        const handler = () => refreshAuth();
+        window.addEventListener("accessTokenChanged", handler);
+        window.addEventListener("storage", handler);
+        return () => {
+            window.removeEventListener("accessTokenChanged", handler);
+            window.removeEventListener("storage", handler);
+        };
+    }, []);
+
+    const loadConversations = async (userId) => {
+        try {
+            const res = await fetch(`${API_GATEWAY}/api/chat/user/${userId}/all`, {
+                headers: { ...authHeaders },
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            setConversations(Array.isArray(data) ? data : []);
+        } catch {
+            // ignore
+        }
+    };
+
+    useEffect(() => {
+        // When logged in, load chat list (requires userId claim)
+        if (!isLoggedIn) {
+            setConversations([]);
+            setActiveChatId(null);
+            return;
+        }
+        const userId = userClaims?.userId;
+        if (typeof userId === "number") {
+            loadConversations(userId);
+        }
+    }, [isLoggedIn, userClaims?.userId]);
 
     const isChatting = messages.length > 0;
 
@@ -60,6 +135,89 @@ export default function Home(){
 
     const handleNewChat = () => {
         setMessages([]);
+        if (!isLoggedIn) {
+            if (typeof crypto !== "undefined" && crypto.randomUUID) setGuestThreadId(`guest-${crypto.randomUUID()}`);
+            else setGuestThreadId(`guest-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+        } else {
+            setActiveChatId(null);
+        }
+    };
+
+    const handleOpenConversation = async (chatId) => {
+        if (!isLoggedIn) return;
+        const userId = userClaims?.userId;
+        if (typeof userId !== "number") return;
+        try {
+            const res = await fetch(`${API_GATEWAY}/api/chat/user/${chatId}`, {
+                headers: { ...authHeaders },
+            });
+            if (!res.ok) return;
+            const chat = await res.json();
+            const msgs = Array.isArray(chat?.messages) ? chat.messages : [];
+            setActiveChatId(chatId);
+            setMessages(
+                msgs.map((m) => ({
+                    role: m?.senderRole === "ai" ? "ai" : "user",
+                    content: m?.content ?? "",
+                }))
+            );
+        } catch {
+            // ignore
+        }
+    };
+
+    const handleDeleteConversation = async (chatId) => {
+        if (!isLoggedIn) return;
+        const userId = userClaims?.userId;
+        if (typeof userId !== "number") return;
+        try {
+            await fetch(`${API_GATEWAY}/api/chat/${chatId}/user/${userId}`, {
+                method: "DELETE",
+                headers: { ...authHeaders },
+            });
+        } finally {
+            setConversations((prev) => prev.filter((c) => c?.chatId !== chatId));
+            if (activeChatId === chatId) {
+                setActiveChatId(null);
+                setMessages([]);
+            }
+        }
+    };
+
+    const ensureChatId = async () => {
+        const userId = userClaims?.userId;
+        if (!isLoggedIn || typeof userId !== "number") return null;
+        if (typeof activeChatId === "number") return activeChatId;
+
+        // create a new chat in chat-service
+        const chatRes = await fetch(`${API_GATEWAY}/api/chat/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...authHeaders,
+            },
+            body: JSON.stringify({ userId, messages: [] }),
+        });
+        if (!chatRes.ok) return null;
+        const chat = await chatRes.json();
+        const newChatId = chat?.chatId;
+        if (typeof newChatId === "number") {
+            setActiveChatId(newChatId);
+            setConversations((prev) => [chat, ...prev]);
+            return newChatId;
+        }
+        return null;
+    };
+
+    const persistMessage = async (chatId, userId, role, content) => {
+        await fetch(`${API_GATEWAY}/api/chat/${chatId}/user/${userId}/messages`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...authHeaders,
+            },
+            body: JSON.stringify({ senderRole: role, content }),
+        });
     };
 
     const chatWithRag = async (messageText) => {
@@ -68,14 +226,28 @@ export default function Home(){
         try {
             setLoading(true)
             setIsResponseLoading(true)
+
+            // Persist user message (logged-in only)
+            const userId = userClaims?.userId;
+            let chatIdForThread = null;
+            if (isLoggedIn && typeof userId === "number") {
+                chatIdForThread = await ensureChatId();
+                if (chatIdForThread) {
+                    await persistMessage(chatIdForThread, userId, "user", messageText);
+                }
+            }
+
             const respond = await fetch(
-                "http://localhost:5000/api/response",
+                `${RAGBOT_API}/api/response`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query: messageText })
+                body: JSON.stringify({
+                    query: messageText,
+                    thread_id: isLoggedIn && chatIdForThread ? String(chatIdForThread) : guestThreadId,
+                })
             });
 
             if (!respond.ok) {
@@ -86,6 +258,11 @@ export default function Home(){
                 ...prev,
                 { role: "ai", content: res.ai }
             ]);
+
+            // Persist ai response (logged-in only)
+            if (isLoggedIn && typeof userId === "number" && chatIdForThread) {
+                await persistMessage(chatIdForThread, userId, "ai", res.ai);
+            }
         } catch (error) {
             console.log("Fetch Failed ", error);
         } finally {
@@ -152,8 +329,30 @@ export default function Home(){
                     + New Chat
                 </button>
                 <div className="historyList">
-                    <div className="historyItem">Test 1</div>
-                    <div className="historyItem">Test 2</div>
+                    {!isLoggedIn ? (
+                        <div className="historyItem">Guest mode (not saved)</div>
+                    ) : (
+                        conversations.map((c) => (
+                            <div
+                                key={c.chatId}
+                                className={`historyItem ${activeChatId === c.chatId ? "active" : ""}`}
+                            >
+                                <button
+                                    className="historyOpenBtn"
+                                    onClick={() => handleOpenConversation(c.chatId)}
+                                >
+                                    Chat #{c.chatId}
+                                </button>
+                                <button
+                                    className="historyDeleteBtn"
+                                    onClick={() => handleDeleteConversation(c.chatId)}
+                                    title="Delete"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        ))
+                    )}
                 </div>
             </aside>
 

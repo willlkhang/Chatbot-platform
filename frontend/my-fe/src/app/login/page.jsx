@@ -44,6 +44,7 @@ export default function LoginPage() {
             if (result.ok) {
                 const res = await result.json();
                 localStorage.setItem("accessToken", res.access_token); // store token access to local storage, however, this token has expired time
+                window.dispatchEvent(new Event("accessTokenChanged"));
                 window.location.href = "/"; //redirection to home page
             } else {
                 const errText = await result.text().catch(() => "");
