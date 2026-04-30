@@ -2,6 +2,7 @@ package com.project.chat.service;
 import java.util.List;
 
 import com.project.chat.domain.Chat;
+import com.project.chat.domain.ChatMessage;
 import com.project.chat.repository.ChatRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,23 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public void updateConversation(Long userId, Long chatId, List<String> messages) {
-        chatRepository.updateConversation(chatId, userId, messages);
+    @Transactional
+    public Chat appendMessageToConversation(Long chatId, Long userId, String senderRole, String content) {
+        Chat chat = chatRepository.findByChatIdAndUserId(chatId, userId)
+                .orElseThrow(() -> new RuntimeException("Chat is not found or unauthorized"));
+
+        ChatMessage newMessage = new ChatMessage(senderRole, content);
+        chat.getMessages().add(newMessage);
+        return chatRepository.save(chat);
     }
 
     @Override
     public void createChat(Chat chat) {
         chatRepository.save(chat);
+    }
+
+    @Override
+    public List<Chat> getAllChat() {
+        return chatRepository.findAll();
     }
 }

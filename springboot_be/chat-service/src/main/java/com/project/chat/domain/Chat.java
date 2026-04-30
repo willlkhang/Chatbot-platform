@@ -1,7 +1,8 @@
 package com.project.chat.domain;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,16 +12,19 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
-//    private Long chatHistoryId;
     private Long userId;
-    private List<String> messages;
 
-    public Chat(){}
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "chat_messages", joinColumns = @JoinColumn(name = "chat_id"))
+    @OrderColumn(name = "message_order")
+    private List<ChatMessage> messages = new ArrayList<>();
 
-    public Chat(Long chatId, List<String> messages, Long userId) {
+    public Chat() {}
+
+    public Chat(Long chatId, Long userId, List<ChatMessage> messages) {
         this.chatId = chatId;
-        this.messages = messages;
         this.userId = userId;
+        this.messages = messages;
     }
 
     public Long getChatId() {
@@ -39,11 +43,11 @@ public class Chat {
         this.userId = userId;
     }
 
-    public List<String> getMessages() {
+    public List<ChatMessage> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<String> messages) {
+    public void setMessages(List<ChatMessage> messages) {
         this.messages = messages;
     }
 }

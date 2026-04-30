@@ -40,13 +40,24 @@ public class ChatController {
         return ResponseEntity.ok().body(chat);
     }
 
-    @PostMapping("/user/{userId}/chat/{chatId}")
+    @PostMapping("/{chatId}/user/{userId}/messages")
     public ResponseEntity<?> updateConversation(@PathVariable Long chatId,
                                                 @PathVariable Long userId,
                                                 @RequestBody ChatMessageRequest incomingMessage){
+        Chat updatedChat = chatService.appendMessageToConversation(
+                chatId,
+                userId,
+                incomingMessage.getSenderRole(),
+                incomingMessage.getContent()
+        );
 
+        return ResponseEntity.ok().body(updatedChat);
+    }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getallChat(){
+        List<Chat> chats = chatService.getAllChat();
 
-        return ResponseEntity.ok(messages);
+        return ResponseEntity.ok().body(chats);
     }
 }

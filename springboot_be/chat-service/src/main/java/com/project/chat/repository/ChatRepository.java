@@ -26,6 +26,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
                             @Param("userId") Long userId,
                             @Param("messages") List<String> messages);
 
-    @Query("SELECT c FROM Chat c WHERE c.userId=:userId AND c.chatId=:chatid")
+    @Query("SELECT c FROM Chat c WHERE c.userId=:userId AND c.chatId=:chatId")
     Optional<Chat> findByChatIdAndUserId(Long chatId, Long userId);
 }

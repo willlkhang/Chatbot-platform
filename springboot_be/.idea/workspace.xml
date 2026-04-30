@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/domain/ChatMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/dto/ChatMessageRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/controller/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/controller/ChatController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/domain/Chat.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/domain/Chat.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/repository/ChatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/repository/ChatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -394,7 +393,7 @@
       <workItem from="1774605255812" duration="4051000" />
       <workItem from="1775097063029" duration="29042000" />
       <workItem from="1776782868091" duration="422000" />
-      <workItem from="1777306765907" duration="23046000" />
+      <workItem from="1777306765907" duration="26715000" />
     </task>
     <servers />
   </component>
