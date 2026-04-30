@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9dafaaf0-85c6-498a-ab31-f92006f988e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../ai/ai_tools/data_extractor/testing/test.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/styles/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/styles/main.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/controller/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/controller/ChatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/domain/Chat.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/domain/Chat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/repository/ChatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/repository/ChatRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/com/project/chat/service/ChatServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +59,7 @@
     "Spring Boot.UserApplication.executor": "Debug",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/will/A MyDoc/project/project/uni-project-1/springboot_be/authorization-service/src/main/resources",
+    "last_opened_file_path": "/home/will/A MyDoc/project/project/uni-project-1/springboot_be",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -393,7 +389,9 @@
       <workItem from="1774605255812" duration="4051000" />
       <workItem from="1775097063029" duration="29042000" />
       <workItem from="1776782868091" duration="422000" />
-      <workItem from="1777306765907" duration="26715000" />
+      <workItem from="1777306765907" duration="27571000" />
+      <workItem from="1777559746786" duration="23000" />
+      <workItem from="1777560119890" duration="801000" />
     </task>
     <servers />
   </component>
