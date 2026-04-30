@@ -1,9 +1,11 @@
 @use "./../components/header/Header.scss";
 @use "./../components/oldChat/OldChat.scss";
 
+
 @use "./pages/FirstChat.scss";
 @use "./pages/AIResponse.scss";
 @use "./pages/WaitingEffect.scss";
 @use "./pages/CodeBlock.scss";
 
-@use "./../login/login.scss";
+@use "./../login/Login.scss";
+@use "./../signup/Signup.scss";

@@ -1,6 +1,5 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image"
 
@@ -24,24 +23,22 @@ export default function LoginPage() {
         }
         setLoading(true);
 
-        //prepare Basic authen profiles
         try {
-                const loginData = {
-                    username: username,
-                    password: password,
-                    grant_type: "password"
-                };
+            // Match the working Postman request: x-www-form-urlencoded to /oauth2/token
+            const formBody = new URLSearchParams({
+                username,
+                password,
+                grant_type: "password",
+            }).toString();
 
-            const result = await fetch("http://170.64.179.146:8060/api/authen/login", {
+            const result = await fetch("http://localhost:8060/api/authen/oauth2/token", {
                 method: "POST",
                 headers: { 
-                    //convert content-type to application/json
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded",
                     "Accept": "application/json",
                     "Authorization": `Basic ${clientCredentials}`,
                 },
-                //make stringify data to json body
-                body: JSON.stringify(loginData),
+                body: formBody,
             });
 
             if (result.ok) {
@@ -49,7 +46,13 @@ export default function LoginPage() {
                 localStorage.setItem("accessToken", res.access_token); // store token access to local storage, however, this token has expired time
                 window.location.href = "/"; //redirection to home page
             } else {
-                setErrors({ general: "Invalid username or password" });
+                const errText = await result.text().catch(() => "");
+                setErrors({
+                    general:
+                        errText?.trim()
+                            ? `Login failed: ${errText}`
+                            : "Invalid username or password",
+                });
             }
         } catch(e) {
             console.error("Fetch Error:", e);
