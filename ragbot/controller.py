@@ -12,6 +12,7 @@ CORS(app)
 
 parser = reqparse.RequestParser()
 parser.add_argument('query', type=str, required=True, help="Message cannot be blank")
+parser.add_argument('thread_id', type=str, required=False)
 
 aiResponse = {
     'ai': fields.String
@@ -22,7 +23,8 @@ class ClientInput(Resource):
     def post(self):
         args = parser.parse_args()
         query = args['query']
-        rag_output = asyncio.run(run_request(query))
+        thread_id = args.get("thread_id") or None
+        rag_output = asyncio.run(run_request(query, thread_id=thread_id))
 
         return {'ai': rag_output}
 

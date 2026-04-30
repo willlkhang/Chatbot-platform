@@ -21,8 +21,8 @@ class RagbotService:
         self._memory = SqliteSaver(self._conn)
         self._app = workflow.compile(checkpointer=self._memory)
 
-    def invoke(self, query: str) -> str:
-        config = {"configurable": {"thread_id": self._thread_id}}
+    def invoke(self, query: str, *, thread_id: str | None = None) -> str:
+        config = {"configurable": {"thread_id": thread_id or self._thread_id}}
         res = self._app.invoke({"messages": [HumanMessage(content=query)]}, config=config)
         raw = res["messages"][-1].content
 
@@ -41,8 +41,8 @@ class RagbotService:
 
 _service = RagbotService()
 
-async def run_request(query):
-    return _service.invoke(query)
+async def run_request(query: str, *, thread_id: str | None = None):
+    return _service.invoke(query, thread_id=thread_id)
 
 if __name__ == "__main__":
     # query = "What is my name?"
