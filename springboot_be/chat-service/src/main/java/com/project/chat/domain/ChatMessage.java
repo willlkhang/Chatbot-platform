@@ -1,11 +1,14 @@
 package com.project.chat.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ChatMessage {
 
     private String senderRole;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public ChatMessage(){}
