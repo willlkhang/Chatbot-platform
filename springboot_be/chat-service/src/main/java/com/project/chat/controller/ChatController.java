@@ -22,6 +22,12 @@ public class ChatController {
         return ResponseEntity.ok().body(chat);
     }
 
+    @GetMapping("/user/{userId}/all")
+    public ResponseEntity<?> getChatsByUserId(@PathVariable Long userId){
+        List<Chat> chats = chatService.getChatsByUserId(userId);
+        return ResponseEntity.ok().body(chats);
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<?> getChatByUserId(@PathVariable Long userId){
         Chat chat = chatService.getChatByUserId(userId);
@@ -59,5 +65,11 @@ public class ChatController {
         List<Chat> chats = chatService.getAllChat();
 
         return ResponseEntity.ok().body(chats);
+    }
+
+    @DeleteMapping("/{chatId}/user/{userId}")
+    public ResponseEntity<?> deleteChat(@PathVariable Long chatId, @PathVariable Long userId) {
+        chatService.deleteChat(chatId, userId);
+        return ResponseEntity.noContent().build();
     }
 }

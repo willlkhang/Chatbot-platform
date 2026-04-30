@@ -32,6 +32,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.util.Assert;
 
+import com.project.auth.service.UserDetailsImpl;
+
 public class CustomPasswordAuthenticationProvider implements AuthenticationProvider {
 
     private static final String ERROR_URI = "https://datatracker.ietf.org/doc/html/rfc6749#section-5.2";
@@ -84,7 +86,8 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
 
         //-----------Create a new Security Context Holder Context----------
         OAuth2ClientAuthenticationToken oAuth2ClientAuthenticationToken = (OAuth2ClientAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        CustomUserAuthorities customPasswordUser = new CustomUserAuthorities(username, user.getAuthorities());
+        Long userId = (user instanceof UserDetailsImpl) ? ((UserDetailsImpl) user).getId() : null;
+        CustomUserAuthorities customPasswordUser = new CustomUserAuthorities(userId, username, user.getAuthorities());
         oAuth2ClientAuthenticationToken.setDetails(customPasswordUser);
 
         var newcontext = SecurityContextHolder.createEmptyContext();

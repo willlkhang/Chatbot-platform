@@ -133,7 +133,8 @@ public class AuthorizationServerConfig {
             if (context.getTokenType().getValue().equals("access_token")) {
                 context.getClaims()
                         .claim("authorities", authorities)
-                        .claim("username", user.getUsername());
+                        .claim("username", user.getUsername())
+                        .claim("userId", user.getUserId());
             }
         };
     }

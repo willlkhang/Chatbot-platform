@@ -26,6 +26,11 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
+    public List<Chat> getChatsByUserId(Long userId) {
+        return chatRepository.findChatsByUserId(userId);
+    }
+
+    @Override
     @Transactional
     public Chat appendMessageToConversation(Long chatId, Long userId, String senderRole, String content) {
         Chat chat = chatRepository.findByChatIdAndUserId(chatId, userId)
@@ -39,6 +44,13 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public void createChat(Chat chat) {
         chatRepository.save(chat);
+    }
+
+    @Override
+    public void deleteChat(Long chatId, Long userId) {
+        Chat chat = chatRepository.findByChatIdAndUserId(chatId, userId)
+                .orElseThrow(() -> new RuntimeException("Chat is not found or unauthorized"));
+        chatRepository.delete(chat);
     }
 
     @Override
