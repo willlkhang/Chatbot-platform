@@ -1,3 +1,2 @@
-from .base_classifier import BaseTopicClassifier
-from .base_preprocessor import BasePreprocessor
 from .base_query import Query, QueryResult
+from .base_db_queries import AddResourceRequest, GetResourceResult

@@ -1,4 +1,4 @@
-from domain import BaseTopicClassifier
+from .base_classifier import BaseTopicClassifier
 from pathlib import Path
 import joblib
 

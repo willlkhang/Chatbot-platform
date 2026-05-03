@@ -6,3 +6,4 @@ class Query(BaseModel):
 class QueryResult(BaseModel):
     query : str
     label : str
+    resource : list
