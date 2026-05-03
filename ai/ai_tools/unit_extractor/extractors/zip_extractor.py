@@ -3,6 +3,9 @@ import zipfile
 from pathlib import Path
 from .base import ExtractorBase
 
+"""
+claude code
+"""
 
 class ZipExtractor(ExtractorBase):
     """

@@ -23,7 +23,7 @@ class DocExtractor(ExtractorBase):
         (saved in the system temp folder).
         """
         src = os.path.abspath(path)
-        dst = os.path.join(tempfile.gettempdir(), Path(src).stem + ".docx")
+        dst = os.path.join(os.path.dirname(src), Path(src).stem + ".pptx")
 
         word = win32com.client.Dispatch("Word.Application")
         try:

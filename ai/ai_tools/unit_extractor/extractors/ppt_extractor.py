@@ -10,7 +10,7 @@ from .pptx_extractor import PptxExtractor
 Claude's code
 
 
-LOTS OF OLD PPT FILES NEEDS TO BE CONVERTED 
+LOTS OF OLD PPT FILES NEEDS TO BE CONVERTED PPTX
 """
 class PptExtractor(ExtractorBase):
     
@@ -27,7 +27,7 @@ class PptExtractor(ExtractorBase):
         """
         # COM needs absolute paths — relative paths silently fail
         src = os.path.abspath(path)
-        dst = os.path.join(tempfile.gettempdir(), Path(src).stem + ".pptx")
+        dst = os.path.join(os.path.dirname(src), Path(src).stem + ".pptx")
 
         powerpoint = win32com.client.Dispatch("PowerPoint.Application")
         try:

@@ -7,23 +7,20 @@ from extractors import PdfExtractor
 from extractors import PptExtractor
 from extractors import PptxExtractor
 from extractors import ZipExtractor
-from extractors import XlsxExtractor
-from extractors import XlsExtractor
+
+# NOTE: Extracting csvs is not recommended for the purpose of this system
 
 EXTRACTORS  = {
     ".txt" : TextExtractor(), 
     ".h" : TextExtractor(),
     ".hpp" : TextExtractor(),
     ".cpp" : TextExtractor(),
-    #".csv" : TextExtractor(),
     ".c" : TextExtractor(),
     ".docx" : DocxExtractor(),
     ".pdf" : PdfExtractor(),
     ".ppt" : PptExtractor(),
     ".pptx" : PptxExtractor(),
     ".zip" : ZipExtractor(), # this does not produce TextData, only more work for the pipeline
-    #".xls" : XlsExtractor(),
-    #".xlsx" : XlsxExtractor()
 }
 
 from serializers import txt_serializer
@@ -32,15 +29,13 @@ from pathlib import Path
 
 ROOT_CWD = Path.cwd()
 
-
 SERIALIZERS = {
         'txt' : txt_serializer,
         'json' : json_serializer
     }
 
+# ============================== HASTY MENU ==============================
 def user_input():
-    
-    path = None
     
     TASKS = [
     #(ROOT_CWD / 'content.txt', txt_serializer),
@@ -91,8 +86,6 @@ def confirm(TASKS : list[tuple]):
         else:
             return user_input
     
-        
-        
 def run(TASKS : list[tuple]):
 
     for data_path, save_name, serializer in TASKS:
@@ -100,7 +93,9 @@ def run(TASKS : list[tuple]):
         OPTIONS = [(save_name, serializer)] # this was an older design, hence the strange set up
         results = UnitExtractor(**EXTRACTORS).run(data_path)
         Serializer(*OPTIONS).run(data=results)
-    
+
+
+# ============================== HASTY MENU END ==============================
 
 if __name__ == "__main__":
     

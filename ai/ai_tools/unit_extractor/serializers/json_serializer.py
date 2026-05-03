@@ -8,7 +8,8 @@ def json_serializer( data : list[TextData], save_path : str | Path = Path().cwd(
         
         for text_data in data:
             text_data_dict = {
-                "id" : str(text_data.id),
+                "filename" : str(text_data.filename),
+                "folder_name" : str(text_data.file_folder),
                 "text" : str(text_data.text),
                 "metadata" : {key : str(metadata) for key, metadata in text_data.metadata.items()}
             }

@@ -5,5 +5,3 @@ from .ppt_extractor import PptExtractor
 from .pptx_extractor import PptxExtractor
 from .txt_extractor import TextExtractor
 from .zip_extractor import ZipExtractor
-from .xls_extractor import XlsExtractor
-from .xlsx_extractor import XlsxExtractor
