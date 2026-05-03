@@ -1,2 +1,3 @@
 from .classifier_controllers import classify_routers
 from .database_controllers import db_routers
+from .home_controllers import home_router

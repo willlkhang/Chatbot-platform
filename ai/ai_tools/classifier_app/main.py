@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from classifiers import LinearSVC
-from controllers import classify_routers, db_routers
+from controllers import classify_routers, db_routers, home_router
 from databases import SQLiteDB
 
 
@@ -12,6 +12,7 @@ app.state.db = SQLiteDB()
 
 app.include_router(classify_routers)
 app.include_router(db_routers)
+app.include_router(home_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=8011, reload=True)
