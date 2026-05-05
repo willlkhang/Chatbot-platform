@@ -9,8 +9,8 @@
         <module name="config-service" />
         <module name="base-service" />
         <module name="gateway-service" />
-        <module name="chat-service" />
         <module name="authorization-service" />
+        <module name="chat-service" />
         <module name="personalization-service" />
         <module name="discovery-service" />
       </profile>

@@ -9,7 +9,7 @@ eureka:
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/thirdparty
+    url: jdbc:postgresql://localhost:5432/chatbot
     username: postgres
     password: 12345678
     hikari:
