@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2b63afb-a7a7-4c43-ad78-fad12260cd3a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../ai/ai_tools/data_preprocessing/data_cleaning.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../ai/ai_tools/data_preprocessing/data_cleaning.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ragbot/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/login/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/login/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/my-fe/src/app/signup/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/my-fe/src/app/signup/page.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../print.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ragbot/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ragbot/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ragbot/controller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/authorization-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/authorization-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/chat-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/chat-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/discovery-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/discovery-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/gateway-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/gateway-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/personalization-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/personalization-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-service/src/main/resources/config/user-service.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config-service/src/main/resources/config/user-service.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../vectordb.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,34 +43,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.ai-chat [clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.AuthorizationApplication.executor": "Debug",
-    "Spring Boot.ChatApplication.executor": "Debug",
-    "Spring Boot.ConfigApplication.executor": "Debug",
-    "Spring Boot.DiscoveryApplication.executor": "Debug",
-    "Spring Boot.GatewayApplication.executor": "Debug",
-    "Spring Boot.PersonalizationApplication.executor": "Debug",
-    "Spring Boot.UserApplication.executor": "Debug",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.configurations.included.in.services": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.ai-chat [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AuthorizationApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.ChatApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.ConfigApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.DiscoveryApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.GatewayApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.PersonalizationApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.UserApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -169,6 +181,7 @@
       <workItem from="1777727659793" duration="490000" />
       <workItem from="1777970195863" duration="492000" />
       <workItem from="1777980446119" duration="52000" />
+      <workItem from="1777990140100" duration="696000" />
     </task>
     <servers />
   </component>

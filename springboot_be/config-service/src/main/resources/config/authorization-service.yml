@@ -4,14 +4,14 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8061/eureka/
+      defaultZone: ${EUREKA_URL:http://discovery-service:8061/eureka/}
 ---
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/chatbot
-    username: postgres
-    password: 12345678
+    url: jdbc:postgresql://${DB_HOST:postgres}:${DB_PORT:5432}/${DB_NAME:chatbot}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345678}
     hikari:
       poolName: Hikari
       maximumPoolSize: 5
@@ -34,12 +34,12 @@ spring:
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
   app:
-    oauth-url: http://localhost:${server.port}/oauth2/token
+    oauth-url: ${OAUTH_URL:http://authorization-service:${server.port}/oauth2/token}
 
 security:
   client-id: ${CLIENT_ID:project}
   client-secret: ${CLIENT_SECRET:secret}
-  issuer: ${AUTH_ISSUER:http://localhost:${server.port}}
+  issuer: ${AUTH_ISSUER:http://authorization-service:${server.port}}
   jwt:
     duration: ${JWT_DURATION:6000}
 
