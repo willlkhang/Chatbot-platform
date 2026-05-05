@@ -1,0 +1,25 @@
+.env
+/.venv
+
+unsloth_compiled_cache/
+
+unsloth_training_checkpoints/
+
+outputs/
+
+__pycache__/
+
+#databasegroup - short term memory, conversation
+checkpoints.sqlite-shm
+checkpoints.sqlite-wal
+checkpoints.sqlite
+
+#long-term memory, knowledge base
+rag_memory.sqlite
+rag_memory.sqlite-shm
+rag_memory.sqlite-wal
+
+ICT283_rag_memory.sqlite
+Stack_overflow_rag_memory.sqlite
+
+.python-version
