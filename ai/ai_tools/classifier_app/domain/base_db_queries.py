@@ -6,4 +6,4 @@ class AddResourceRequest(BaseModel):
 
 class GetResourceResult(BaseModel):
     resources : list
-    
+

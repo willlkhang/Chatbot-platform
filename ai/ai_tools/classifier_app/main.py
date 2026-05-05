@@ -4,7 +4,6 @@ from classifiers import LinearSVC
 from controllers import classify_routers, db_routers, home_router
 from databases import SQLiteDB
 
-
 app = FastAPI()
 
 app.state.classifier = LinearSVC()

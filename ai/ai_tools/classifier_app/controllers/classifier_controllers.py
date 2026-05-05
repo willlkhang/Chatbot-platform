@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from domain import Query, QueryResult
+from domain import Query, QueryResult, ModelTopics
 from classifiers import BaseTopicClassifier
 from databases import BaseDB
 
@@ -17,3 +17,10 @@ def query(query : Query, requests : Request):
     return QueryResult(query=query.text, 
                        label=label,
                        resource=resource)
+    
+@classify_routers.get("/get_topics")
+def get_topics(requests : Request):
+    
+    model : BaseTopicClassifier = requests.app.state.classifier
+    topics = model.get_topics()
+    return ModelTopics(topics=topics)

@@ -12,12 +12,12 @@ class SQLiteDB(BaseDB):
         cursor = connection.cursor()
         
         cursor.execute("""
-                                CREATE TABLE IF NOT EXISTS resources (
-                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                    topic TEXT NOT NULL,
-                                    resource TEXT
-                                    )
-                            """)
+                            CREATE TABLE IF NOT EXISTS resources (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                topic TEXT NOT NULL,
+                                resource TEXT NOT NULL UNIQUE
+                                )
+                        """)
         
         connection.commit()
         
@@ -25,7 +25,7 @@ class SQLiteDB(BaseDB):
         
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute( """
                         INSERT INTO resources (topic, resource)
                         VALUES(?, ?)
                         """, (topic, resource))
@@ -39,10 +39,10 @@ class SQLiteDB(BaseDB):
         connection = sqlite3.connect(self.db_path)
         cursor = connection.cursor()
         
-        cursor.execute(f"""
+        cursor.execute( """
                         SELECT * FROM resources WHERE topic = ?
                         """, (topic,))
         
         rows = cursor.fetchall()
         
-        return [resources for _, _, resources in rows]
+        return [resources[2] for resources in rows]

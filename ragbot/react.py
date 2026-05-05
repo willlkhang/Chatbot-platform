@@ -1,8 +1,10 @@
 import os
+import ollama
 from dotenv import load_dotenv
 from langchain_tavily import TavilySearch
 from langchain_ollama import ChatOllama
 from langchain_google_genai import ChatGoogleGenerativeAI
+
 
 from tools.knowledge_tools import ICT283_questions, Stack_overflow_questions
 
@@ -18,7 +20,8 @@ class ToolRegistry:
         enable_web: bool = True,
         extra_tools: list | None = None,
     ) -> None:
-        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen3.5"
+        self._model = model or os.environ.get("OLLAMA_MODEL") or "gemma4:31b-cloud"
+            
         self._tavily_max_results = tavily_max_results
         self._enable_web = enable_web
         self._extra_tools = extra_tools or []

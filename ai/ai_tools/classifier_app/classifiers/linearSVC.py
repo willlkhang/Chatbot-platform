@@ -23,8 +23,9 @@ class LinearSVC(BaseTopicClassifier):
         else:
             return 'OTHER'
         
-    def get_topics():
-        ...
+    def get_topics(self):
+        
+        return self.class_names.values()
         
         
         
