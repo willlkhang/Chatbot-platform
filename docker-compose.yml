@@ -133,9 +133,6 @@ services:
     build:
       context: ./frontend/my-fe
       args:
-        # NEXT_PUBLIC_* are baked in at build time. The browser runs on the
-        # host, so localhost points to the host machine. Gateway is published
-        # by compose; ragbot runs natively on the host (default port 5000).
         NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY:-http://localhost:8060}
         NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API:-http://localhost:5000}
     ports:

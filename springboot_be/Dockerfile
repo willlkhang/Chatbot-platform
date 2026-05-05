@@ -17,7 +17,7 @@ COPY user-service/pom.xml ./user-service/pom.xml
 
 #download dependencies
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -DskipTests dependency:go-offline \
+    mvn -DskipTests dependency:go-offline
 
 #copy full mnodules source
 COPY . .
