@@ -1,1 +1,148 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: chatbot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chatbot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
+  config-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: config-service
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+    ports:
+      - "8088:8088"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  discovery-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: discovery-service
+    environment:
+      CONFIG_SERVER_URL: http://config-service:8088/
+      EUREKA_HOST: discovery-service
+    ports:
+      - "8061:8061"
+    depends_on:
+      config-service:
+        condition: service_started
+
+  gateway-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: gateway-service
+    environment:
+      CONFIG_SERVER_URL: http://config-service:8088/
+      EUREKA_URL: http://discovery-service:8061/eureka/
+    ports:
+      - "8060:8060"
+    depends_on:
+      discovery-service:
+        condition: service_started
+
+  authorization-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: authorization-service
+    environment:
+      CONFIG_SERVER_URL: http://config-service:8088/
+      EUREKA_URL: http://discovery-service:8061/eureka/
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: chatbot
+      DB_USER: postgres
+      DB_PASSWORD: 12345678
+      AUTH_ISSUER: http://authorization-service:8087
+      OAUTH_URL: http://authorization-service:8087/oauth2/token
+    ports:
+      - "8087:8087"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+
+  user-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: user-service
+    environment:
+      CONFIG_SERVER_URL: http://config-service:8088/
+      EUREKA_URL: http://discovery-service:8061/eureka/
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: chatbot
+      DB_USER: postgres
+      DB_PASSWORD: 12345678
+      AUTH_ISSUER: http://authorization-service:8087
+    ports:
+      - "8085:8085"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      authorization-service:
+        condition: service_started
+
+  chat-service:
+    build:
+      context: ./springboot_be
+      dockerfile: Dockerfile
+      args:
+        SERVICE: chat-service
+    environment:
+      CONFIG_SERVER_URL: http://config-service:8088/
+      EUREKA_URL: http://discovery-service:8061/eureka/
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: chatbot
+      DB_USER: postgres
+      DB_PASSWORD: 12345678
+    ports:
+      - "8086:8086"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend/my-fe
+      args:
+        # NEXT_PUBLIC_* are baked in at build time. The browser runs on the
+        # host, so localhost points to the host machine. Gateway is published
+        # by compose; ragbot runs natively on the host (default port 5000).
+        NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY:-http://localhost:8060}
+        NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API:-http://localhost:5000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      gateway-service:
+        condition: service_started
+
+volumes:
+  postgres_data:

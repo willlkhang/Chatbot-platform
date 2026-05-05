@@ -7,6 +7,8 @@ import Image from "next/image";
 export default function SignupPage() {
   const router = useRouter();
 
+  const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY || "http://localhost:8060";
+
   const [form, setForm] = useState({
     fullName: "",
     username: "",
@@ -59,7 +61,7 @@ export default function SignupPage() {
         fullName: form.fullName.trim(),
       };
 
-      const res = await fetch("http://localhost:8060/api/user/registery", {
+      const res = await fetch(`${API_GATEWAY}/api/user/registery`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -10,6 +10,7 @@ export default function LoginPage() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY || "http://localhost:8060";
     const clientCredentials = btoa("project:secret");
 
     const handleSubmit = async () => {
@@ -31,7 +32,7 @@ export default function LoginPage() {
                 grant_type: "password",
             }).toString();
 
-            const result = await fetch("http://localhost:8060/api/authen/oauth2/token", {
+            const result = await fetch(`${API_GATEWAY}/api/authen/oauth2/token`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/x-www-form-urlencoded",

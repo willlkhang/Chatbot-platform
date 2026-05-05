@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
 from flask_cors import CORS
@@ -33,6 +35,10 @@ api.add_resource(ClientInput, '/api/response')
 @app.route('/')
 def home():
     return '<h1>Go back</h1>'
+
+@app.route('/healthz')
+def healthz():
+    return {'status': 'ok'}, 200
 
 if __name__ == '__main__':
     app.run(debug=True)

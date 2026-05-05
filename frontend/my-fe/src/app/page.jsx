@@ -13,8 +13,8 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FaRegCopy } from "react-icons/fa6";
 import { LuSendHorizontal } from "react-icons/lu";
 
-const API_GATEWAY = "http://localhost:8060";
-const RAGBOT_API = "http://localhost:5000";
+const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY || "http://localhost:8060";
+const RAGBOT_API = process.env.NEXT_PUBLIC_RAGBOT_API || "http://localhost:5000";
 
 function safeJsonParse(s) {
     try { return JSON.parse(s); } catch { return null; }
