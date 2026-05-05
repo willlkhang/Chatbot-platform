@@ -19,5 +19,3 @@ __pycache__/
 node_modules/
 
 .next/
-
-.note.txt
