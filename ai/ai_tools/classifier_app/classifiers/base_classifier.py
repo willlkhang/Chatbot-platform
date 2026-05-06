@@ -8,6 +8,6 @@ class BaseTopicClassifier():
         ...
        
     @abstractmethod 
-    def get_topics() -> list[tuple]:
+    def get_topics() -> list:
         """return the topics this model knows"""
         ...

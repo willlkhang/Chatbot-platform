@@ -7,3 +7,6 @@ class QueryResult(BaseModel):
     query : str
     label : str
     resource : list
+    
+class ModelTopics(BaseModel):
+    topics : list
