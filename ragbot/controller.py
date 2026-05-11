@@ -41,4 +41,7 @@ def healthz():
     return {'status': 'ok'}, 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    host = os.environ.get("RAGBOT_HOST", "0.0.0.0")
+    port = int(os.environ.get("RAGBOT_PORT", "5000"))
+    debug = os.environ.get("RAGBOT_DEBUG", "false").lower() in ("1", "true", "yes")
+    app.run(host=host, port=port, debug=debug)
