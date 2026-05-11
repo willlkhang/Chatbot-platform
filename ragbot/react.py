@@ -20,7 +20,7 @@ class ToolRegistry:
         enable_web: bool = True,
         extra_tools: list | None = None,
     ) -> None:
-        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen1.5"
+        self._model = model or os.environ.get("OLLAMA_MODEL") or "granite4.1:3b"
             
         self._tavily_max_results = tavily_max_results
         self._enable_web = enable_web
