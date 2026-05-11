@@ -69,7 +69,7 @@ services:
       args:
         SERVICE: authorization-service
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       CONFIG_SERVER_URL: http://config-service:8088/
       EUREKA_URL: http://discovery-service:8061/eureka/
       DB_HOST: postgres
@@ -95,7 +95,7 @@ services:
       args:
         SERVICE: user-service
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       CONFIG_SERVER_URL: http://config-service:8088/
       EUREKA_URL: http://discovery-service:8061/eureka/
       DB_HOST: postgres
@@ -119,7 +119,7 @@ services:
       args:
         SERVICE: chat-service
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       CONFIG_SERVER_URL: http://config-service:8088/
       EUREKA_URL: http://discovery-service:8061/eureka/
       DB_HOST: postgres
