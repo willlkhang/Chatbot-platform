@@ -58,6 +58,7 @@ services:
     environment:
       CONFIG_SERVER_URL: http://config-service:8088/
       EUREKA_URL: http://discovery-service:8061/eureka/
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
     ports:
       - "${GATEWAY_HOST_PORT}:8060"
     depends_on:
