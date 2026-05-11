@@ -20,7 +20,7 @@ class ToolRegistry:
         enable_web: bool = True,
         extra_tools: list | None = None,
     ) -> None:
-        self._model = model or os.environ.get("OLLAMA_MODEL") or "granite4.1:3b-q3_k_s" #"granite4.1:8b-q3_k_m" #"granite4.1:3b"
+        self._model = model or os.environ.get("OLLAMA_MODEL") or "gemma4:31b-cloud" #"granite4.1:8b-q3_k_m" #"granite4.1:3b"
             
         # self._tavily_max_results = tavily_max_results
         # self._enable_web = enable_web
