@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from langchain_community.document_loaders import TextLoader
-from langchain_text_splitters import CharacterTextSplitter
+from langchain_text_splitters import CharacterTextSplitter, RecursiveCharacterTextSplitter
 
 from repository import RagRepository
 
@@ -15,7 +15,10 @@ if __name__ == "__main__":
     document = loader.load()
 
     print("Splitting...")
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1500, 
+        chunk_overlap=0,
+        separators=["\n\n", "\n", ". ", " ", ""])
     texts = text_splitter.split_documents(document)
 
     print(f"Created {len(texts)} chunks")
