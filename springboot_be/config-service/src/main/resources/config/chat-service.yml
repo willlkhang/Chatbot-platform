@@ -34,26 +34,26 @@ spring:
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
 
-#---
-##local development
-#spring:
-#  config:
-#    activate:
-#      on-profile: dev
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: http://192.168.8.200:8086
-#
-#---
-##vps production config
-#spring:
-#  config:
-#    activate:
-#      on-profile: prod
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: http://170.64.179.146:8060
+---
+#local development
+spring:
+  config:
+    activate:
+      on-profile: dev
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER:http://localhost:8087}
+
+---
+#production (chatbot283 / 10.51.33.11)
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER:http://10.51.33.11:8087}

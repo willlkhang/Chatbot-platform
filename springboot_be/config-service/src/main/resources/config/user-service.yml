@@ -44,10 +44,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${AUTH_ISSUER:http://authorization-service:8087}
+          issuer-uri: ${AUTH_ISSUER:http://localhost:8087}
 
 ---
-#vps production config
+#production (chatbot283 / 10.51.33.11)
 spring:
   config:
     activate:
@@ -56,4 +56,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://170.64.179.146:8060
+          issuer-uri: ${AUTH_ISSUER:http://10.51.33.11:8087}

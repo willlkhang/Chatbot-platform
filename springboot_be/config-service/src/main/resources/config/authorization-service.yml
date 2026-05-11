@@ -51,17 +51,17 @@ spring:
     activate:
       on-profile: dev
   app:
-    oauth-url: http://192.168.8.200:${server.port}/oauth2/token
+    oauth-url: ${OAUTH_URL:http://localhost:${server.port}/oauth2/token}
 security:
   issuer: ${AUTH_ISSUER:http://localhost:${server.port}}
 
 ---
-#vps production config
+#production (chatbot283 / 10.51.33.11)
 spring:
   config:
     activate:
       on-profile: prod
   app:
-    oauth-url: http://170.64.179.146:${server.port}/oauth2/to
+    oauth-url: ${OAUTH_URL:http://10.51.33.11:${server.port}/oauth2/token}
 security:
-  issuer: ${AUTH_ISSUER:http://170.64.179.146:${server.port}}
+  issuer: ${AUTH_ISSUER:http://10.51.33.11:${server.port}}

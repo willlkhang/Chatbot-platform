@@ -8,3 +8,5 @@ docker compose ps -a
 docker rmi -f $(docker images -aq)
 
 docker compose exec postgres psql -U postgres -d chatbot -c "\dn"
+
+docker compose --env-file .env.prod up -d --build
