@@ -57,7 +57,7 @@ services:
       CONFIG_SERVER_URL: http://config-service:8088/
       EUREKA_URL: http://discovery-service:8061/eureka/
     ports:
-      - "${GATEWAY_HOST_PORT:-8060}:8060"
+      - "${GATEWAY_HOST_PORT}:8060"
     depends_on:
       discovery-service:
         condition: service_started
@@ -141,10 +141,10 @@ services:
       context: ./frontend/my-fe
       args:
         # Baked into the Next.js build. Defaults support "just run locally".
-        NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY:-http://localhost:8060}
-        NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API:-http://localhost:5000}
+        NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY}
+        NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API}
     ports:
-      - "${FRONTEND_HOST_PORT:-3000}:3000"
+      - "${FRONTEND_HOST_PORT}:3000"
     depends_on:
       gateway-service:
         condition: service_started
