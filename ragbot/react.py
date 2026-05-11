@@ -26,6 +26,24 @@ class ToolRegistry:
         self._enable_web = enable_web
         self._extra_tools = extra_tools or []
 
+        #check if the mode exists, otherwise, pull
+        self._model_exists()
+
+    def _model_exists(self):
+        #this method is used for chekcing if a LM exists, otherwise pull
+        try:
+            local_models = ollama.list()
+            model_names = [m['model'] for m in local_models['models']]
+
+            if self._model not in model_names and f"{self._model}:latest" not in model_names:
+                print(f"Model '{self._model}' not found. Pulling now...")
+                ollama.pull(self._model)
+                print("Pull complete!")
+            else:
+                print(f"Model '{self._model}' is already available.")
+        except Exception as e:
+            print(f"Could not verify or pull model: {e}")
+
     def build_tools(self):
         tool_list = []
         if self._enable_web:
