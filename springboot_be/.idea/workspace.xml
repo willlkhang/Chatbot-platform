@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2b63afb-a7a7-4c43-ad78-fad12260cd3a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ragbot/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../ragbot/requirements.txt" afterDir="false" />
+    <list default="true" id="ba246233-6e29-4ed9-92c0-87c7977bdbf3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,37 +15,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 7
-}</component>
-  <component name="ProjectId" id="3DAb7ixJRlI2pi8NApdVOmFs3Yw" />
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="3DJIJmnW1WoKQWwhfKJKaWgftTV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Maven.ai-chat [clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.AuthorizationApplication.executor": "Debug",
-    "Spring Boot.ChatApplication.executor": "Debug",
-    "Spring Boot.ConfigApplication.executor": "Debug",
-    "Spring Boot.DiscoveryApplication.executor": "Debug",
-    "Spring Boot.GatewayApplication.executor": "Debug",
-    "Spring Boot.PersonalizationApplication.executor": "Debug",
-    "Spring Boot.UserApplication.executor": "Debug",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -68,23 +53,6 @@
         <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
       </set>
-    </option>
-    <option name="configurationStatuses">
-      <map>
-        <entry key="SpringBootApplicationConfigurationType">
-          <value>
-            <map>
-              <entry key="AuthorizationApplication" value="STOPPED" />
-              <entry key="ChatApplication" value="STOPPED" />
-              <entry key="ConfigApplication" value="STOPPED" />
-              <entry key="DiscoveryApplication" value="STOPPED" />
-              <entry key="GatewayApplication" value="STOPPED" />
-              <entry key="PersonalizationApplication" value="STOPPED" />
-              <entry key="UserApplication" value="STOPPED" />
-            </map>
-          </value>
-        </entry>
-      </map>
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.AuthorizationApplication">
@@ -162,15 +130,12 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c2b63afb-a7a7-4c43-ad78-fad12260cd3a" name="Changes" comment="" />
-      <created>1777727659080</created>
+      <changelist id="ba246233-6e29-4ed9-92c0-87c7977bdbf3" name="Changes" comment="" />
+      <created>1777993677303</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1777727659080</updated>
-      <workItem from="1777727659793" duration="490000" />
-      <workItem from="1777970195863" duration="492000" />
-      <workItem from="1777980446119" duration="52000" />
-      <workItem from="1777990140100" duration="1508000" />
+      <updated>1777993677303</updated>
+      <workItem from="1777993678863" duration="1992000" />
     </task>
     <servers />
   </component>

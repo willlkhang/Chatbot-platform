@@ -143,5 +143,5 @@ class _SqliteRetriever:
     def invoke(self, query: str):
         return self._repo.similarity_search(query)
 
-retriever_ICT283 = RagRepository(sqlite_path="./data/ICT283_rag_memory.sqlite").retriever
+retriever_ICT283 = RagRepository(sqlite_path="./data/ICT283_all.sqlite").retriever
 retriever_SOF = RagRepository(sqlite_path="./data/Stack_overflow_rag_memory.sqlite").retriever

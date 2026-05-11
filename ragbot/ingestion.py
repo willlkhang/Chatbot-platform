@@ -11,7 +11,7 @@ load_dotenv()
 if __name__ == "__main__":
     print("Woring, Will !!!")
     
-    loader = TextLoader("./A1-QandA.txt", encoding='UTF-8')
+    loader = TextLoader("./knowledge/ICT283_ALL_CONTENT.txt", encoding='UTF-8')
     document = loader.load()
 
     print("Splitting...")
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print(f"Created {len(texts)} chunks")
 
     print("ingesting into sqlite long-term memory...")
-    repo = RagRepository(sqlite_path=os.environ.get("RAG_MEMORY_DB") or "./data/rag_memory.sqlite")
+    repo = RagRepository(sqlite_path=os.environ.get("RAG_MEMORY_DB") or "./data/ICT283_all.sqlite")
     inserted = repo.add_documents(texts)
     print(f"Inserted {inserted} chunks")
     print("Done, Will, This is new data ingestion")
