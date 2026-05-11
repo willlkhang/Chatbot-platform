@@ -15,9 +15,8 @@ COPY gateway-service/pom.xml ./gateway-service/pom.xml
 COPY personalization-service/pom.xml ./personalization-service/pom.xml
 COPY user-service/pom.xml ./user-service/pom.xml
 
-#download dependencies
-RUN --mount=type=cache,target=/root/.m2 \
-    mvn -DskipTests dependency:go-offline
+#download dependencies (no BuildKit cache mount for compatibility with legacy docker-compose v1)
+RUN mvn -DskipTests dependency:go-offline
 
 #copy full mnodules source
 COPY . .
@@ -26,8 +25,7 @@ COPY . .
 #build only request services or modules
 #this way helps me not to run mvn then docker, but, combine them
 RUN test -n "$SERVICE"
-RUN --mount=type=cache,target=/root/.m2 \
-    mvn -DskipTests -pl "${SERVICE}" -am package
+RUN mvn -DskipTests -pl "${SERVICE}" -am package
 
 
 FROM amazoncorretto:23-alpine AS runtime
