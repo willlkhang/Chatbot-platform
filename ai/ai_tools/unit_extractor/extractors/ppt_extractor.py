@@ -1,30 +1,24 @@
+"""Extractor for legacy PowerPoint `.ppt` files.
+
+Converts `.ppt` files to `.pptx` using COM automation on Windows and
+then delegates to `PptxExtractor`. Small docstrings and comments were
+added; functionality is unchanged.
+"""
+
 import os
-import tempfile
 from pathlib import Path
 import win32com.client  # from the 'pywin32' package
 
 from .base import ExtractorBase
 from .pptx_extractor import PptxExtractor
 
-"""
-Claude's code
 
-
-LOTS OF OLD PPT FILES NEEDS TO BE CONVERTED PPTX
-"""
 class PptExtractor(ExtractorBase):
-    
-    """
-    Extracts .ppt files by first converting them to .pptx using PowerPoint,
-    then delegating to PptxExtractor.
-    """
-    
+
+    """Handle legacy `.ppt` by converting to `.pptx` and delegating."""
+
     def _ppt_to_pptx(self, path: str) -> str:
-        """
-        Converts a .ppt file to .pptx by driving a real PowerPoint instance
-        via COM automation. Returns the path to the new .pptx file
-        (saved in the system temp folder).
-        """
+        """Convert `path` (.ppt) to a `.pptx` file and return its path."""
         # COM needs absolute paths — relative paths silently fail
         src = os.path.abspath(path)
         dst = os.path.join(os.path.dirname(src), Path(src).stem + ".pptx")

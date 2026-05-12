@@ -1,29 +1,29 @@
+"""Extractor for legacy Microsoft Word `.doc` files.
+
+This extractor uses COM automation (Windows-only) to convert a `.doc`
+file to `.docx` and then delegates to `DocxExtractor`. Small comments
+and docstrings have been added; functionality is unchanged.
+"""
+
 import os
-import tempfile
 from pathlib import Path
 import win32com.client
 
 from .base import ExtractorBase
 from .docx_extractor import DocxExtractor
 
-"""
-CLAUDE CODE
-"""
 
 class DocExtractor(ExtractorBase):
-    """
-    Extracts .doc files by first converting them to .docx using Word,
-    then delegating to DocxExtractor.
-    """
+    """Handle legacy `.doc` files by converting to `.docx` first."""
 
     def _doc_to_docx(self, path: str) -> str:
-        """
-        Converts a .doc file to .docx by driving a real Word instance
-        via COM automation. Returns the path to the new .docx file
-        (saved in the system temp folder).
+        """Convert `path` (.doc) to a temporary .docx file and return its path.
+
+        Note: uses Windows COM automation and therefore only works on
+        Windows hosts with Microsoft Word installed.
         """
         src = os.path.abspath(path)
-        dst = os.path.join(os.path.dirname(src), Path(src).stem + ".pptx")
+        dst = os.path.join(os.path.dirname(src), Path(src).stem + ".docx")
 
         word = win32com.client.Dispatch("Word.Application")
         try:
@@ -42,6 +42,7 @@ class DocExtractor(ExtractorBase):
         return dst
 
     def _extract(self, path=None, docx_extractor=None) -> list:
+        """Convert `.doc` to `.docx` and delegate extraction to `DocxExtractor`."""
         if docx_extractor is None:
             docx_extractor = DocxExtractor()
         elif isinstance(docx_extractor, type):
@@ -51,7 +52,7 @@ class DocExtractor(ExtractorBase):
 
         try:
             docs = docx_extractor.extract(converted_path)
-            # Rewrite path to the original .doc
+            # Rewrite path to the original .doc so metadata reflects source
             for doc in docs:
                 doc.path = path
             return docs

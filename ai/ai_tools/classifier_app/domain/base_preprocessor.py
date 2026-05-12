@@ -1,8 +1,11 @@
+"""Abstract preprocessor interface for text normalization."""
+
 from abc import abstractmethod
 
-class BasePreprocessor():
-    
+
+class BasePreprocessor:
+
     @abstractmethod
-    def preprocess(text : str) -> str:
-        """process a prompt or query"""
+    def preprocess(text: str) -> str:
+        """Return a normalized/cleaned version of `text`."""
         ...

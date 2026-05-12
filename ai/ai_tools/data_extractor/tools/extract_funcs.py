@@ -1,115 +1,118 @@
+"""Utility functions used by the data extractor.
+
+Includes helpers to locate `.txt` files, extract Q/A pairs from files
+using a simple heuristic, and write the results to JSON. Existing
+implementation is preserved; only documentation/comments were added.
+"""
+
 from pathlib import Path
-import re 
+import re
 import json
 
-def search_txt_files(dir_path : str, files=None):
-    
+
+def search_txt_files(dir_path: str, files=None):
+    """Recursively collect `.txt` files under `dir_path`.
+
+    Returns a list of `Path` objects. The `files` argument is used for
+    recursion to accumulate results.
     """
-    Searches a directory path and returns a list of txt file paths
-    from the directory.
-    """
-    
+
     # creates an initial list to store the found txt files
     if files is None:
         files = list()
-    
+
     # turns string path into a Path object
     current_dir = Path(dir_path)
-    
+
     if not current_dir.is_dir():
         return files
-    
+
     # recursively searches for text files from starting directory
     for item in current_dir.iterdir():
-        
+
         if item.is_file() and re.search(r'\.txt', item.name):
             files.append(item)
         elif item.is_dir():
             search_txt_files(str(item), files)
-            
+
     return files
 
-def extract_qna_pairs(txt_file_paths : list[Path]):
-    
+def extract_qna_pairs(txt_file_paths: list[Path]):
+
+    """Extract question/answer pairs from the given list of text files.
+
+    The function reads each file (ignoring decoding errors), splits the
+    text using a simple regex-based heuristic and delegates block
+    processing to `create_qna_pairs`.
     """
-    Returns all QnA pairs findable from the list of txt files.
-    
-    The pairs are returned as a list of {Q: (Question), A: (Answer)}.
-    """
-    
+
     qna_pairs = []
-    
+
     for txt_file in txt_file_paths:
-        
-        # shri's files use weird apostrophes that we cant easily, so we ignore errors
+
+        # some source files contain non-standard characters; ignore errors
         with open(txt_file, 'r', encoding='utf-8', errors='ignore') as f:
-            
+
             raw_text = f.read()
 
-            # split by the Q and A tag
+            # split by the lines that start with Q/q or A/a
             split_text = re.split(r'(\n[AaQq].?\n)', raw_text)
-            
+
+            # drop any leading fragments until we hit a Q/A marker
             while split_text and re.search(r'^([AaQq].?)$', split_text[0].strip()) is None:
-                split_text.pop(0) 
-            
+                split_text.pop(0)
+
             qna_pairs = qna_pairs + create_qna_pairs(split_text)
-    
+
     return qna_pairs
 
 
 
-def create_qna_pairs(split_txt_list : list):
-    
+def create_qna_pairs(split_txt_list: list):
+
+    """Convert a split text list into a sequence of Q/A dictionaries.
+
+    The function scans the list in windows expecting the pattern:
+    [Q_marker, question, A_marker, answer]. If the pattern is not found
+    the window advances by two to attempt realignment.
     """
-    Creates QnA pairs from list of text in pattern (Q, question, A, answer).
-    
-    Data is returned as {Q: (Question), A: (Answer)} pairs.
-    
-    NOTE: gemini created this logic, I just wrote it to be cleaner.
-    
-    How it works:
-    
-    1. Checks list via index in blocks of 4.
-    2. For each block, checks if position 1 is 'Q' and position 2 is 'A'
-    3. If both are true, this is a valid block, it gets collected as a QnA pair.
-    4. If not, we assume there's an issue with the list and move two steps forward
-       to try realign again.
-    
-    """
-    
+
     pair_storage = []
-    
+
     i = 0
     while i < len(split_txt_list) - 3:
-        
+
         Q = split_txt_list[i].strip()
         A = split_txt_list[i + 2].strip()
-            
+
         is_Q = re.search(r"^([Qq].?)$", Q) is not None
         is_A = re.search(r"^([Aa].?)$", A) is not None
-        
+
         if is_Q and is_A:
-            
+
             question = split_txt_list[i + 1].strip()
             answer = split_txt_list[i + 3].strip()
-            
+
             pair_storage.append({'Q': question, 'A': answer})
-            
+
             i += 4
         else:
+            # realign assumption: skip two elements when pattern not found
             i += 2
-        
+
     return pair_storage
         
 
 
-def create_json(pair_list, save_loc= Path.cwd() , mode='w'):
-    
+def create_json(pair_list, save_loc=Path.cwd(), mode='w'):
+    """Write `pair_list` to a JSON file named `data.json` in `save_loc`.
+
+    `save_loc` may be a directory path or string; the function appends
+    `/data.json` to the provided location.
     """
-    Creates a json file from a list
-    """
-    save_loc = str(save_loc) +  '/data.json'
-    
+
+    save_loc = str(save_loc) + '/data.json'
+
     with open(save_loc, mode) as file:
         json.dump(pair_list, file, indent=4)
         

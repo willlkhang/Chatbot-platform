@@ -1,17 +1,18 @@
+"""Extractor for ZIP archives.
+
+Extracts archive contents into a sibling directory and returns a flat
+list of files found. The extractor normalises ZIP member filenames to
+handle archives created by legacy tools that may use backslashes.
+"""
+
 import shutil
 import zipfile
 from pathlib import Path
 from .base import ExtractorBase
 
-"""
-claude code
-"""
 
 class ZipExtractor(ExtractorBase):
-    """
-    Extracts a .zip archive into a sibling folder next to the source zip,
-    and returns a flat list of every file that came out (recursively).
-    """
+    """Extract a ZIP archive and return the contained file paths."""
 
     def _extract(self, path: str | Path = None) -> list:
         path = Path(path)
@@ -24,11 +25,8 @@ class ZipExtractor(ExtractorBase):
 
         with zipfile.ZipFile(path) as z:
             for member in z.infolist():
-                # The ZIP spec requires forward slashes in filenames, but some
-                # older Windows tools write backslashes anyway. Python's
-                # extraction logic trips on those, so we normalise them here
-                # before letting Python do its thing. Both filename fields
-                # need to match or Python's internal integrity check fails.
+                # Normalise path separators to forward slashes to avoid
+                # platform-specific extraction issues.
                 fixed = member.filename.replace('\\', '/')
                 member.filename = fixed
                 if hasattr(member, 'orig_filename'):
@@ -36,5 +34,5 @@ class ZipExtractor(ExtractorBase):
 
                 z.extract(member, out_dir)
 
-        # Walk the extracted tree; return only real files, not directories
+        # Walk the extracted tree; return only files
         return [p for p in out_dir.rglob('*') if p.is_file()]
