@@ -9,4 +9,21 @@ docker rmi -f $(docker images -aq)
 
 docker compose exec postgres psql -U postgres -d chatbot -c "\dn"
 
-docker compose --env-file .env.prod up -d --build
+
+
+sudo docker-compose --env-file .env.prod up -d --build
+
+sudo docker-compose --env-file .env.prod ps
+
+sudo docker exec -it ict304-project-postgres-1 psql -U postgres -d chatbot
+
+sudo docker exec -it ict304-project_postgres_1 psql -U postgres -d chatbot
+
+sudo ufw status
+# if active, allow them:
+sudo ufw allow 3000/tcp
+sudo ufw allow 8060/tcp
+sudo ufw allow 5000/tcp
+
+ watch -n 1 nvidia-smi
+
