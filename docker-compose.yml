@@ -7,8 +7,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345678
       POSTGRES_DB: chatbot
-    # Intentionally not published to host. Other services reach it on the
-    # internal docker network as `postgres:5432`.
     expose:
       - "5432"
     volumes:
@@ -80,7 +78,6 @@ services:
       DB_NAME: chatbot
       DB_USER: postgres
       DB_PASSWORD: 12345678
-      #Internal Docker hostname — overrides profile defaults for service-to-service calls
       AUTH_ISSUER: http://authorization-service:8087
       OAUTH_URL: http://authorization-service:8087/oauth2/token
     expose:
@@ -143,7 +140,6 @@ services:
     build:
       context: ./frontend/my-fe
       args:
-        # Baked into the Next.js build. Defaults support "just run locally".
         NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY}
         NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API}
     ports:
