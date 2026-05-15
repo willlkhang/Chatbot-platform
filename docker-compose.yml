@@ -112,6 +112,14 @@ services:
       authorization-service:
         condition: service_started
 
+  classifier-service:
+    build:
+      context: ./ai/ai_tools/classifier_app
+    environment:
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+    ports:
+      - "${CLASSIFIER_HOST_PORT}:8011"
+
   chat-service:
     build:
       context: ./springboot_be
@@ -142,10 +150,13 @@ services:
       args:
         NEXT_PUBLIC_API_GATEWAY: ${NEXT_PUBLIC_API_GATEWAY}
         NEXT_PUBLIC_RAGBOT_API: ${NEXT_PUBLIC_RAGBOT_API}
+        NEXT_PUBLIC_CLASSIFIER_API: ${NEXT_PUBLIC_CLASSIFIER_API}
     ports:
       - "${FRONTEND_HOST_PORT}:3000"
     depends_on:
       gateway-service:
+        condition: service_started
+      classifier-service:
         condition: service_started
 
 volumes:
