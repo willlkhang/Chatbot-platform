@@ -25,5 +25,6 @@ sudo ufw allow 3000/tcp
 sudo ufw allow 8060/tcp
 sudo ufw allow 5000/tcp
 
- watch -n 1 nvidia-smi
+watch -n 1 nvidia-smi
 
+cp .env.dev .env

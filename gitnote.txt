@@ -1,0 +1,16 @@
+Author: Minh Khang Nguyen
+ID: 34739531
+Date: 15/05/2025
+
+-- I split this repo into 2 branches because the direction for ICT304 unit and production for ICT283 a bit different.
+
+-- The main branch is for ICT304 as it is easier for my teammates to push the code as it is.
+
+-- The branch for ICT283 is production-v1
+
+create new branch: git checkout -b <branch name>
+push code to that new branch: git push -u origin <branch name>
+
+switch branch: git check out <branch name>
+pull code: git pull origin
+push code: git push origin <branch name>
