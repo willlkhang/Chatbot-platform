@@ -15,6 +15,28 @@ import { LuSendHorizontal } from "react-icons/lu";
 
 const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY || "http://localhost:8060";
 const RAGBOT_API = process.env.NEXT_PUBLIC_RAGBOT_API || "http://localhost:5000";
+const CLASSIFIER_API = process.env.NEXT_PUBLIC_CLASSIFIER_API || "http://localhost:8011";
+
+function formatTopicLabel(label) {
+    return label
+        .split("_")
+        .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+        .join(" ");
+}
+
+async function classifyQuestion(text) {
+    try {
+        const res = await fetch(`${CLASSIFIER_API}/query`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+        });
+        if (!res.ok) return null;
+        return await res.json();
+    } catch {
+        return null;
+    }
+}
 
 function safeJsonParse(s) {
     try { return JSON.parse(s); } catch { return null; }
@@ -38,6 +60,7 @@ export default function Home(){
     const [loading, setLoading] = useState(false);
     const [isResponseLoading, setIsResponseLoading] = useState(false);
     const [copiedCode, setCopiedCode] = useState(null);
+    const [topicPopup, setTopicPopup] = useState(null);
 
     const messageEndRef = useRef(null);
 
@@ -135,6 +158,7 @@ export default function Home(){
 
     const handleNewChat = () => {
         setMessages([]);
+        setTopicPopup(null);
         if (!isLoggedIn) {
             if (typeof crypto !== "undefined" && crypto.randomUUID) setGuestThreadId(`guest-${crypto.randomUUID()}`);
             else setGuestThreadId(`guest-${Date.now()}-${Math.random().toString(16).slice(2)}`);
@@ -237,18 +261,33 @@ export default function Home(){
                 }
             }
 
-            const respond = await fetch(
-                `${RAGBOT_API}/api/response`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: messageText,
-                    thread_id: isLoggedIn && chatIdForThread ? String(chatIdForThread) : guestThreadId,
-                })
-            });
+            const [classifyResult, respond] = await Promise.all([
+                classifyQuestion(messageText),
+                fetch(`${RAGBOT_API}/api/response`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        query: messageText,
+                        thread_id: isLoggedIn && chatIdForThread ? String(chatIdForThread) : guestThreadId,
+                    }),
+                }),
+            ]);
+
+            if (classifyResult?.label && classifyResult.label !== "OTHER") {
+                const resources = Array.isArray(classifyResult.resource)
+                    ? classifyResult.resource.filter(Boolean)
+                    : [];
+                if (resources.length > 0) {
+                    setTopicPopup({
+                        topic: classifyResult.label,
+                        resources,
+                    });
+                } else {
+                    setTopicPopup(null);
+                }
+            } else {
+                setTopicPopup(null);
+            }
 
             if (!respond.ok) {
                 throw new Error(`API Error: ${respond.status}`);
@@ -410,6 +449,57 @@ export default function Home(){
                     </form>
                 </div>
             </div>
+
+            {topicPopup && (
+                <div
+                    className="topicToast"
+                    role="dialog"
+                    aria-labelledby="topic-popup-title"
+                    aria-live="polite"
+                >
+                    <button
+                        type="button"
+                        className="topicToastClose"
+                        onClick={() => setTopicPopup(null)}
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+
+                    <div className="topicToastHeader">
+                        <span className="topicToastBadge" aria-hidden="true">
+                            {topicPopup.topic.slice(0, 2)}
+                        </span>
+                        <div className="topicToastTitleBlock">
+                            <h2 id="topic-popup-title">Related study materials</h2>
+                            <span className="topicLabel">{formatTopicLabel(topicPopup.topic)}</span>
+                        </div>
+                    </div>
+
+                    <div className="topicToastBody">
+                        <p>We found resources that may help with your question:</p>
+                        <ul>
+                            {topicPopup.resources.map((url, i) => (
+                                <li key={i}>
+                                    <a href={url} target="_blank" rel="noopener noreferrer">
+                                        {url}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="topicToastActions">
+                        <button
+                            type="button"
+                            className="topicToastBtn topicToastBtn--secondary"
+                            onClick={() => setTopicPopup(null)}
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
