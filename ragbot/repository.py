@@ -60,7 +60,11 @@ class RagRepository:
         )
         self._conn.commit()
 
-        self._embeddings = OllamaEmbeddings(model=self._embedding_model)
+        _embed_kwargs: dict = {"model": self._embedding_model}
+        _base = os.environ.get("OLLAMA_BASE_URL")
+        if _base:
+            _embed_kwargs["base_url"] = _base.rstrip("/")
+        self._embeddings = OllamaEmbeddings(**_embed_kwargs)
 
     @property
     def retriever(self):

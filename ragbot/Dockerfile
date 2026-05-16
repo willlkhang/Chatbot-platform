@@ -13,11 +13,11 @@ RUN uv sync --frozen --no-dev
 
 COPY . .
 
-RUN mkdir -p /app/data
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+#create db directory copy sqlite files
+RUN mkdir -p /opt/ragbot-seed \
+    && cp /app/data/*.sqlite /opt/ragbot-seed/ 2>/dev/null || true \
+    && chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 5000
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

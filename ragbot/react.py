@@ -10,6 +10,10 @@ from tools.knowledge_tools import ICT283_questions#, Stack_overflow_questions
 
 load_dotenv()
 
+# LangChain and the Ollama Python client share this host (default: local Ollama).
+OLLAMA_BASE_URL = (os.environ.get("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
+_ollama_sdk = ollama.Client(host=OLLAMA_BASE_URL)
+
 
 class ToolRegistry:
     def __init__(
@@ -33,12 +37,12 @@ class ToolRegistry:
     def _model_exists(self):
         #this method is used for chekcing if a LM exists, otherwise pull
         try:
-            local_models = ollama.list()
-            model_names = [m['model'] for m in local_models['models']]
+            local_models = _ollama_sdk.list()
+            model_names = [m["model"] for m in local_models["models"]]
 
             if self._model not in model_names and f"{self._model}:latest" not in model_names:
                 print(f"Model '{self._model}' not found. Pulling now...")
-                ollama.pull(self._model)
+                _ollama_sdk.pull(self._model)
                 print("Pull complete!")
             else:
                 print(f"Model '{self._model}' is already available.")
@@ -57,7 +61,7 @@ class ToolRegistry:
         return tool_list
 
     def build_llm(self):
-        return ChatOllama(model=self._model)
+        return ChatOllama(model=self._model, base_url=OLLAMA_BASE_URL)
         #return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview")
 
     def build_llm_with_tools(self):
