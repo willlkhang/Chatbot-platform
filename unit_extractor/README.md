@@ -1,1 +1,0 @@
-NOTE: running this set extractor requires microsoft 365 to be installed on your system
