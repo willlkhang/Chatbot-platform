@@ -12,7 +12,7 @@ Local models (recommended):
 - **Ollama API**: set `OLLAMA_BASE_URL` (local default `http://127.0.0.1:11434`; Docker Compose uses `http://host.docker.internal:11434` so the container reaches Ollama on your machine)
 - **Long-term memory DB**: set `RAG_MEMORY_DB` (default: `./data/rag_memory.sqlite`)
 
-ollama pull qwen2.5:7b
+ollama pull qwen3.5:7b
 ollama pull nomic-embed-text
 
 ### Docker (project root)
