@@ -17,4 +17,9 @@ dependencies = [
     "langchain-tavily>=0.2.17",
     "langgraph>=1.1.6",
     "langgraph-checkpoint-sqlite>=3.0.3",
+    "waitress>=3.0.0",
+    "sqlite-vec>=0.1.6",
+    "tiktoken>=0.8.0",
+    "flashrank>=0.2.10",
+    "numpy>=1.26",
 ]

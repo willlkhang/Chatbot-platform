@@ -1,36 +1,107 @@
+"""Per-course retrieval tools exposed to the LangGraph agent.
+
+Each tool follows the same shape:
+
+    over-fetch (k=20 via vector store)  ->  rerank to top-3 with a
+    cross-encoder  ->  format into a string for the LLM, while pushing
+    structured citation info into the request-scoped sources sink.
+"""
+
+from __future__ import annotations
+
+import os
+import logging
+
 from langchain_core.tools import tool
-from repository import retriever_ICT283, retriever_ICT167, retriever_ICT159
+
+from repository import (
+    repo_ICT283,
+    repo_ICT167,
+    repo_ICT159,
+    RagRepository,
+    record_sources,
+)
+from reranker import reranker
+
+logger = logging.getLogger("ragbot.tools")
+
+
+RETRIEVAL_K = int(os.environ.get("RAGBOT_RETRIEVAL_K", "20"))
+RERANK_TOP_K = int(os.environ.get("RAGBOT_RERANK_TOP_K", "3"))
+
+
+def _retrieve(repo: RagRepository, query: str) -> str:
+    """Run the retrieve -> rerank -> format pipeline for one course."""
+    raw = repo.similarity_search(query, k=RETRIEVAL_K)
+    if not raw:
+        return "No relevant course material was found for that query."
+
+    top = reranker.rerank(query, raw, top_k=RERANK_TOP_K)
+
+    # Only the post-rerank top-K is surfaced as citations to the API caller.
+    record_sources(top, course=getattr(repo, "_course", None))
+
+    parts: list[str] = []
+    for i, doc in enumerate(top, start=1):
+        meta = doc.metadata or {}
+        course = meta.get("course", "?")
+        source = meta.get("source") or "unknown"
+        score = meta.get("_rerank_score") or meta.get("_score") or 0.0
+        header = f"[{i}] course={course} source={source} score={score:.3f}"
+        parts.append(f"{header}\n{doc.page_content}")
+    return "\n\n---\n\n".join(parts)
+
 
 @tool
 def ICT283_questions(query: str) -> str:
-    """ALWAYS use this tool when the user asks a question has ICT283_questions keywords.
-        Look for keywords:
-        - Assignment 1
-        - Assignment 2
-        - Lab, tutorials
-        - SOLID
-        - ICT283
-        - No marks, zero marks
-        - Demostrate, demo, demostration
+    """Retrieve relevant ICT283 course material.
+
+    USE THIS TOOL whenever the user's question mentions any of:
+      - ICT283
+      - Software Design / Object-Oriented Design
+      - SOLID principles (SRP, OCP, LSP, ISP, DIP)
+      - Design patterns (Singleton, Factory, Observer, Strategy, etc.)
+      - Inheritance, polymorphism, encapsulation, abstraction in C++/Java
+      - Assignment 1, Assignment 2, Lab, tutorial (in ICT283 context)
+      - Demonstration / demo of a program
+      - "No marks" / "zero marks" policies
+
+    The ``query`` should be a rewritten, self-contained search question.
     """
-    docs = retriever_ICT283.invoke(query)
-    return "\n\n".join(doc.page_content for doc in docs)
+    return _retrieve(repo_ICT283, query)
+
 
 @tool
 def ICT167_questions(query: str) -> str:
-    """ALWAYS use this tool when the user asks a question has ICT167_questions keywords.
-    Look for keywords:
-    - ICT167
+    """Retrieve relevant ICT167 course material.
+
+    USE THIS TOOL whenever the user's question mentions any of:
+      - ICT167
+      - Java fundamentals (classes, objects, methods)
+      - Control flow, loops, conditionals (in ICT167 context)
+      - Arrays, ArrayList, basic collections
+      - Introductory OOP concepts
+      - File I/O in Java
+      - ICT167 lab, tutorial, assignment
+
+    The ``query`` should be a rewritten, self-contained search question.
     """
-    docs = retriever_ICT167.invoke(query)
-    return "\n\n".join(doc.page_content for doc in docs)
+    return _retrieve(repo_ICT167, query)
+
 
 @tool
 def ICT159_questions(query: str) -> str:
-    """ALWAYS use this tool when the user asks a question has ICT159_questions keywords.
-    Look for keywords:
-    - ICT159
-    - Modularity
+    """Retrieve relevant ICT159 course material.
+
+    USE THIS TOOL whenever the user's question mentions any of:
+      - ICT159
+      - Foundations of Programming / introductory C
+      - Modularity, functions, parameters, scope
+      - Variables, data types, operators, expressions
+      - Selection (if/else), iteration (for/while)
+      - Arrays, structs, file I/O in C
+      - ICT159 lab, tutorial, assignment
+
+    The ``query`` should be a rewritten, self-contained search question.
     """
-    docs = retriever_ICT159.invoke(query)
-    return "\n\n".join(doc.page_content for doc in docs)
+    return _retrieve(repo_ICT159, query)
