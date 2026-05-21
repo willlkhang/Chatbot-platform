@@ -1,19 +1,18 @@
 import os
+import logging
 import ollama
 from dotenv import load_dotenv
-# from langchain_tavily import TavilySearch
 from langchain_ollama import ChatOllama
-# from langchain_google_genai import ChatGoogleGenerativeAI
 
-
-from tools.knowledge_tools import ICT283_questions
-from tools.knowledge_tools import ICT167_questions
-from tools.knowledge_tools import ICT159_questions
+from tools.knowledge_tools import ICT283_questions, ICT167_questions, ICT159_questions
 
 load_dotenv()
 
-# LangChain and the Ollama Python client share this host (default: local Ollama).
+logger = logging.getLogger("ragbot.react")
+
 OLLAMA_BASE_URL = (os.environ.get("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
+DEFAULT_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL") or "qwen3.5:latest"
+
 _ollama_sdk = ollama.Client(host=OLLAMA_BASE_URL)
 
 
@@ -22,49 +21,45 @@ class ToolRegistry:
         self,
         *,
         model: str | None = None,
-        # tavily_max_results: int = 1,
-        enable_web: bool = True,
         extra_tools: list | None = None,
+        auto_pull: bool | None = None,
     ) -> None:
-        self._model = model or os.environ.get("OLLAMA_MODEL") or "qwen3.5:latest"  #"granite4.1:3b"
-            
-        # self._tavily_max_results = tavily_max_results
-        # self._enable_web = enable_web
-
+        self._model = model or DEFAULT_OLLAMA_MODEL
         self._extra_tools = extra_tools or []
+        if auto_pull is None:
+            auto_pull = os.environ.get("RAGBOT_AUTO_PULL_MODEL", "true").lower() in (
+                "1", "true", "yes",
+            )
+        if auto_pull:
+            self._ensure_model()
 
-        #check if the mode exists, otherwise, pull
-        self._model_exists()
-
-    def _model_exists(self):
-        #this method is used for chekcing if a LM exists, otherwise pull
+    def _ensure_model(self) -> None:
         try:
             local_models = _ollama_sdk.list()
             model_names = [m["model"] for m in local_models["models"]]
 
-            if self._model not in model_names and f"{self._model}:latest" not in model_names:
-                print(f"Model '{self._model}' not found. Pulling now...")
+            if (
+                self._model not in model_names
+                and f"{self._model}:latest" not in model_names
+            ):
+                logger.info("Model '%s' not found locally. Pulling...", self._model)
                 _ollama_sdk.pull(self._model)
-                print("Pull complete!")
+                logger.info("Pull complete: %s", self._model)
             else:
-                print(f"Model '{self._model}' is already available.")
+                logger.info("Ollama model '%s' is available.", self._model)
         except Exception as e:
-            print(f"Could not verify or pull model: {e}")
+            logger.warning("Could not verify or pull Ollama model: %s", e)
 
     def build_tools(self):
-        tool_list = []
-        # if self._enable_web:
-        #     tool_list.append(TavilySearch(max_results=self._tavily_max_results))
-
-        tool_list.extend([ICT283_questions, ICT167_questions, ICT159_questions])
-
-        tool_list.extend(self._extra_tools)
-
-        return tool_list
+        return [
+            ICT283_questions,
+            ICT167_questions,
+            ICT159_questions,
+            *self._extra_tools,
+        ]
 
     def build_llm(self):
         return ChatOllama(model=self._model, base_url=OLLAMA_BASE_URL)
-        #return ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite-preview")
 
     def build_llm_with_tools(self):
         tools_local = self.build_tools()
