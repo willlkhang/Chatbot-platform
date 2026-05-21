@@ -6,7 +6,9 @@ from langchain_ollama import ChatOllama
 # from langchain_google_genai import ChatGoogleGenerativeAI
 
 
-from tools.knowledge_tools import ICT283_questions#, Stack_overflow_questions
+from tools.knowledge_tools import ICT283_questions
+from tools.knowledge_tools import ICT167_questions
+from tools.knowledge_tools import ICT159_questions
 
 load_dotenv()
 
@@ -54,7 +56,7 @@ class ToolRegistry:
         # if self._enable_web:
         #     tool_list.append(TavilySearch(max_results=self._tavily_max_results))
 
-        tool_list.extend([ICT283_questions])
+        tool_list.extend([ICT283_questions, ICT167_questions, ICT159_questions])
 
         tool_list.extend(self._extra_tools)
 
