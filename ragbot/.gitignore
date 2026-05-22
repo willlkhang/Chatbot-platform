@@ -16,7 +16,7 @@ checkpoints.sqlite
 
 data/*.sqlite-shm
 data/*.sqlite-wal
-data/*.sqlite
+# data/*.sqlite
 data/flashrank_cache/
 
 
