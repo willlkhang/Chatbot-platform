@@ -115,13 +115,13 @@ services:
       authorization-service:
         condition: service_started
 
-  classifier-service:
-    build:
-      context: ./classifier_app
-    environment:
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
-    ports:
-      - "${CLASSIFIER_HOST_PORT}:8011"
+  # classifier-service:
+  #   build:
+  #     context: ./classifier_app
+  #   environment:
+  #     CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+  #   ports:
+  #     - "${CLASSIFIER_HOST_PORT}:8011"
 
   ragbot:
     build:
