@@ -182,8 +182,8 @@ services:
     depends_on:
       gateway-service:
         condition: service_started
-      classifier-service:
-        condition: service_started
+      # classifier-service:
+      #   condition: service_started
       ragbot:
         condition: service_started
 
