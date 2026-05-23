@@ -123,6 +123,19 @@ services:
   #   ports:
   #     - "${CLASSIFIER_HOST_PORT}:8011"
 
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
   ragbot:
     build:
       context: ./ragbot
@@ -130,15 +143,17 @@ services:
       RAGBOT_HOST: "0.0.0.0"
       RAGBOT_PORT: "5000"
       RAG_MEMORY_DB: /app/data/rag_memory.sqlite
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-Llama-3-8B-Instruct}
       OLLAMA_EMBED_MODEL: ${OLLAMA_EMBED_MODEL:-nomic-embed-text}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
     ports:
       - "${RAGBOT_HOST_PORT:-5000}:5000"
     volumes:
       - ragbot_data:/app/data
+    depends_on:
+      - ollama
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/healthz || exit 1"]
       interval: 15s
@@ -190,3 +205,4 @@ services:
 volumes:
   postgres_data:
   ragbot_data:
+  ollama_data:
