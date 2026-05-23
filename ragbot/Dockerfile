@@ -15,13 +15,14 @@ ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
 
 RUN uv python install 3.10
 
-ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75" \
+# 0.2.x uses LLAMA_CUBLAS (not GGML_CUDA). CUDA 11.0 + sm_75 (T4).
+ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on -DCMAKE_CUDA_ARCHITECTURES=75" \
     FORCE_CMAKE=1
 
 RUN uv venv --seed --python 3.10 /opt/build-venv \
     && /opt/build-venv/bin/python -m pip wheel \
         --no-deps --no-cache-dir \
-        "llama-cpp-python>=0.3.0" \
+        "llama-cpp-python==0.2.90" \
         -w /tmp/wheels
 
 
