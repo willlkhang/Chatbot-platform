@@ -3,7 +3,7 @@ FROM python:3.12-slim-bookworm
 WORKDIR /app
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
+    && apt-get install -y --no-install-recommends curl build-essential gcc g++ \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
