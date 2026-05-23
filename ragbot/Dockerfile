@@ -1,37 +1,39 @@
 # =============================================================
 # Stage 1 — compile llama-cpp-python with CUDA 11.0 / cuBLAS
 #   Base: nvidia/cuda 11.0 devel (Ubuntu 20.04)
-#   Python 3.12 via deadsnakes — added manually to avoid
-#   add-apt-repository misbehaving inside Docker.
+#   Python 3.12: provided by `uv python install` (portable build),
+#   so we don't need the deadsnakes PPA or any system python3.12.
 # =============================================================
 FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04 AS wheel-builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        gnupg2 ca-certificates curl cmake make gcc g++ \
-    && curl -fsSL \
-        "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776" \
-        | gpg --dearmor -o /etc/apt/trusted.gpg.d/deadsnakes.gpg \
-    && echo "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu focal main" \
-        > /etc/apt/sources.list.d/deadsnakes.list \
-    && apt-get update && apt-get install -y --no-install-recommends \
-        python3.12 python3.12-dev python3.12-distutils \
-    && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 \
+        ca-certificates curl cmake make gcc g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# sm_75 = Turing (T4).  GGML_CUDA replaces the old LLAMA_CUBLAS flag in >=0.3.
+COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
+
+ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
+    UV_LINK_MODE=copy
+
+RUN uv python install 3.12
+
+# sm_75 = Turing (T4). GGML_CUDA replaces the old LLAMA_CUBLAS flag in >=0.3.
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75" \
     FORCE_CMAKE=1
 
-RUN python3.12 -m pip wheel --no-deps --no-cache-dir \
-        "llama-cpp-python>=0.3.0" -w /tmp/wheels
+# Create a Python 3.12 venv with pip seeded, then build the wheel.
+RUN uv venv --seed --python 3.12 /opt/build-venv \
+    && /opt/build-venv/bin/python -m pip wheel \
+        --no-deps --no-cache-dir \
+        "llama-cpp-python>=0.3.0" \
+        -w /tmp/wheels
 
 
 # =============================================================
 # Stage 2 — runtime
-#   Base: official python:3.12-slim-bookworm (has Python headers
-#   built-in, so no -dev package needed).
+#   Base: official python:3.12-slim-bookworm.
 # =============================================================
 FROM python:3.12-slim-bookworm
 
