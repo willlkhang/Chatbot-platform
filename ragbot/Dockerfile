@@ -1,62 +1,60 @@
-# =============================================================
-# Stage 1 — compile llama-cpp-python with CUDA 11.0 / cuBLAS
-#   Base: nvidia/cuda 11.0 devel (Ubuntu 20.04)
-#   Python 3.12: provided by `uv python install` (portable build),
-#   so we don't need the deadsnakes PPA or any system python3.12.
-# =============================================================
 FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04 AS wheel-builder
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+RUN rm -f /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates curl cmake make gcc g++ \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
 
 ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
     UV_LINK_MODE=copy
 
-RUN uv python install 3.12
+RUN uv python install 3.10
 
-# sm_75 = Turing (T4). GGML_CUDA replaces the old LLAMA_CUBLAS flag in >=0.3.
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75" \
     FORCE_CMAKE=1
 
-# Create a Python 3.12 venv with pip seeded, then build the wheel.
-RUN uv venv --seed --python 3.12 /opt/build-venv \
+RUN uv venv --seed --python 3.10 /opt/build-venv \
     && /opt/build-venv/bin/python -m pip wheel \
         --no-deps --no-cache-dir \
         "llama-cpp-python>=0.3.0" \
         -w /tmp/wheels
 
 
-# =============================================================
-# Stage 2 — runtime
-#   Base: official python:3.12-slim-bookworm.
-# =============================================================
-FROM python:3.12-slim-bookworm
+FROM nvidia/cuda:11.0.3-runtime-ubuntu20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
+
+RUN rm -f /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
+ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
+    UV_LINK_MODE=copy
+RUN uv python install 3.10
 
 COPY pyproject.toml uv.lock ./
 
-# Install all runtime deps (this pulls a CPU llama-cpp-python from PyPI).
+RUN uv venv --python 3.10 /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
+
 RUN uv sync --no-dev
 
-# Replace the CPU wheel with the CUDA-enabled one built in Stage 1.
 COPY --from=wheel-builder /tmp/wheels/llama_cpp_python*.whl /tmp/
 RUN uv pip install --force-reinstall /tmp/llama_cpp_python*.whl \
     && rm /tmp/llama_cpp_python*.whl
 
 COPY . .
 
-# Seed runtime SQLite DBs from baked-in copies on first start.
 RUN mkdir -p /opt/ragbot-seed \
     && cp /app/data/*.sqlite /opt/ragbot-seed/ 2>/dev/null || true \
     && chmod +x /app/docker-entrypoint.sh
