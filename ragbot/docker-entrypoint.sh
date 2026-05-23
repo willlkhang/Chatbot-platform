@@ -14,4 +14,4 @@ for seed_file in /opt/ragbot-seed/*.sqlite; do
 done
 
 
-exec /app/.venv/bin/python controller.py
+exec uv run python controller.py

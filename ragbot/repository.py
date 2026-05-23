@@ -7,8 +7,10 @@ import struct
 import threading
 import logging
 import contextvars
+from typing import Any
+
 from dotenv import load_dotenv
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import OllamaEmbeddings
 from langchain_core.documents import Document
 
 import sqlite_vec
@@ -54,9 +56,9 @@ def record_sources(docs, *, course: str | None = None) -> None:
 
 
 def _split_document(doc: Document, *, chunk_size: int, chunk_overlap: int) -> list[Document]:
-    """Last-resort character splitter used only when embedding a document
-    exceeds the embedding model's context limit. Real ingestion uses a
-    token-aware splitter in ``ingestion.py``."""
+    """Last-resort character splitter used only when embedding the document
+    raises a context-length error from Ollama. Real ingestion uses a token-
+    aware splitter in ``ingestion.py``."""
     text = doc.page_content or ""
     if len(text) <= chunk_size:
         return [doc]
@@ -87,13 +89,15 @@ class RagRepository:
         k: int = 3,
     ) -> None:
         self._sqlite_path = sqlite_path or os.environ.get("RAG_MEMORY_DB") or "./data/rag_memory.sqlite"
-        self._embedding_model = embedding_model or os.environ.get("HF_EMBED_MODEL") or "sentence-transformers/all-MiniLM-L6-v2"
+        self._embedding_model = embedding_model or os.environ.get("OLLAMA_EMBED_MODEL") or "nomic-embed-text"
         self._course = course or "unknown"
-        self._embed_dim = int(embed_dim or os.environ.get("EMBED_DIM") or 384)
+        self._embed_dim = int(embed_dim or os.environ.get("EMBED_DIM") or 768)
         self._k = k
         self._embed_chunk_size = int(os.environ.get("EMBED_CHUNK_SIZE") or "1500")
         self._embed_chunk_overlap = int(os.environ.get("EMBED_CHUNK_OVERLAP") or "150")
-        self._embed_batch_size = int(os.environ.get("EMBED_BATCH_SIZE") or "64")
+        # Ollama enforces a combined context budget per /embed call, so send
+        # documents in small batches rather than one giant request.
+        self._embed_batch_size = int(os.environ.get("EMBED_BATCH_SIZE") or "16")
 
         os.makedirs(os.path.dirname(self._sqlite_path) or ".", exist_ok=True)
         self._conn = sqlite3.connect(self._sqlite_path, check_same_thread=False)
@@ -141,11 +145,11 @@ class RagRepository:
         if self._vec_available:
             self._migrate_legacy_embeddings()
 
-        self._embeddings = HuggingFaceEmbeddings(
-            model_name=self._embedding_model,
-            model_kwargs={"device": "cpu"},
-            encode_kwargs={"normalize_embeddings": True},
-        )
+        _embed_kwargs: dict[str, Any] = {"model": self._embedding_model}
+        _base = os.environ.get("OLLAMA_BASE_URL")
+        if _base:
+            _embed_kwargs["base_url"] = _base.rstrip("/")
+        self._embeddings = OllamaEmbeddings(**_embed_kwargs)
 
     @property
     def retriever(self):

@@ -1,76 +1,33 @@
-FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04 AS wheel-builder
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN rm -f /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates curl cmake make gcc g++ \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
-
-ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
-    UV_LINK_MODE=copy
-
-RUN uv python install 3.10
-
-# 0.2.x uses LLAMA_CUBLAS (not GGML_CUDA). CUDA 11.0 + sm_75 (T4).
-ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on -DCMAKE_CUDA_ARCHITECTURES=75" \
-    FORCE_CMAKE=1
-
-RUN uv venv --seed --python 3.10 /opt/build-venv \
-    && /opt/build-venv/bin/python -m pip wheel \
-        --no-deps --no-cache-dir \
-        "llama-cpp-python==0.2.90" \
-        -w /tmp/wheels
-
-
-FROM nvidia/cuda:11.0.3-runtime-ubuntu20.04
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
-
-RUN rm -f /etc/apt/sources.list.d/cuda.list /etc/apt/sources.list.d/nvidia-ml.list
-
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
-ENV UV_PYTHON_INSTALL_DIR=/opt/uv-python \
-    UV_LINK_MODE=copy
-RUN uv python install 3.10
+COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock ./
-
-RUN uv venv --python 3.10 /app/.venv
-ENV PATH="/app/.venv/bin:$PATH"
-
-RUN uv sync --no-dev
-
-COPY --from=wheel-builder /tmp/wheels/llama_cpp_python*.whl /tmp/
-RUN uv pip install --force-reinstall /tmp/llama_cpp_python*.whl \
-    && rm /tmp/llama_cpp_python*.whl
+RUN uv sync --frozen --no-dev
 
 COPY . .
 
+# Seed runtime SQLite DBs from baked-in copies on first start.
 RUN mkdir -p /opt/ragbot-seed \
     && cp /app/data/*.sqlite /opt/ragbot-seed/ 2>/dev/null || true \
     && chmod +x /app/docker-entrypoint.sh
 
+# Sensible defaults for concurrent serving (override at runtime as needed).
 ENV RAGBOT_HOST=0.0.0.0 \
     RAGBOT_PORT=5000 \
     RAGBOT_THREADS=16 \
     RAGBOT_DEBUG=false \
-    RAGBOT_LOG_LEVEL=INFO \
-    LLAMA_N_GPU_LAYERS=33 \
-    HF_HOME=/app/hf_cache
+    RAGBOT_LOG_LEVEL=INFO
 
 EXPOSE 5000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD curl -fsS http://127.0.0.1:5000/healthz || exit 1
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
