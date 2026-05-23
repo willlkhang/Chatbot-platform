@@ -1,36 +1,56 @@
-# CUDA 11.0 devel image — matches the GRID T4-16Q vGPU driver (450.x / CUDA 11.0).
-# We need the *devel* variant at build time so cmake can find cublas headers.
-FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04
+# =============================================================
+# Stage 1 — compile llama-cpp-python with CUDA 11.0 / cuBLAS
+#   Base: nvidia/cuda 11.0 devel (Ubuntu 20.04)
+#   Python 3.12 via deadsnakes — added manually to avoid
+#   add-apt-repository misbehaving inside Docker.
+# =============================================================
+FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04 AS wheel-builder
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Python 3.12 via deadsnakes PPA (Ubuntu 20.04 ships 3.8 only).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        software-properties-common curl gnupg2 ca-certificates \
-    && add-apt-repository -y ppa:deadsnakes/ppa \
+        gnupg2 ca-certificates curl cmake make gcc g++ \
+    && curl -fsSL \
+        "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF23C5A6CF475977595C89F51BA6932366A755776" \
+        | gpg --dearmor -o /etc/apt/trusted.gpg.d/deadsnakes.gpg \
+    && echo "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu focal main" \
+        > /etc/apt/sources.list.d/deadsnakes.list \
     && apt-get update && apt-get install -y --no-install-recommends \
-        python3.12 python3.12-dev python3.12-venv \
-        cmake make gcc g++ \
-    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1 \
-    && update-alternatives --install /usr/bin/python  python  /usr/bin/python3.12 1 \
+        python3.12 python3.12-dev python3.12-distutils \
+    && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12 \
     && rm -rf /var/lib/apt/lists/*
 
+# sm_75 = Turing (T4).  GGML_CUDA replaces the old LLAMA_CUBLAS flag in >=0.3.
+ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75" \
+    FORCE_CMAKE=1
+
+RUN python3.12 -m pip wheel --no-deps --no-cache-dir \
+        "llama-cpp-python>=0.3.0" -w /tmp/wheels
+
+
+# =============================================================
+# Stage 2 — runtime
+#   Base: official python:3.12-slim-bookworm (has Python headers
+#   built-in, so no -dev package needed).
+# =============================================================
+FROM python:3.12-slim-bookworm
+
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock ./
 
-# Build llama-cpp-python with cuBLAS.
-# sm_75 = Turing (T4). GGML_CUDA replaces the old LLAMA_CUBLAS flag in >=0.3.
-ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75" \
-    FORCE_CMAKE=1
-
-# uv sync resolves + installs; compile llama-cpp-python from source using the
-# CMAKE_ARGS above.  Drop --frozen so a regenerated lock is not required.
+# Install all runtime deps (this pulls a CPU llama-cpp-python from PyPI).
 RUN uv sync --no-dev
+
+# Replace the CPU wheel with the CUDA-enabled one built in Stage 1.
+COPY --from=wheel-builder /tmp/wheels/llama_cpp_python*.whl /tmp/
+RUN uv pip install --force-reinstall /tmp/llama_cpp_python*.whl \
+    && rm /tmp/llama_cpp_python*.whl
 
 COPY . .
 
