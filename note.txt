@@ -28,3 +28,36 @@ sudo ufw allow 5000/tcp
 watch -n 1 nvidia-smi
 
 cp .env.dev .env
+
+
+Steps you need to take before building
+1. Download the model GGUF
+
+mkdir -p ragbot/models
+# ~4.7 GB — Q4_K_M quantisation, good quality/speed balance on a 16 GB T4
+wget -O ragbot/models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf \
+  https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf
+2. Regenerate the uv lockfile (needed because you removed langchain-ollama and added two new packages)
+
+cd ragbot
+uv lock
+3. Re-run ingestion — the embedding model changed (Ollama nomic-embed-text 768-dim → all-MiniLM-L6-v2 384-dim), so the existing SQLite vector stores are incompatible and must be rebuilt:
+
+# Clear the old DBs first, then re-ingest
+rm -f ragbot/data/ICT*.sqlite
+cd ragbot
+uv run python ingestion.py   # or whatever the ingestion CLI entry point is
+4. Ensure NVIDIA Container Toolkit is installed on the VM (required for runtime: nvidia in docker-compose):
+
+# One-time setup on the VM host
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list \
+  | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+5. Build and start
+
+
+docker compose --env-file .env.dev up --build ragbot
+The first start will also download all-MiniLM-L6-v2 (~22 MB) into the ragbot_hf_cache volume; subsequent restarts use the cached copy.

@@ -1,8 +1,8 @@
 import os
 import logging
-import ollama
+
 from dotenv import load_dotenv
-from langchain_ollama import ChatOllama
+from langchain_community.chat_models import ChatLlamaCpp
 
 from tools.knowledge_tools import ICT283_questions, ICT167_questions, ICT159_questions
 
@@ -10,45 +10,31 @@ load_dotenv()
 
 logger = logging.getLogger("ragbot.react")
 
-OLLAMA_BASE_URL = (os.environ.get("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
-DEFAULT_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL") or "qwen3.5:4b"
-
-_ollama_sdk = ollama.Client(host=OLLAMA_BASE_URL)
+LLAMA_MODEL_PATH = (
+    os.environ.get("LLAMA_MODEL_PATH")
+    or "./models/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"
+)
+LLAMA_N_GPU_LAYERS = int(os.environ.get("LLAMA_N_GPU_LAYERS") or "33")
+LLAMA_N_CTX = int(os.environ.get("LLAMA_N_CTX") or "8192")
+LLAMA_N_BATCH = int(os.environ.get("LLAMA_N_BATCH") or "512")
+LLAMA_TEMPERATURE = float(os.environ.get("LLAMA_TEMPERATURE") or "0.1")
 
 
 class ToolRegistry:
     def __init__(
         self,
         *,
-        model: str | None = None,
+        model_path: str | None = None,
         extra_tools: list | None = None,
-        auto_pull: bool | None = None,
     ) -> None:
-        self._model = model or DEFAULT_OLLAMA_MODEL
+        self._model_path = model_path or LLAMA_MODEL_PATH
         self._extra_tools = extra_tools or []
-        if auto_pull is None:
-            auto_pull = os.environ.get("RAGBOT_AUTO_PULL_MODEL", "true").lower() in (
-                "1", "true", "yes",
+        if not os.path.isfile(self._model_path):
+            logger.warning(
+                "GGUF model not found at '%s'. "
+                "Download it to that path before starting the server.",
+                self._model_path,
             )
-        if auto_pull:
-            self._ensure_model()
-
-    def _ensure_model(self) -> None:
-        try:
-            local_models = _ollama_sdk.list()
-            model_names = [m["model"] for m in local_models["models"]]
-
-            if (
-                self._model not in model_names
-                and f"{self._model}:latest" not in model_names
-            ):
-                logger.info("Model '%s' not found locally. Pulling...", self._model)
-                _ollama_sdk.pull(self._model)
-                logger.info("Pull complete: %s", self._model)
-            else:
-                logger.info("Ollama model '%s' is available.", self._model)
-        except Exception as e:
-            logger.warning("Could not verify or pull Ollama model: %s", e)
 
     def build_tools(self):
         return [
@@ -59,7 +45,14 @@ class ToolRegistry:
         ]
 
     def build_llm(self):
-        return ChatOllama(model=self._model, base_url=OLLAMA_BASE_URL)
+        return ChatLlamaCpp(
+            model_path=self._model_path,
+            n_gpu_layers=LLAMA_N_GPU_LAYERS,
+            n_ctx=LLAMA_N_CTX,
+            n_batch=LLAMA_N_BATCH,
+            temperature=LLAMA_TEMPERATURE,
+            verbose=False,
+        )
 
     def build_llm_with_tools(self):
         tools_local = self.build_tools()
