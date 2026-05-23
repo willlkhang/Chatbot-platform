@@ -11,7 +11,7 @@ load_dotenv()
 logger = logging.getLogger("ragbot.react")
 
 OLLAMA_BASE_URL = (os.environ.get("OLLAMA_BASE_URL") or "http://127.0.0.1:11434").rstrip("/")
-DEFAULT_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL") or "Llama-3-8B-Instruct"
+DEFAULT_OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL") or "llama3:latest"
 
 _ollama_sdk = ollama.Client(host=OLLAMA_BASE_URL)
 
