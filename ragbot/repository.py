@@ -8,7 +8,7 @@ import threading
 import logging
 import contextvars
 from dotenv import load_dotenv
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 
 import sqlite_vec
