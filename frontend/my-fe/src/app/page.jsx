@@ -1,4 +1,4 @@
-"use client"
+"use client" // this is client side
 
 import { useEffect, useRef, useState } from "react";
 
@@ -13,10 +13,12 @@ import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { FaRegCopy } from "react-icons/fa6";
 import { LuSendHorizontal } from "react-icons/lu";
 
+//defines backend_sprintboot ports, rabbot port, and FAAA port
 const API_GATEWAY = process.env.NEXT_PUBLIC_API_GATEWAY || "http://localhost:8060";
 const RAGBOT_API = process.env.NEXT_PUBLIC_RAGBOT_API || "http://localhost:5000";
 const CLASSIFIER_API = process.env.NEXT_PUBLIC_CLASSIFIER_API || "http://localhost:8011";
 
+// this helper function helps format ugly string labels
 function formatTopicLabel(label) {
     return label
         .split("_")
@@ -71,7 +73,8 @@ export default function Home(){
     const [conversations, setConversations] = useState([]); // logged-in only
     const [activeChatId, setActiveChatId] = useState(null); // logged-in: numeric chatId, guest: null
     const [guestThreadId, setGuestThreadId] = useState(() => {
-        // guest mode: ephemeral per refresh
+        //guest mode, ephemeral per refresh
+        //modern crypto to make a highly unique guest ID
         if (typeof crypto !== "undefined" && crypto.randomUUID) return `guest-${crypto.randomUUID()}`;
         return `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     });
@@ -82,37 +85,41 @@ export default function Home(){
 
     const authHeaders = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 
+    //method refresh, and get access token, and set to the variable
     const refreshAuth = () => {
         const token = localStorage.getItem("accessToken");
-        setAccessToken(token || null);
-        setUserClaims(decodeJwtPayload(token));
+        setAccessToken(token || null); // if there is not login which is guest mode, then null here
+        setUserClaims(decodeJwtPayload(token)); //decode and set to user profile data
     };
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages, isResponseLoading]);
+        scrollToBottom(); //this one if for when either user or AI send message, it always scroll down to bottomx
+    }, [messages, isResponseLoading]); //this is only triggered if messages array is changed
+    //which is when user or AI is sending messagexs
 
     useEffect(() => {
-        refreshAuth();
+        refreshAuth(); //check if user is login
         const handler = () => refreshAuth();
-        window.addEventListener("accessTokenChanged", handler);
-        window.addEventListener("storage", handler);
+        window.addEventListener("accessTokenChanged", handler); //listen for login/logout
+        window.addEventListener("storage", handler);//listens for token changes across tabs
         return () => {
-            window.removeEventListener("accessTokenChanged", handler);
-            window.removeEventListener("storage", handler);
+            window.removeEventListener("accessTokenChanged", handler); //remove listner
+            window.removeEventListener("storage", handler);// free memory
         };
-    }, []);
+    }, []); //empty array means runs only once on mount
 
+    // async function to get user's hisotry for side bar
     const loadConversations = async (userId) => {
-        try {
+        try { //get get API to get conversations blocks history
             const res = await fetch(`${API_GATEWAY}/api/chat/user/${userId}/all`, {
-                headers: { ...authHeaders },
+                headers: { ...authHeaders }, //attaches the secure auth token
             });
-            if (!res.ok) return;
-            const data = await res.json();
-            setConversations(Array.isArray(data) ? data : []);
+            if (!res.ok) return; //return nothing is there is nothing, or database dies
+            const data = await res.json(); //parse the list of chatx
+            setConversations(Array.isArray(data) ? data : []); //if data is ok, set to converations array variable
         } catch {
             // ignore
+            //if call failed, then failed
         }
     };
 
