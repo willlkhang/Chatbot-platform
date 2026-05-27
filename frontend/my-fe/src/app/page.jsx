@@ -25,9 +25,11 @@ function formatTopicLabel(label) {
         .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
         .join(" ");
 }
-
+// function call to FAAA classifier to classify which topic does the user's
+//prompt belong to.
 async function classifyQuestion(text) {
     try {
+        // call to topic classifier
         const res = await fetch(`${CLASSIFIER_API}/query`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -127,34 +129,36 @@ export default function Home(){
 
     useEffect(() => {
         // When logged in, load chat list (requires userId claim)
-        if (!isLoggedIn) {
+        if (!isLoggedIn) {// guest mode
+            // clear old conversation list bar
             setConversations([]);
-            setActiveChatId(null);
-            return;
+            setActiveChatId(null); //clear all activity ID
+            return;  //return 0, obviously
         }
-        const userId = userClaims?.userId;
-        if (typeof userId === "number") {
-            loadConversations(userId);
+        const userId = userClaims?.userId; //when user logs in, get user ID
+        if (typeof userId === "number") { // if a valid ID exists
+            loadConversations(userId); // load user's old conversation history.
         }
-    }, [isLoggedIn, userClaims?.userId]);
+    }, [isLoggedIn, userClaims?.userId]); //re-run if user changes
 
-    const isChatting = messages.length > 0;
+    const isChatting = messages.length > 0; // when user start prompting
 
     const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (query.trim() === "") return;
+        e.preventDefault(); //present browser doing all page refresh
+        if (query.trim() === "") return; //check if input is just spaces, Yes? abort
 
-        const textToSend = query;
+        const textToSend = query; //saves the input string to a local variable
 
-        const newMessages = [
-            ...messages,
-            { role: "user", content: textToSend }
+        const newMessages = [ // if new massages comming
+            ...messages, //copy items from existing array to new now
+            { role: "user", content: textToSend } // append this new "tuple" (sounds like python) to new array
         ];
 
-        setMessages(newMessages);
+        setMessages(newMessages); //update varivable array messages
         console.log("What's your problem from ICT283?:", query);
-        setQuery("");
+        setQuery(""); //clear query/prompt after sendding it to language model
 
+        //call the main async function to get the AI's response
         chatWithRag(textToSend);
 
         // setTimeout(() => {
@@ -165,30 +169,34 @@ export default function Home(){
         // }, 600);
     };
 
-    const handleNewChat = () => {
-        setMessages([]);
-        setTopicPopup(null);
-        if (!isLoggedIn) {
+    const handleNewChat = () => { //when user create a new chat
+        setMessages([]); //make new array variable
+        setTopicPopup(null); //this is FAAA pop up function
+        if (!isLoggedIn) { // in guest mode
             if (typeof crypto !== "undefined" && crypto.randomUUID) setGuestThreadId(`guest-${crypto.randomUUID()}`);
             else setGuestThreadId(`guest-${Date.now()}-${Math.random().toString(16).slice(2)}`);
-        } else {
+        } else { //if login
+            //sets active ID to null so the next message sent will create an entirely new db record
             setActiveChatId(null);
         }
     };
 
+    //async function, trigger when user click on those past conversation on history bar
     const handleOpenConversation = async (chatId) => {
-        if (!isLoggedIn) return;
-        const userId = userClaims?.userId;
-        if (typeof userId !== "number") return;
-        try {
+        if (!isLoggedIn) return; //guest mode does not have past comv
+        const userId = userClaims?.userId; //get user id
+        if (typeof userId !== "number") return; // safety check
+        try { // call get API loads past conv from db
             const res = await fetch(`${API_GATEWAY}/api/chat/user/${chatId}`, {
                 headers: { ...authHeaders },
             });
-            if (!res.ok) return;
-            const chat = await res.json();
+            if (!res.ok) return; //if failed, then nothing
+            const chat = await res.json(); //assign returned data to chat variable
+            //create new array variables to assign message item
             const msgs = Array.isArray(chat?.messages) ? chat.messages : [];
-            setActiveChatId(chatId);
-            setMessages(
+            setActiveChatId(chatId); // set which chatId is online
+            setMessages( //set message variable, also distinguish if this message is from AI or user
+                //the package is packed including user role, and message content
                 msgs.map((m) => ({
                     role: m?.senderRole === "ai" ? "ai" : "user",
                     content: m?.content ?? "",
@@ -199,27 +207,31 @@ export default function Home(){
         }
     };
 
+    //function trigger by deleting
     const handleDeleteConversation = async (chatId) => {
-        if (!isLoggedIn) return;
-        const userId = userClaims?.userId;
-        if (typeof userId !== "number") return;
-        try {
+        if (!isLoggedIn) return; // no login, then nothing
+        const userId = userClaims?.userId; //get user id
+        if (typeof userId !== "number") return; //safety check
+        try { //call delete API
             await fetch(`${API_GATEWAY}/api/chat/${chatId}/user/${userId}`, {
                 method: "DELETE",
                 headers: { ...authHeaders },
             });
-        } finally {
+        } finally { // this block runs to update UI 
+            // remove the deleted chat from history bar instantly
             setConversations((prev) => prev.filter((c) => c?.chatId !== chatId));
-            if (activeChatId === chatId) {
-                setActiveChatId(null);
-                setMessages([]);
+            if (activeChatId === chatId) { //if user is looking at the deleting chat
+                setActiveChatId(null); //chat the active chatid to null which throw user back to the welcome screen
+                setMessages([]); // empties the array messages
             }
         }
     };
 
+    // make sure a logged-in user has a database ID before saving a message
     const ensureChatId = async () => {
-        const userId = userClaims?.userId;
-        if (!isLoggedIn || typeof userId !== "number") return null;
+        const userId = userClaims?.userId; // retrive get userId.
+        if (!isLoggedIn || typeof userId !== "number") return null; //if guest, then nothing
+        // if we already have a chat open, just return its ID
         if (typeof activeChatId === "number") return activeChatId;
 
         // create a new chat in chat-service
@@ -242,7 +254,9 @@ export default function Home(){
         return null;
     };
 
+    //this function saves every single message text to the database
     const persistMessage = async (chatId, userId, role, content) => {
+        //call POST APIs to load current chat
         await fetch(`${API_GATEWAY}/api/chat/${chatId}/user/${userId}/messages`, {
             method: "POST",
             headers: {
@@ -253,26 +267,32 @@ export default function Home(){
         });
     };
 
+    //the soul of this system
     const chatWithRag = async (messageText) => {
-        if (!messageText) return;
+        if (!messageText) return; //safety check to stop if text is empty
 
         try {
-            setLoading(true)
-            setIsResponseLoading(true)
+            setLoading(true) //turns on the general loading state.
+            setIsResponseLoading(true) // turns on the AI is typing, which are three bouncing dots
 
             // Persist user message (logged-in only)
-            const userId = userClaims?.userId;
-            let chatIdForThread = null;
-            if (isLoggedIn && typeof userId === "number") {
+            const userId = userClaims?.userId; // get user id
+            let chatIdForThread = null; //this thread it is for ragbot, which is ID for rag short-term memory
+            if (isLoggedIn && typeof userId === "number") {  //check user is authenticated
+                // call to function to get an exisitng ID or create a new one
                 chatIdForThread = await ensureChatId();
-                if (chatIdForThread) {
+                if (chatIdForThread) { //when threadid is secured
+                    //save the user's text to the database immediately
                     await persistMessage(chatIdForThread, userId, "user", messageText);
                 }
             }
 
+            //runs two network requests at the exact same time to save waiting time.
             const [classifyResult, respond] = await Promise.all([
+                // this is for asking classider what DSA is this
                 classifyQuestion(messageText),
-                fetch(`${RAGBOT_API}/api/response`, {
+                // this is the second request sending prompt to RAGBOT server
+                fetch(`${RAGBOT_API}/api/response`, { 
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -281,28 +301,30 @@ export default function Home(){
                     }),
                 }),
             ]);
-
+            // check if the prompt is classified into a specific topic
+            // or it's a "other" label
             if (classifyResult?.label && classifyResult.label !== "OTHER") {
+                //safety extracts the array of URL resources
                 const resources = Array.isArray(classifyResult.resource)
-                    ? classifyResult.resource.filter(Boolean)
-                    : [];
-                if (resources.length > 0) {
-                    setTopicPopup({
-                        topic: classifyResult.label,
-                        resources,
+                    ? classifyResult.resource.filter(Boolean) //filter out any null array
+                    : []; // nothing is nothing
+                if (resources.length > 0) {// if we have at least one valid link to show
+                    setTopicPopup({ //open UI toast notification
+                        topic: classifyResult.label, //pass the topic name
+                        resources, //pass the array of URLs
                     });
                 } else {
-                    setTopicPopup(null);
+                    setTopicPopup(null); // if no resources, ensure the toast is closed, which is not toast at all
                 }
             } else {
-                setTopicPopup(null);
+                setTopicPopup(null); // if the label as "OTHER", close the toast
             }
 
-            if (!respond.ok) {
+            if (!respond.ok) { //no response, raise exception?
                 throw new Error(`API Error: ${respond.status}`);
             }
             const res = await respond.json();
-            setMessages((prev) => [
+            setMessages((prev) => [ //update message array
                 ...prev,
                 { role: "ai", content: res.ai }
             ]);
@@ -325,6 +347,7 @@ export default function Home(){
         setTimeout(() => setCopiedCode(null, 2000));
     }
 
+    //make response from AI more beautiful
     const MarkdownComponents = {
 
         pre({ children }){
