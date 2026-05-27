@@ -1,26 +1,30 @@
 import os
-import sqlite3
-import logging
-from typing import TypedDict
+import sqlite3 #impport splite databae
+import logging #import log
+from typing import TypedDict #import this to create strict structural types for dictionaries
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv #load env
 
+#imports LangChain's standard class for a message sent by a human user
 from langchain_core.messages import HumanMessage
+#imports LangGraph's built-in tool for saving conversation history to SQLite
 from langgraph.checkpoint.sqlite import SqliteSaver
 
+#import workflow blueprint from graph.py
 from graph import workflow
-from repository import _SOURCES_CV
+from repository import _SOURCES_CV #import context variables used to track citations
 
 load_dotenv()
 
+#looging for this file
 logger = logging.getLogger("ragbot.handler")
 
-
+#defines the strict dictionary shape we promise to return to the web server
 class InvokeResult(TypedDict):
-    answer: str
-    sources: list[dict]
+    answer: str #answer from the AI
+    sources: list[dict] #the list of citation dicts
 
-
+#helper to safely open the memory database.
 def _open_sqlite(path: str) -> sqlite3.Connection:
     """Open a SQLite connection tuned for multi-threaded use.
     """
