@@ -79,6 +79,8 @@ export default function Home(){
         return `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     });
 
+    //when a new message is send either from user or AI.
+    // the coversation will scroll down to the bottom.
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
