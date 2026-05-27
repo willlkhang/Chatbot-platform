@@ -1,12 +1,3 @@
-"""Per-course retrieval tools exposed to the LangGraph agent.
-
-Each tool follows the same shape:
-
-    over-fetch (k=20 via vector store)  ->  rerank to top-3 with a
-    cross-encoder  ->  format into a string for the LLM, while pushing
-    structured citation info into the request-scoped sources sink.
-"""
-
 from __future__ import annotations
 
 import os

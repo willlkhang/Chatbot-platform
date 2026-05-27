@@ -1,14 +1,15 @@
-import os
-import logging
+import os #import os for interacting with the env
+import logging #import this to output status and error message
 
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-from flask_cors import CORS
+from flask import Flask # this is for flask server which a backend server
+from flask_restful import Resource, Api, reqparse #this is flask tools to build restful APIs
+from flask_cors import CORS #this allows web browsers to make request to this api from different domain.
 
-from waitress import serve
+from waitress import serve #this is for production-ready web server python
 
-from handler import service
+from handler import service #call services from hanlder (or service) layer because this layer can interact with the database
 
+# configures the root logger for the application
 logging.basicConfig(
     level=os.environ.get("RAGBOT_LOG_LEVEL", "INFO").upper(),
     format="%(asctime)s %(levelname)s [%(threadName)s] %(name)s - %(message)s",
