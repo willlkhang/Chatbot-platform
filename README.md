@@ -18,9 +18,3 @@ The goal of this project is to provide a working full-stack system where:
 - business services (user/chat/personalization) persist data to **Postgres**
 - AI components can be run alongside the backend to power chat/classification features
 
-## Backend documentation
-
-Start here:
-
-- `springboot_be/README.md` (backend overview + how to run)
-- `springboot_be/docs/architecture-and-flows.md` (full flow across services)
