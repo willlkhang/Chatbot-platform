@@ -420,7 +420,7 @@ docker compose exec postgres psql -U postgres -d chatbot   # database shell
 
 Developed as a university project at **Murdoch University**. Thanks to supervisors and host-organisation mentors for their guidance throughout the internship and project delivery.
 
-**Author:** Minh Khang Nguyen
+**Author:** Minh Khang Nguyen, John Palmes
 
 ---
 
